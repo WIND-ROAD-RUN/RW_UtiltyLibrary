@@ -13,6 +13,8 @@ add_executable(MyTests "test1.cc")
 
 target_link_libraries(MyTests PRIVATE GTest::gtest GTest::gtest_main)
 
+set_target_properties(MyTests PROPERTIES EXCLUDE_FROM_ALL true)
+
 add_test(NAME MyTests COMMAND MyTests)
 
 include(GoogleTest)

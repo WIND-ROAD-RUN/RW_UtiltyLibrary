@@ -28,6 +28,9 @@ namespace rw {
             }
 
             virtual void subLevel() {
+                if (level==0) {
+                    return;
+                }
                 level--;
             }
 
@@ -64,8 +67,8 @@ namespace rw {
         class ObjectStoreItem
             :public ObjectStoreCore {
         private:
-            std::string m_value{ "0" };
-            ObjectDataItemStoreType m_type{ ObjectDataItemStoreType::item_int };
+            std::string _value{ "0" };
+            ObjectDataItemStoreType _type{ ObjectDataItemStoreType::item_int };
         public:
             ObjectStoreItem();
 

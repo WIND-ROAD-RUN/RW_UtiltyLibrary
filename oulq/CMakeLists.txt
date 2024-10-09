@@ -24,7 +24,7 @@ add_compile_options("$<$<CXX_COMPILER_ID:MSVC>:/utf-8>")
 file(GLOB UI_FILES "io/*.ui")
 qt_wrap_ui(UIS_HDRS ${UI_FILES})
 
-aux_source_directory(${CMAKE_CURRENT_SOURCE_DIR} SRC_LIST)
+aux_source_directory(${CMAKE_CURRENT_SOURCE_DIR}/src SRC_LIST)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include UIS_HDRS  UI_FILES)
 
 add_library(${PROJECT_NAME}  STATIC ${SRC_LIST} ${UI_FILES})

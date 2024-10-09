@@ -16,110 +16,110 @@ namespace rw {
             ObjectStoreItem::setValueFromString
             (const std::string& value)
         {
-            m_value = value;
-            m_type = ObjectDataItemStoreType::item_string;
+            _value = value;
+            _type = ObjectDataItemStoreType::item_string;
         }
 
         void 
             ObjectStoreItem::setValueFromInt
             (int value)
         {
-            m_value = std::to_string(value);
-            m_type = ObjectDataItemStoreType::item_int;
+            _value = std::to_string(value);
+            _type = ObjectDataItemStoreType::item_int;
         }
 
         void 
             ObjectStoreItem::setValueFromLong
             (long value)
         {
-            m_value = std::to_string(value);
-            m_type = ObjectDataItemStoreType::item_long;
+            _value = std::to_string(value);
+            _type = ObjectDataItemStoreType::item_long;
         }
 
         void 
             ObjectStoreItem::setValueFromFloat
             (float value)
         {
-            m_value = std::to_string(value);
-            m_type = ObjectDataItemStoreType::item_float;
+            _value = std::to_string(value);
+            _type = ObjectDataItemStoreType::item_float;
         }
 
         void 
             ObjectStoreItem::setValueFromDouble
             (double value)
         {
-            m_value = std::to_string(value);
-            m_type = ObjectDataItemStoreType::item_double;
+            _value = std::to_string(value);
+            _type = ObjectDataItemStoreType::item_double;
         }
 
         void 
             ObjectStoreItem::setValueFromBool
             (bool value)
         {
-            m_value = value ? "true" : "false";
-            m_type = ObjectDataItemStoreType::item_bool;
+            _value = value ? "true" : "false";
+            _type = ObjectDataItemStoreType::item_bool;
         }
 
         std::string 
             ObjectStoreItem::getValueAsString
             () const
         {
-            assert(m_type == ObjectDataItemStoreType::item_string);
-            return m_value;
+            assert(_type == ObjectDataItemStoreType::item_string);
+            return _value;
         }
 
         int 
             ObjectStoreItem::getValueAsInt
             () const
         {
-            assert(m_type == ObjectDataItemStoreType::item_int);
-            return std::stoi(m_value);
+            assert(_type == ObjectDataItemStoreType::item_int);
+            return std::stoi(_value);
         }
 
         long 
             ObjectStoreItem::getValueAsLong
             () const
         {
-            assert(m_type == ObjectDataItemStoreType::item_long);
-            return std::stol(m_value);
+            assert(_type == ObjectDataItemStoreType::item_long);
+            return std::stol(_value);
         }
 
         float 
             ObjectStoreItem::getValueAsFloat
             () const
         {
-            assert(m_type == ObjectDataItemStoreType::item_float);
-            return std::stof(m_value);
+            assert(_type == ObjectDataItemStoreType::item_float);
+            return std::stof(_value);
         }
 
         double 
             ObjectStoreItem::getValueAsDouble
             () const
         {
-            assert(m_type == ObjectDataItemStoreType::item_double);
-            return std::stod(m_value);
+            assert(_type == ObjectDataItemStoreType::item_double);
+            return std::stod(_value);
         }
 
         bool 
             ObjectStoreItem::getValueAsBool
             () const
         {
-            assert(m_type == ObjectDataItemStoreType::item_bool);
-            return m_value == "true";
+            assert(_type == ObjectDataItemStoreType::item_bool);
+            return _value == "true";
         }
 
         ObjectDataItemStoreType 
             ObjectStoreItem::getType
             () const
         {
-            return m_type;
+            return _type;
         }
 
         std::string 
             ObjectStoreItem::getTypeString
             () const
         {
-            switch (m_type)
+            switch (_type)
             {   
             case rw::oso::ObjectDataItemStoreType::item_string:
                 return "string";
@@ -150,7 +150,7 @@ namespace rw {
             (std::ostream& os)
         {
             ObjectStoreCore::print(os);
-            os << "*" << this->getName() << ": " << m_value << " (" << this->getTypeString() << ")" << std::endl;
+            os << "*" << this->getName() << ": " << _value << " (" << this->getTypeString() << ")" << std::endl;
         }
 
         ObjectStoreAssembly::ObjectStoreAssembly() {

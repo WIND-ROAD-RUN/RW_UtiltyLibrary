@@ -12,7 +12,7 @@ namespace rw {
 
         }
 
-        void
+        void 
             ObjectStoreItem::setValueFromString
             (const std::string& value)
         {
@@ -20,7 +20,7 @@ namespace rw {
             m_type = ObjectDataItemStoreType::item_string;
         }
 
-        void
+        void 
             ObjectStoreItem::setValueFromInt
             (int value)
         {
@@ -28,7 +28,7 @@ namespace rw {
             m_type = ObjectDataItemStoreType::item_int;
         }
 
-        void
+        void 
             ObjectStoreItem::setValueFromLong
             (long value)
         {
@@ -36,7 +36,7 @@ namespace rw {
             m_type = ObjectDataItemStoreType::item_long;
         }
 
-        void
+        void 
             ObjectStoreItem::setValueFromFloat
             (float value)
         {
@@ -44,7 +44,7 @@ namespace rw {
             m_type = ObjectDataItemStoreType::item_float;
         }
 
-        void
+        void 
             ObjectStoreItem::setValueFromDouble
             (double value)
         {
@@ -52,7 +52,7 @@ namespace rw {
             m_type = ObjectDataItemStoreType::item_double;
         }
 
-        void
+        void 
             ObjectStoreItem::setValueFromBool
             (bool value)
         {
@@ -60,7 +60,7 @@ namespace rw {
             m_type = ObjectDataItemStoreType::item_bool;
         }
 
-        std::string
+        std::string 
             ObjectStoreItem::getValueAsString
             () const
         {
@@ -68,7 +68,7 @@ namespace rw {
             return m_value;
         }
 
-        int
+        int 
             ObjectStoreItem::getValueAsInt
             () const
         {
@@ -76,7 +76,7 @@ namespace rw {
             return std::stoi(m_value);
         }
 
-        long
+        long 
             ObjectStoreItem::getValueAsLong
             () const
         {
@@ -84,7 +84,7 @@ namespace rw {
             return std::stol(m_value);
         }
 
-        float
+        float 
             ObjectStoreItem::getValueAsFloat
             () const
         {
@@ -92,7 +92,7 @@ namespace rw {
             return std::stof(m_value);
         }
 
-        double
+        double 
             ObjectStoreItem::getValueAsDouble
             () const
         {
@@ -100,7 +100,7 @@ namespace rw {
             return std::stod(m_value);
         }
 
-        bool
+        bool 
             ObjectStoreItem::getValueAsBool
             () const
         {
@@ -108,19 +108,19 @@ namespace rw {
             return m_value == "true";
         }
 
-        ObjectDataItemStoreType
+        ObjectDataItemStoreType 
             ObjectStoreItem::getType
             () const
         {
             return m_type;
         }
 
-        std::string
+        std::string 
             ObjectStoreItem::getTypeString
             () const
         {
             switch (m_type)
-            {
+            {   
             case rw::oso::ObjectDataItemStoreType::item_string:
                 return "string";
                 break;
@@ -145,7 +145,7 @@ namespace rw {
             }
         }
 
-        void
+        void 
             ObjectStoreItem::print
             (std::ostream& os)
         {
@@ -157,7 +157,7 @@ namespace rw {
 
         }
 
-        void
+        void 
             ObjectStoreAssembly::addItem
             (std::shared_ptr<ObjectStoreCore> item) {
             item->addLevel();
@@ -179,7 +179,7 @@ namespace rw {
             m_items.back()->parent = this;
         }
 
-        void
+        void 
             ObjectStoreAssembly::removeItem
             (std::shared_ptr<ObjectStoreCore> item) {
             item->subLevel();
@@ -187,7 +187,7 @@ namespace rw {
             item->parent = nullptr;
         }
 
-        void
+        void 
             ObjectStoreAssembly::print
             (std::ostream& os)
         {
@@ -231,7 +231,7 @@ namespace rw {
             return m_items;
         }
 
-        const std::shared_ptr<ObjectStoreCore>
+        const std::shared_ptr<ObjectStoreCore> 
             ObjectStoreAssembly::getItem
             (const std::string& name) const
         {
@@ -243,13 +243,13 @@ namespace rw {
             return nullptr;
         }
 
-        void
+        void 
             ObjectStoreCore::setName
             (const std::string& name) {
             m_name = name;
         }
 
-        std::string
+        std::string 
             ObjectStoreCore::getName() const {
             return m_name;
         }
@@ -261,5 +261,5 @@ namespace rw {
             }
         }
 
-    }
+}
 }

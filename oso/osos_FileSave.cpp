@@ -10,12 +10,12 @@
 #include"json/json.h"
 
 namespace rw {
-    namespace oso
-    {
-        void
+	namespace oso
+	{
+		void 
             FileSave_XML::saveNodeWithAssembly_isDeprecated
             (pugi::xml_node& node, const  std::shared_ptr<ObjectStoreAssembly>& assembly)
-        {
+		{
             auto child = node.append_child(assembly->getName().c_str());
             child.append_attribute("nodeType").set_value("assembly");
             for (const auto& item : assembly->getItems()) {
@@ -29,9 +29,9 @@ namespace rw {
                     throw std::runtime_error("Unknown type which is the superclass of objectStoreCore");
                 }
             }
-        }
+		}
 
-        void
+        void 
             FileSave_XML::saveNodeWithItem_Deprecated
             (pugi::xml_node& node, const std::shared_ptr<ObjectStoreItem>& item)
         {
@@ -118,10 +118,10 @@ namespace rw {
             }
         }
 
-        void
+		void 
             FileSave_XML::save_Deprecated
             (const std::filesystem::path& fileName, std::shared_ptr<ObjectStoreAssembly> assembly)
-        {
+		{
             assert(fileName.extension() == std::string(".xml"));
             pugi::xml_document doc;
             auto rootNode = doc.append_child(assembly->getName().c_str());
@@ -136,11 +136,11 @@ namespace rw {
                 else {
                     throw std::runtime_error("Unknown node type which is instance of the superclass of objectStoreCore");
                 }
-            }
+			}
 
             doc.save_file(fileName.c_str());
-
-        }
+		
+		}
 
         std::shared_ptr<ObjectStoreAssembly> FileSave_XML::load_Deprecated(const std::filesystem::path& fileName)
         {
@@ -348,6 +348,6 @@ namespace rw {
             return std::shared_ptr<ObjectStoreAssembly>();
         }
 
-    }
+}
 
 }

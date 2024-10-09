@@ -77,11 +77,12 @@ namespace rw {
             void loadNodeWithAssembly(const pugi::xml_node& node, std::shared_ptr<ObjectStoreAssembly>& assembly);
 
             void loadNodeWithItem(const pugi::xml_node& node, std::shared_ptr<ObjectStoreItem>& item);
+
         public:
             void save(const std::filesystem::path& fileName, std::shared_ptr<ObjectStoreAssembly> assembly)override;
 
             std::shared_ptr<ObjectStoreAssembly> load(const std::filesystem::path& fileName) override;
-            //TODO：自定义类型到std::shared_ptr<ObjectStoreAssembly>的转换
+            //TODO���Զ������͵�std::shared_ptr<ObjectStoreAssembly>��ת��
         private:
             void saveNodeWithAssembly_isDeprecated(pugi::xml_node& node, const std::shared_ptr<ObjectStoreAssembly>& assembly);
 
@@ -105,7 +106,7 @@ namespace rw {
 
 
         public:
-            // 通过 FileSave_Strategy 继承
+            // ͨ�� FileSave_Strategy �̳�
             void save(const std::filesystem::path& fileName, std::shared_ptr<ObjectStoreAssembly> assembly) override;
 
             std::shared_ptr<ObjectStoreAssembly> load(const std::filesystem::path& fileName) override;
@@ -126,7 +127,7 @@ namespace rw {
         }
 
         template<FileSaveStrategyType strategyType>
-        inline void
+        inline void  
             FileSave<strategyType>::save
             (const std::filesystem::path& fileName, std::shared_ptr<ObjectStoreAssembly> assembly)
         {
@@ -151,7 +152,7 @@ namespace rw {
         }
 
         template<FileSaveStrategyType strategyType>
-        inline std::shared_ptr<ObjectStoreAssembly>
+        inline std::shared_ptr<ObjectStoreAssembly> 
             FileSave<strategyType>::load
             (const std::filesystem::path& fileName)
         {
@@ -166,7 +167,7 @@ namespace rw {
         }
 
         template<FileSaveStrategyType strategyType>
-        inline std::shared_ptr<ObjectStoreAssembly>
+        inline std::shared_ptr<ObjectStoreAssembly> 
             FileSave<strategyType>::load
             (const std::filesystem::path& fileName, bool& loadResult)
         {
@@ -180,7 +181,7 @@ namespace rw {
                 loadResult = false;
                 return nullptr;
             }
-
+            
         }
 
     }

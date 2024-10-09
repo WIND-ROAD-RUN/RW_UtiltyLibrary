@@ -22,7 +22,7 @@ namespace rw {
 
         public:
             int level{ 0 };
-
+            
             virtual void addLevel() {
                 level++;
             }
@@ -155,19 +155,19 @@ namespace rw {
 
         };
 
-        inline std::shared_ptr<ObjectStoreAssembly>
+        inline std::shared_ptr<ObjectStoreAssembly> 
             makeObjectStoreAssemblySharedPtr
             (const ObjectStoreAssembly& assembly) {
             return std::make_shared<ObjectStoreAssembly>(assembly);
         }
 
-        inline std::shared_ptr<ObjectStoreItem>
+        inline std::shared_ptr<ObjectStoreItem> 
             makeObjectStoreItemSharedPtr
             (const ObjectStoreItem& item) {
             return std::make_shared<ObjectStoreItem>(item);
         }
 
-        inline std::shared_ptr<ObjectStoreAssembly>
+        inline std::shared_ptr<ObjectStoreAssembly> 
             ObjectStoreCoreToAssembly
             (std::shared_ptr<ObjectStoreCore> core) {
             std::shared_ptr<ObjectStoreAssembly> assembly = std::dynamic_pointer_cast<ObjectStoreAssembly>(core);
@@ -175,7 +175,7 @@ namespace rw {
             return assembly;
         }
 
-        inline std::shared_ptr<ObjectStoreItem>
+        inline std::shared_ptr<ObjectStoreItem> 
             ObjectStoreCoreToItem
             (std::shared_ptr<ObjectStoreCore> core) {
             std::shared_ptr<ObjectStoreItem> item = std::dynamic_pointer_cast<ObjectStoreItem>(core);

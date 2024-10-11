@@ -1,6 +1,7 @@
 #include"oso_core.h"
 
 #include<cassert>
+#include<algorithm>
 
 namespace rw {
     namespace oso {
@@ -183,7 +184,8 @@ namespace rw {
             ObjectStoreAssembly::removeItem
             (std::shared_ptr<ObjectStoreCore> item) {
             item->subLevel();
-            m_items.erase(std::remove(m_items.begin(), m_items.end(), item), m_items.end());
+            m_items.erase(std::remove_if(m_items.begin(), m_items.end(),
+                [&item](const std::shared_ptr<ObjectStoreCore>& i) { return i == item; }), m_items.end());
             item->parent = nullptr;
         }
 

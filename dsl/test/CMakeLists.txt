@@ -18,6 +18,7 @@ target_link_libraries(${PROJECT_NAME} PRIVATE GTest::gtest GTest::gtest_main)
 
 #rw库
 add_dependencies(${PROJECT_NAME} dsl)
+
 target_link_libraries(${PROJECT_NAME} PRIVATE dsl)
 
 add_test(NAME ${PROJECT_NAME} COMMAND ${PROJECT_NAME})
@@ -25,3 +26,5 @@ add_test(NAME ${PROJECT_NAME} COMMAND ${PROJECT_NAME})
 # GoogleTest integration
 include(GoogleTest)
 gtest_discover_tests(${PROJECT_NAME})
+
+

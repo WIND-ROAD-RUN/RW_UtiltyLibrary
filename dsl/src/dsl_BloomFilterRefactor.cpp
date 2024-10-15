@@ -1,14 +1,26 @@
 #include"dsl_BloomFilter.h"
 #include "dsl_BloomFilterRefactor.h"
 
-
+#include <functional>
+#include <cmath> 
 namespace rw
 {
     namespace dsl {
-        size_t 
-            BloomFilterRefactor::hash(const std::string& item, size_t seed) const
+        BloomFilterRefactor::BloomFilterRefactor
+        (size_t estimatedStorageSize)
+            : _estimatedStorageSize(estimatedStorageSize)
         {
-            return size_t();
+            _maxTolerance = 0.1;
+            auto size = getBloomFilterBitNum(estimatedStorageSize, _maxTolerance);
+            _bloomFilterbuffer.resize(size, false);
+        }
+
+        BloomFilterRefactor::BloomFilterRefactor
+        (size_t estimatedStorageSize, double maxTolerance)
+            :_estimatedStorageSize(estimatedStorageSize), _maxTolerance(maxTolerance)
+        {
+            auto size = getBloomFilterBitNum(estimatedStorageSize, _maxTolerance);
+            _bloomFilterbuffer.resize(size, false);
         }
     }
 }

@@ -22,5 +22,10 @@ namespace rw
             auto size = getBloomFilterBitNum(estimatedStorageSize, _maxTolerance);
             _bloomFilterbuffer.resize(size, false);
         }
+
+        void BloomFilterRefactor::iniHashFunctions(size_t numHashFunctions, size_t numBits)
+        {
+
+        }
     }
 }

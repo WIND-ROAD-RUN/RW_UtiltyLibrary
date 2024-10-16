@@ -3,7 +3,8 @@
 
 #include<vector>
 #include <cmath> 
-
+#include<functional>
+#include<string>
 
 namespace rw {
     namespace dsl {

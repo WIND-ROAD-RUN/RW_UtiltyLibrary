@@ -1,4 +1,4 @@
-﻿#include"osos_FileSave.h"
+#include"osos_FileSave.h"
 
 #include<iostream>
 #include<fstream>

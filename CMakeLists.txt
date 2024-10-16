@@ -1,4 +1,4 @@
-﻿cmake_minimum_required(VERSION 3.5)
+cmake_minimum_required(VERSION 3.5)
 
 project(RW_UtiltyLibrary VERSION 0.1 LANGUAGES CXX)
 
@@ -12,7 +12,12 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 enable_testing()
 
+# 设置编译选项以确保使用UTF-8编码
 add_compile_options("$<$<CXX_COMPILER_ID:MSVC>:/utf-8>")
+add_compile_options("$<$<CXX_COMPILER_ID:GNU>:-finput-charset=UTF-8>")
+add_compile_options("$<$<CXX_COMPILER_ID:GNU>:-fexec-charset=UTF-8>")
+add_compile_options("$<$<CXX_COMPILER_ID:Clang>:-finput-charset=UTF-8>")
+add_compile_options("$<$<CXX_COMPILER_ID:Clang>:-fexec-charset=UTF-8>")
 
 # 启用 /PROFILE 选项
 if (MSVC)

@@ -4,7 +4,7 @@
 #include <vector>
 #include <functional>
 #include<string>
-
+ 
 class BloomFilter {
 public:
     BloomFilter(size_t size, size_t numHashes);

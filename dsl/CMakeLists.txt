@@ -16,6 +16,3 @@ aux_source_directory(${CMAKE_CURRENT_SOURCE_DIR}/src source_file)
 add_library(${PROJECT_NAME} STATIC ${source_file} )
 
 add_subdirectory(./test)
-
-add_executable(dsl_main main.cpp)
-add_dependencies(dsl_main ${PROJECT_NAME})

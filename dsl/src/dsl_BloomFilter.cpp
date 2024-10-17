@@ -11,7 +11,8 @@ namespace rw
         {
             auto size = getBloomFilterBitNum(estimatedStorageSize, _maxTolerance);
             _bloomFilterbuffer.resize(size, false);
-            _maxHashFunctions = static_cast<double>(size) / static_cast<double>(estimatedStorageSize) * (ln2);
+            auto maxHashFunctions = static_cast<double>(size) / static_cast<double>(estimatedStorageSize) * (ln2);
+            _maxHashFunctions = static_cast<size_t>(maxHashFunctions);
             iniHashFunctions(_maxHashFunctions, size);
         }
 

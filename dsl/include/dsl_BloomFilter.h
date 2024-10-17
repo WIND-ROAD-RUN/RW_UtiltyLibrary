@@ -39,7 +39,7 @@ namespace rw {
             //公式为m=-n*ln(p)/(ln(2)^2),其中m为布隆过滤器的缓冲区位数，n为预计插入元素的数量，p为误判率
             inline size_t getBloomFilterBitNum(size_t estimatedStorageSize, double maxTolerance) {
                 auto bloomFilterBitNum = -(estimatedStorageSize * log(maxTolerance) / (ln2Square));
-                size_t size = std::ceil(bloomFilterBitNum);
+                size_t size = static_cast<size_t>(std::ceil(bloomFilterBitNum));
                 return size;
             }
 

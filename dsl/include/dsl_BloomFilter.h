@@ -70,8 +70,6 @@ namespace rw {
 
             //哈希函数集
             Vector<std::function<size_t(const std::string&)>> _hashFunctions;
-
-        
         };
 
         inline uint32_t MurmurHash3(const void* key, int len, uint32_t seed)

@@ -3,9 +3,12 @@
 
 #include<vector>
 #include<memory>
+#include<string>
 
 namespace rw {
     namespace dsl {
+        using String = std::string;
+
         template<typename T>
         using Vector = std::vector<T>;
         

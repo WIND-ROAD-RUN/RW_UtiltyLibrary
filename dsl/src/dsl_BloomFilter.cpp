@@ -10,6 +10,7 @@ namespace rw
             :_estimatedStorageSize(estimatedStorageSize), _maxTolerance(maxTolerance)
         {
             auto size = getBloomFilterBitNum(estimatedStorageSize, _maxTolerance);
+            size *= 1.3;//增加一点冗余从而降低误判率的误差
             _bloomFilterbuffer.resize(size, false);
             auto maxHashFunctions = static_cast<double>(size) / static_cast<double>(estimatedStorageSize) * (ln2);
             _maxHashFunctions = static_cast<size_t>(maxHashFunctions);

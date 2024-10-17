@@ -77,11 +77,18 @@ namespace dsl_BLoomFilter {
     TEST(DSL, BLOOMFILTER_REFACTOR_ADAPTIVETEST) {
         std::locale::global(std::locale("en_US.UTF-8"));
         std::wcout.imbue(std::locale());
-        int adaptiveCount{ 1 };
-        bool result{ false };
-        double ErrorRate{ 0.01 };
-        int testCount{ 0 };
+        int adaptiveCount{ 1 };// 迭代次数
+        double ErrorRate{ 0.01 }; // 初始误差率
+        double adptiveDifferenceRateStep{ 0.001 }; // 递增的误差率
 
+        // 随机生成最大错误率和预估的存储数量
+        std::random_device rd;
+        std::mt19937 generator(rd());
+        std::uniform_real_distribution<> errorRateDist(0.01, 0.1); // 错误率在0.01到0.1之间
+        std::uniform_int_distribution<> storageSizeDist(100, 10000); // 预估存储数量在1000到10000之间
+
+        bool result{ false };
+        int testCount{ 0 }; // 测试次数
         while (!result) {
             auto start = std::chrono::high_resolution_clock::now(); // 记录开始时间
             std::cout << "迭代组序号: " << testCount;
@@ -90,12 +97,6 @@ namespace dsl_BLoomFilter {
 
             double theLastErrorRateDifference;
             for (int i = 0; i < adaptiveCount; i++) {
-                // 随机生成最大错误率和预估的存储数量
-                std::random_device rd;
-                std::mt19937 generator(rd());
-                std::uniform_real_distribution<> errorRateDist(0.01, 0.1); // 错误率在0.01到0.1之间
-                std::uniform_int_distribution<> storageSizeDist(1000, 10000); // 预估存储数量在1000到10000之间
-
                 double maxTolerance = errorRateDist(generator);
                 size_t estimatedStorageSize = storageSizeDist(generator);
 
@@ -152,9 +153,9 @@ namespace dsl_BLoomFilter {
             }
             else {
                 if (ErrorRate< theLastErrorRateDifference) {
-                    ErrorRate = theLastErrorRateDifference + 0.01;
+                    ErrorRate = theLastErrorRateDifference + adptiveDifferenceRateStep;
                 }
-                ErrorRate += 0.001;
+                ErrorRate += adptiveDifferenceRateStep;
             }
 
             testCount++;

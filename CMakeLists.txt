@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.5)
+cmake_minimum_required(VERSION 3.7)
 
 project(RW_UtiltyLibrary VERSION 0.1 LANGUAGES CXX)
 
@@ -32,8 +32,13 @@ if (MSVC)
 endif()
 
 ##
+
+##在Windows额外构建
+if(${CMAKE_SYSTEM_NAME}  STREQUAL "Windows")
+    add_subdirectory(oulq)
+endif()
+
 add_subdirectory(oso)
 add_subdirectory(Extra)
 add_subdirectory(cfgr)
-add_subdirectory(oulq)
 add_subdirectory(dsl)

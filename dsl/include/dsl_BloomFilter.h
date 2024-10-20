@@ -13,7 +13,9 @@ namespace rw {
         inline uint32_t MurmurHash3(const void* key, int len, uint32_t seed);
         inline uint32_t Fnv1Hash(const std::string& str);
 
-        //该实现假阳性误差率在0.001~0.035之间
+        //BloomFilter: Bloom filter
+        //          The false positive rate of the input will have an error of 0-0.035
+        //      compared to the actual value
         class BloomFilter {
 
             const double ln2 = 0.6931471805599453;
@@ -21,22 +23,45 @@ namespace rw {
             const double ln2Square = 0.4804530139182014;
 
         public:
-            //parameter estimatedStorageSize: 预计插入元素的数量
-            //parameter maxTolerance: 最大容忍的假阳性率（误判率） 
-            //parameter estimatedStorageSize: 预计插入元素的数量,默认maxTolerance=0.01 也即误判率为1%
+            //Parameters:
+            //      estimatedStorageSize: The expected number of elements to be stored
+            //      maxTolerance: Maximum tolerable false positive rate (misjudgment rate)
+            // 
+            //BloomFilter（） ：Initialize Bloom filter
             explicit BloomFilter(size_t estimatedStorageSize, double maxTolerance=0.1);
 
             ~BloomFilter() = default;
 
         public:
-            //插入元素
+            //Parameters:
+            //      key: Elements to be inserted
+            // 
+            //insert（） ：Insert element
             void insert(const std::string& key);
 
-            //判断元素是否存在
+            //Parameters:
+            //      key: Elements to be queried
+            // 
+            //Returns: bool
+            //      When the element exists in the Bloom filter, return true; otherwise, 
+            //  return false (resulting in false positives)
+            // 
+            //contains（） ：Query elements
             bool contains(const std::string& key);
 
         private:
-            //公式为m=-n*ln(p)/(ln(2)^2),其中m为布隆过滤器的缓冲区位数，n为预计插入元素的数量，p为误判率
+            //Parameters:
+            //      estimatedStorageSize: Expected quantity of elements to be stored
+            //      maxTolerance: Maximum tolerable false positive rate (misjudgment rate)
+            //
+            //Returns: size_t
+            //      Return the number of buffer bits for the Bloom filter
+            // 
+            //getBloomFilterBitNum（） ：Calculate the number of buffer bits for the Bloom filter
+            // 
+            //Supplement
+            //      The formula is m=- n * ln (p)/(ln (2) ^ 2), where m is the number of buffer 
+            //  bits in the Bloom filter, n is the expected number of inserted elements, and p is the false positive rate 
             inline size_t getBloomFilterBitNum(size_t estimatedStorageSize, double maxTolerance) {
                 auto bloomFilterBitNum = -(estimatedStorageSize * log(maxTolerance) / (ln2Square));
                 size_t size = static_cast<size_t>(std::ceil(bloomFilterBitNum));
@@ -52,26 +77,42 @@ namespace rw {
                 return Fnv1Hash(str);
                 };
 
-            //初始化哈希函数集，公式hi(key)=murmurHash(key)+i*fnv1Hash(key)+i^2 % numBits
+            //Parameters:
+            //      numHashFunctions: Number of hash functions
+            //      numBits: Number of buffer bits in the Bloom filter
+            // 
+            //iniHashFunctions: Initialize member variable hash function set_ hash functions
+            //
+            //Supplement
+            //      The formula is hi(key) = murmurHash(key) + i * fnv1Hash(key) + i ^ 2 % numBits
             void iniHashFunctions(size_t numHashFunctions,size_t numBits);
 
         private:
-            //布隆过滤器的缓冲区
+            //Buffer bits of Bloom filter
             Vector<bool> _bloomFilterbuffer;
 
-            //预计插入元素的数量
+            //Expected number of elements to be stored
             size_t _estimatedStorageSize;
 
-            //最大容忍的假阳性率（误判率）
+            //Maximum tolerable false positive rate (misjudgment rate)
             double _maxTolerance;
 
-            //最大哈希函数数量:计算公式为m/n*ln(2),其中m为布隆过滤器的缓冲区位数，n为预计插入元素的数量
+            //Number of hash functions
             size_t _maxHashFunctions;
 
-            //哈希函数集
+            //Hash function set
             Vector<std::function<size_t(const std::string&)>> _hashFunctions;
         };
 
+        //Parameters:
+        //      key: Elements to be hashed
+        //      len: Length of the element
+        //      seed: Seed
+        // 
+        // returns: uint32_t
+        //      the hash value of the element
+        // 
+        //MurmurHash3: MurmurHash3 hash function
         inline uint32_t MurmurHash3(const void* key, int len, uint32_t seed)
         {
             const uint8_t* data = (const uint8_t*)key;
@@ -117,6 +158,13 @@ namespace rw {
             return h1;
         }
 
+        //Parameters:
+        //      str: String to be hashed
+        //
+        //returns: uint32_t
+        //      the hash value of the string
+        // 
+        //Fnv1Hash: FNV-1 hash function
         inline uint32_t Fnv1Hash(const std::string& str) {
             const uint32_t fnv_prime = 16777619;
             uint32_t hash = 2166136261;

@@ -14,8 +14,7 @@ namespace rw {
         inline uint32_t Fnv1Hash(const std::string& str);
 
         //BloomFilter: Bloom filter
-        //          The false positive rate of the input will have an error of 0-0.035
-        //      compared to the actual value
+        //          The false positive rate of the input will have an error of 0-0.035 compared to the actual value
         class BloomFilter {
 
             const double ln2 = 0.6931471805599453;
@@ -43,8 +42,7 @@ namespace rw {
             //      key: Elements to be queried
             // 
             //Returns: bool
-            //      When the element exists in the Bloom filter, return true; otherwise, 
-            //  return false (resulting in false positives)
+            //      When the element exists in the Bloom filter, return true; otherwise,  return false (resulting in false positives)
             // 
             //contains（） ：Query elements
             bool contains(const std::string& key);
@@ -60,8 +58,7 @@ namespace rw {
             //getBloomFilterBitNum（） ：Calculate the number of buffer bits for the Bloom filter
             // 
             //Supplement
-            //      The formula is m=- n * ln (p)/(ln (2) ^ 2), where m is the number of buffer 
-            //  bits in the Bloom filter, n is the expected number of inserted elements, and p is the false positive rate 
+            //      The formula is m=- n * ln (p)/(ln (2) ^ 2), where m is the number of buffer bits in the Bloom filter, n is the expected number of inserted elements, and p is the false positive rate 
             inline size_t getBloomFilterBitNum(size_t estimatedStorageSize, double maxTolerance) {
                 auto bloomFilterBitNum = -(estimatedStorageSize * log(maxTolerance) / (ln2Square));
                 size_t size = static_cast<size_t>(std::ceil(bloomFilterBitNum));

@@ -258,7 +258,7 @@ namespace rw {
 
         void ObjectStoreCore::print(std::ostream& os)
         {
-            for (int i = 0; i < level; ++i) {
+            for (size_t i = 0; i < level; ++i) {
                 os << "  ";
             }
         }

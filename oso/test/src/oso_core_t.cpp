@@ -1,5 +1,5 @@
 #include"pch.h"
-#include <random> // 添加此行以包含 <random> 头文件
+#include <random> 
 
 namespace oso_core{
     TEST(ObjectStoreCore_Class, attribute_name) {
@@ -19,10 +19,10 @@ namespace oso_core{
         
         auto currentLevel = testObj.level;
 
-        //检查初始值是否为0
+        //Check if the initial value is 0
         ASSERT_EQ(testObj.level, 0);
 
-        //检查level是否应该永不为正值
+        //Check if the level should never be a positive value
         testObj.subLevel();
         ASSERT_EQ(testObj.level, 0)<<"level应不为负值";
 
@@ -32,7 +32,7 @@ namespace oso_core{
         testObj.subLevel();
         EXPECT_EQ(testObj.level, currentLevel);
 
-        //随机添加指定level
+        //Randomly add specified levels
         std::random_device rd;
         std::mt19937 gen(rd());
         std::uniform_int_distribution<> dis(0, 100);
@@ -125,6 +125,4 @@ namespace oso_core{
         EXPECT_EQ(testObj.getValueAsBool(), value);
         EXPECT_EQ(testObj.getType(), ObjectDataItemStoreType::item_bool);
     }
-
-    //下面测试ObjectStoreAssembly类测试用例在类修改时应该先对接口补充测试用例
 }

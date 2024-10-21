@@ -67,6 +67,10 @@ namespace rw {
             //Print the object tree of the Object Store with the current instance as the root node
             virtual void print(std::ostream& os);
 
+        public:
+            virtual bool operator==(const ObjectStoreCore& other) const {
+                return m_name == other.m_name;
+            }
         };
 
         //The type of data stored in the Object Data Item class
@@ -157,6 +161,17 @@ namespace rw {
                 return "item";
             }
 
+        public:
+            virtual bool operator==(const ObjectStoreItem & other) {
+                auto nameIsSame = this->getName() == other.getName();
+                
+                auto typeIsSame = this->getType() == other.getType();
+
+                auto valueIsSame = _value == other._value;
+
+                return nameIsSame && typeIsSame && valueIsSame;
+
+            }
         };
 
         //
@@ -233,6 +248,21 @@ namespace rw {
 
             virtual std::string getStoreType() const override {
                 return "assembly";
+            }
+
+            virtual bool operator==(const ObjectStoreAssembly& other) {
+                bool result{true};
+
+                auto nameIsSame = this->getName() == other.getName();
+
+                auto sizeIsSame = this->m_items.size() == other.m_items.size();
+
+                for (int i = 0;i<this->getItems().size();++i) {
+                    result = result && (*this->getItems()[i] == *other.getItems()[i]);
+                }
+
+                return result&&nameIsSame && sizeIsSame;
+
             }
 
         };

@@ -8,9 +8,11 @@
 #include "oso_core.h"
 #include "osoc_MVSCameraConfig.h"
 #include "osop_OcrDateProductConfig.h"
+#include "oso_OrganizeStructure.h"
 
 #include<string>
 #include<random>
+#include<algorithm>
 
 using namespace rw::oso;
 using namespace std;

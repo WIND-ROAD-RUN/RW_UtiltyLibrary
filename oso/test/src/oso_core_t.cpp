@@ -125,4 +125,275 @@ namespace oso_core{
         EXPECT_EQ(testObj.getValueAsBool(), value);
         EXPECT_EQ(testObj.getType(), ObjectDataItemStoreType::item_bool);
     }
+
+    TEST(ObjectStoreCore_Class, opeatorEuqa_true) {
+        ObjectStoreCore testCore;
+        ObjectStoreCore testCore1;
+        testCore.setName("testName");
+        testCore1.setName("testName");
+        auto result = testCore == testCore1;
+        EXPECT_EQ(result, true);
+    }
+
+    TEST(ObjectStoreCore_Class, opeatorEuqa_false) {
+        ObjectStoreCore testCore;
+        ObjectStoreCore testCore1;
+        testCore.setName("testName");
+        testCore1.setName("ErrorName");
+        auto result = testCore == testCore1;
+        EXPECT_EQ(result, false);
+    }
+
+    TEST(ObjectStoreCore_Class, opeatorNeEuqa_true) {
+        ObjectStoreCore testObj;
+        ObjectStoreCore testObj1;
+        testObj.setName("testName");
+        testObj1.setName("errorName");
+        auto result = testObj != testObj1;
+        EXPECT_EQ(result, true);
+
+    }
+
+    TEST(ObjectStoreCore_Class, opeatorNeEuqa_false) {
+        ObjectStoreCore testObj;
+        ObjectStoreCore testObj1;
+        testObj.setName("testName");
+        testObj1.setName("testName");
+        auto result = testObj != testObj1;
+        EXPECT_EQ(result, false);
+    }
+
+    TEST(ObjectStoreItem_Class, opeatorEuqa_true) {
+        ObjectStoreItem testObj;
+        ObjectStoreItem testObj1;
+        testObj.setName("testName");
+        testObj.setValueFromBool(false);
+
+        testObj1.setName("testName");
+        testObj1.setValueFromBool(false);
+
+        auto result = testObj == testObj1;
+        EXPECT_EQ(result, true);
+
+        testObj.setValueFromDouble(1);
+        testObj1.setValueFromDouble(1);
+        result = testObj == testObj1;
+        EXPECT_EQ(result, true);
+
+        testObj.setValueFromFloat(1);
+        testObj1.setValueFromFloat(1);
+        result = testObj == testObj1;
+        EXPECT_EQ(result, true);
+
+        testObj.setValueFromInt(1);
+        testObj1.setValueFromInt(1);
+        result = testObj == testObj1;
+        EXPECT_EQ(result, true);
+
+        testObj.setValueFromLong(1);
+        testObj1.setValueFromLong(1);
+        result = testObj == testObj1;
+        EXPECT_EQ(result, true);
+
+        testObj.setValueFromString("test");
+        testObj1.setValueFromString("test");
+        result = testObj == testObj1;
+        EXPECT_EQ(result, true);
+    }
+
+    TEST(ObjectStoreItem_Class, opeatorEuqa_false) {
+        ObjectStoreItem testObj;
+        ObjectStoreItem testObj1;
+        testObj.setName("testName");
+        testObj.setValueFromBool(false);
+        testObj1.setName("testName");
+        testObj1.setValueFromBool(true);
+        auto result = testObj == testObj1;
+        EXPECT_EQ(result, false);
+
+        testObj.setValueFromDouble(1);
+        testObj1.setValueFromDouble(2);
+        result = testObj == testObj1;
+        EXPECT_EQ(result, false);
+
+        testObj.setValueFromFloat(1);
+        testObj1.setValueFromFloat(2);
+        result = testObj == testObj1;
+        EXPECT_EQ(result, false);
+
+        testObj.setValueFromInt(1);
+        testObj1.setValueFromInt(2);
+        result = testObj == testObj1;
+        EXPECT_EQ(result, false);
+
+        testObj.setValueFromLong(1);
+        testObj1.setValueFromLong(2);
+        result = testObj == testObj1;
+        EXPECT_EQ(result, false);
+
+        testObj.setValueFromString("test");
+        testObj1.setValueFromString("error");
+        result = testObj == testObj1;
+        EXPECT_EQ(result, false);
+    }
+
+    TEST(ObjectStoreItem_Class, opeatorNeEuqa_true) {
+        ObjectStoreItem testObj;
+        ObjectStoreItem testObj1;
+        testObj.setName("testName");
+        testObj.setValueFromBool(false);
+        testObj1.setName("testName");
+        testObj1.setValueFromBool(true);
+        auto result = testObj != testObj1;
+        EXPECT_EQ(result, true);
+
+        testObj.setValueFromDouble(1);
+        testObj1.setValueFromDouble(2);
+        result = testObj != testObj1;
+        EXPECT_EQ(result, true);
+
+        testObj.setValueFromFloat(1);
+        testObj1.setValueFromFloat(2);
+        result = testObj != testObj1;
+        EXPECT_EQ(result, true);
+
+        testObj.setValueFromInt(1);
+        testObj1.setValueFromInt(2);
+        result = testObj != testObj1;
+        EXPECT_EQ(result, true);
+
+        testObj.setValueFromLong(1);
+        testObj1.setValueFromLong(2);
+        result = testObj != testObj1;
+        EXPECT_EQ(result, true);
+
+        testObj.setValueFromString("test");
+        testObj1.setValueFromString("error");
+        result = testObj != testObj1;
+        EXPECT_EQ(result, true);
+    }
+
+    TEST(ObjectStoreItem_Class, opeatorNeEuqa_false) {
+        ObjectStoreItem testObj;
+        ObjectStoreItem testObj1;
+        testObj.setName("testName");
+        testObj.setValueFromBool(true);
+        testObj1.setName("testName");
+        testObj1.setValueFromBool(true);
+        auto result = testObj != testObj1;
+        EXPECT_EQ(result, false);
+
+        testObj.setValueFromDouble(1);
+        testObj1.setValueFromDouble(1);
+        result = testObj != testObj1;
+        EXPECT_EQ(result, false);
+
+        testObj.setValueFromFloat(1);
+        testObj1.setValueFromFloat(1);
+        result = testObj != testObj1;
+        EXPECT_EQ(result, false);
+        
+        testObj.setValueFromInt(1);
+        testObj1.setValueFromInt(1);
+        result = testObj != testObj1;
+        EXPECT_EQ(result, false);
+
+        testObj.setValueFromLong(1);
+        testObj1.setValueFromLong(1);
+        result = testObj != testObj1;
+        EXPECT_EQ(result, false);
+
+        testObj.setValueFromString("test");
+        testObj1.setValueFromString("test");
+        result = testObj != testObj1;
+        EXPECT_EQ(result, false);
+    }
+
+    TEST(ObjectStoreAssembly_Class, opeatorEuqa_true) {
+        ObjectStoreAssembly testAssembly;
+        ObjectStoreAssembly testAssembly1;
+
+        testAssembly.setName("testName");
+        testAssembly1.setName("testName");
+
+        auto testItem = std::make_shared<ObjectStoreItem>();
+        testItem->setName("testItem");
+        testItem->setValueFromBool(false);
+        testAssembly.addItem(testItem);
+
+        auto testItem1 = std::make_shared<ObjectStoreItem>();
+        testItem1->setName("testItem");
+        testItem1->setValueFromBool(false);
+        testAssembly1.addItem(testItem1);
+
+        auto result = testAssembly == testAssembly1;
+        EXPECT_EQ(result, true);
+    }
+
+    TEST(ObjectStoreAssembly_Class, opeatorEuqa_false) {
+        ObjectStoreAssembly testAssembly;
+        ObjectStoreAssembly testAssembly1;
+
+        testAssembly.setName("testName");
+        testAssembly1.setName("testName");
+
+        auto testItem = std::make_shared<ObjectStoreItem>();
+        testItem->setName("testItem");
+        testItem->setValueFromBool(false);
+        testAssembly.addItem(testItem);
+
+        auto testItem1 = std::make_shared<ObjectStoreItem>();
+        testItem1->setName("testItem");
+        testItem1->setValueFromBool(true);
+        testAssembly1.addItem(testItem1);
+
+        auto result = testAssembly == testAssembly1;
+        EXPECT_EQ(result, false);
+    }
+
+    TEST(ObjectStoreAssembly_Class, opeatorNeEuqa_true) {
+        ObjectStoreAssembly testAssembly;
+        ObjectStoreAssembly testAssembly1;
+
+        testAssembly.setName("testName");
+        testAssembly1.setName("testName");
+
+        auto testItem = std::make_shared<ObjectStoreItem>();
+        testItem->setName("testItem");
+        testItem->setValueFromBool(false);
+        testAssembly.addItem(testItem);
+
+        auto testItem1 = std::make_shared<ObjectStoreItem>();
+        testItem1->setName("testItem");
+        testItem1->setValueFromBool(true);
+        testAssembly1.addItem(testItem1);
+
+        auto result = testAssembly != testAssembly1;
+        EXPECT_EQ(result, true);
+
+    }
+
+    TEST(ObjectStoreAssembly_Class, opeatorNeEuqa_false) {
+        ObjectStoreAssembly testAssembly;
+        ObjectStoreAssembly testAssembly1;
+
+        testAssembly.setName("testName");
+        testAssembly1.setName("testName");
+
+        auto testItem = std::make_shared<ObjectStoreItem>();
+        testItem->setName("testItem");
+        testItem->setValueFromBool(false);
+        testAssembly.addItem(testItem);
+
+        auto testItem1 = std::make_shared<ObjectStoreItem>();
+        testItem1->setName("testItem");
+        testItem1->setValueFromBool(false);
+        testAssembly1.addItem(testItem1);
+
+        auto result = testAssembly != testAssembly1;
+        EXPECT_EQ(result, false);
+
+    }
+
+
 }

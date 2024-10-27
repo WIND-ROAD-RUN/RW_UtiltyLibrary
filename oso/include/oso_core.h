@@ -35,7 +35,7 @@ namespace rw {
             //Supplement:
             //      Hierarchical structure:He represents the level of the instance in the object tree, for example, if he has a parent object and the parent object has no parent bject, then his level is 1
             size_t level{ 0 };
-            
+
             //Increase the hierarchy of class instances
             virtual void addLevel() {
                 level++;
@@ -43,7 +43,7 @@ namespace rw {
 
             //Reduce the hierarchy of class instances
             virtual void subLevel() {
-                if (level==0) {
+                if (level == 0) {
                     return;
                 }
                 level--;
@@ -68,14 +68,14 @@ namespace rw {
             virtual void print(std::ostream& os);
 
         public:
-            virtual bool operator==(const ObjectStoreCore& other) const {
-                return m_name == other.m_name;
-            }
+            virtual bool operator==(const ObjectStoreCore& other) const;
+
+            virtual bool operator!=(const ObjectStoreCore& other) const;
         };
 
         //The type of data stored in the Object Data Item class
         enum  class ObjectDataItemStoreType
-        {   
+        {
             item_string,
             item_int,
             item_long,
@@ -162,16 +162,16 @@ namespace rw {
             }
 
         public:
-            virtual bool operator==(const ObjectStoreItem & other) {
-                auto nameIsSame = this->getName() == other.getName();
-                
-                auto typeIsSame = this->getType() == other.getType();
+            bool equlas(const ObjectStoreItem& other) const;
 
-                auto valueIsSame = _value == other._value;
+            bool operator==(const ObjectStoreCore& other) const override;
 
-                return nameIsSame && typeIsSame && valueIsSame;
+            bool operator!=(const ObjectStoreCore& other) const override;
 
-            }
+            bool operator==(const ObjectStoreItem& other) const;
+
+            bool operator!=(const ObjectStoreItem& other)const;
+
         };
 
         //
@@ -249,37 +249,32 @@ namespace rw {
             virtual std::string getStoreType() const override {
                 return "assembly";
             }
+        public:
+            bool equlas(const ObjectStoreAssembly& other) const;
 
-            virtual bool operator==(const ObjectStoreAssembly& other) {
-                bool result{true};
+            bool operator==(const ObjectStoreCore& other) const override;
 
-                auto nameIsSame = this->getName() == other.getName();
+            bool operator!=(const ObjectStoreCore& other)const override;
 
-                auto sizeIsSame = this->m_items.size() == other.m_items.size();
+            bool operator==(const ObjectStoreAssembly& other) const;
 
-                for (int i = 0;i<this->getItems().size();++i) {
-                    result = result && (*this->getItems()[i] == *other.getItems()[i]);
-                }
-
-                return result&&nameIsSame && sizeIsSame;
-
-            }
+            bool operator!=(const ObjectStoreAssembly& other)const;
 
         };
 
-        inline std::shared_ptr<ObjectStoreAssembly> 
+        inline std::shared_ptr<ObjectStoreAssembly>
             makeObjectStoreAssemblySharedPtr
             (const ObjectStoreAssembly& assembly) {
             return std::make_shared<ObjectStoreAssembly>(assembly);
         }
 
-        inline std::shared_ptr<ObjectStoreItem> 
+        inline std::shared_ptr<ObjectStoreItem>
             makeObjectStoreItemSharedPtr
             (const ObjectStoreItem& item) {
             return std::make_shared<ObjectStoreItem>(item);
         }
 
-        inline std::shared_ptr<ObjectStoreAssembly> 
+        inline std::shared_ptr<ObjectStoreAssembly>
             ObjectStoreCoreToAssembly
             (std::shared_ptr<ObjectStoreCore> core) {
             std::shared_ptr<ObjectStoreAssembly> assembly = std::dynamic_pointer_cast<ObjectStoreAssembly>(core);
@@ -287,7 +282,7 @@ namespace rw {
             return assembly;
         }
 
-        inline std::shared_ptr<ObjectStoreItem> 
+        inline std::shared_ptr<ObjectStoreItem>
             ObjectStoreCoreToItem
             (std::shared_ptr<ObjectStoreCore> core) {
             std::shared_ptr<ObjectStoreItem> item = std::dynamic_pointer_cast<ObjectStoreItem>(core);

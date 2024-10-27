@@ -11,7 +11,7 @@ namespace rw {
             QLabel* label = new QLabel("Initializing, please wait...", this);
             layout->addWidget(label);
             setLayout(layout);
-            setModal(true); // ÉèÖÃÎªÄ£Ì¬´°¿Ú
+            setModal(true); // è®¾ç½®ä¸ºæ¨¡æ€çª—å£
         }
 
         DialogInitialization::DialogInitialization(QWidget* parent)
@@ -19,7 +19,7 @@ namespace rw {
             , ui(new Ui::DialogInitializationClass())
         {
             ui->setupUi(this);
-            setModal(true); // ÉèÖÃÎªÄ£Ì¬´°¿Ú
+            setModal(true); // è®¾ç½®ä¸ºæ¨¡æ€çª—å£
             setWindowFlags(Qt::FramelessWindowHint);
         }
 

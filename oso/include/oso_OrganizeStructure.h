@@ -15,7 +15,6 @@ namespace pugi {
     class xml_node;
 }
 
-
 namespace rw {
     namespace oso {
 

@@ -1,6 +1,8 @@
 #include "cfgr_RuntimeConfigLoader.h"
 
-#include"osos_FileSave.h"
+#include"oso_FileSave.h"
+#include"oso_OrganizeStructure.h"
+#include"oso_core.h"
 
 namespace rw {
     namespace cfgr {
@@ -9,9 +11,9 @@ namespace rw {
             (const std::filesystem::path& filePath, bool & isLoad)
         {
             bool isLoadSuccess = false;
-            oso::FileSave fileSave;
-            auto config = fileSave.load(filePath, isLoadSuccess);
-            if (!isLoadSuccess) {
+            oso::FileSave fileSave(rw::oso::OrganizeStructureType::XML_pugixml);
+            auto config = fileSave.load(filePath);
+            if (!config) {
                 isLoad = false;
                 return RutimeConfig();
             }
@@ -24,9 +26,8 @@ namespace rw {
             RuntimeConfigLoader::save
             (const std::filesystem::path& filePath, const RutimeConfig& config)
         {
-            oso::FileSave fileSave;
-            fileSave.save(filePath, oso::makeObjectStoreAssemblySharedPtr(RutimeConfig::toObjectStoreAssembly(config)));
-
+            oso::FileSave fileSave(rw::oso::OrganizeStructureType::XML_pugixml);
+            fileSave.save(filePath, std::make_shared<oso::ObjectStoreAssembly>(RutimeConfig::toObjectStoreAssembly(config)));
         }
     }
 }

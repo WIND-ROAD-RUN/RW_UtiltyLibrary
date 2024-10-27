@@ -39,6 +39,5 @@ if(${CMAKE_SYSTEM_NAME}  STREQUAL "Windows")
 endif()
 
 add_subdirectory(oso)
-add_subdirectory(Extra)
 add_subdirectory(cfgr)
 add_subdirectory(dsl)

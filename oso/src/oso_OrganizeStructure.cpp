@@ -12,6 +12,44 @@
 namespace rw {
 
     namespace oso {
+        OrganizeStructure::OrganizeStructure(OrganizeStructureType type)
+            :_core(OrganizeStructureFactory::create(type))
+        {
+
+        }
+
+        OrganizeStructure::~OrganizeStructure(){
+        
+        }
+
+        std::string
+            OrganizeStructure::getString
+            (const std::shared_ptr<ObjectStoreItem> source)
+        {
+            return _core->getString(source);
+        }
+
+        std::string
+            OrganizeStructure::getString
+            (const std::shared_ptr<ObjectStoreAssembly> source)
+        {
+            return _core->getString(source);
+        }
+
+        std::shared_ptr<ObjectStoreItem>
+            OrganizeStructure::getStoreItemFromString
+            (const std::string& source)
+        {
+            return _core->getStoreItemFromString(source);
+        }
+
+        std::shared_ptr<ObjectStoreAssembly>
+            OrganizeStructure::getStoreAssemblyFromString
+            (const std::string& source)
+        {
+            return _core->getStoreAssemblyFromString(source);
+        }
+
         void
             OrganizeStructure_pugixml::appendXmlNodeFromStoreItem
             (pugi::xml_node& node, const std::shared_ptr<ObjectStoreItem> source)
@@ -217,5 +255,19 @@ namespace rw {
                 }
             }
         }
+
+        std::shared_ptr<OrganizeStructure_core> OrganizeStructureFactory::create(OrganizeStructureType type)
+        {
+            switch (type)
+            {
+            case rw::oso::OrganizeStructureType::XML_pugixml:
+                return std::make_shared<OrganizeStructure_pugixml>();
+                break;
+            default:
+                throw std::runtime_error("Unknown type which is OrganizeStructureType");
+                break;
+            }
+        }
+        
     }
 }

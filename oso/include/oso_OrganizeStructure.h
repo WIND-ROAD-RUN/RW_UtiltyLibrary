@@ -24,18 +24,6 @@ namespace rw {
             JSON_jsonCpp,
         };
 
-        class OrganizeStructure {
-        public:
-            explicit OrganizeStructure(OrganizeStructureType type);
-            ~OrganizeStructure();
-        };
-
-
-        class OrganizeStructureFactory {
-        public:
-        };
-        
-
         class OrganizeStructure_core {
         public:
             virtual std::string getString(const std::shared_ptr<ObjectStoreItem> source) = 0;
@@ -46,6 +34,27 @@ namespace rw {
 
         };
 
+        class OrganizeStructure
+            :public OrganizeStructure_core {
+        public:
+            explicit OrganizeStructure(OrganizeStructureType type);
+            ~OrganizeStructure();
+        private:
+            std::shared_ptr<OrganizeStructure_core> _core;
+        public:
+            std::string getString(const std::shared_ptr<ObjectStoreItem> source) override;
+            std::string getString(const std::shared_ptr<ObjectStoreAssembly> source) override;
+
+            std::shared_ptr<ObjectStoreItem> getStoreItemFromString(const std::string& source) override;
+            std::shared_ptr<ObjectStoreAssembly> getStoreAssemblyFromString(const std::string& source) override;
+        };
+
+
+        class OrganizeStructureFactory {
+        public:
+            static std::shared_ptr<OrganizeStructure_core> create(OrganizeStructureType type);
+        };
+        
         class OrganizeStructure_pugixml
             : public OrganizeStructure_core {
         private:
@@ -62,7 +71,6 @@ namespace rw {
             std::shared_ptr<ObjectStoreAssembly> getStoreAssemblyFromString(const std::string& source) override;
 
         };
-
 
     }
 }

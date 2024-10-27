@@ -91,6 +91,44 @@ namespace oso_OrganizeStructure {
         EXPECT_EQ(str, standardString);
     }
 
+    TEST(OrganizeStructure_class, xmlCore_getStringAssembly) {
+        OrganizeStructure testObj(OrganizeStructureType::XML_pugixml);
+        OsoOrganizeStructureDataXmlStoreFormat data;
+        auto str = testObj.getString(std::make_shared<ObjectStoreAssembly>(data));
+        str = removeNewlinesAndTabs(str);
+        auto standardString = data.assemblyStandardString();
+
+        EXPECT_EQ(str, standardString);
+    }
+
+    TEST(OrganizeStructure_class, xmlCore_getStringItem) {
+        OrganizeStructure testObj(OrganizeStructureType::XML_pugixml);
+        OsoOrganizeStructureDataXmlStoreFormat data;
+        auto str = testObj.getString(std::make_shared<ObjectStoreItem>(data));
+        str = removeNewlinesAndTabs(str);
+        auto standardString = data.itemStandardString();
+
+        EXPECT_EQ(str, standardString);
+    }
+
+    TEST(OrganizeStructure_class, xmlCore_getStoreAssemblyFromString) {
+        OrganizeStructure testObj(OrganizeStructureType::XML_pugixml);
+        OsoOrganizeStructureDataXmlStoreFormat data;
+        auto target = testObj.getStoreAssemblyFromString(OsoOrganizeStructureDataXmlStoreFormat::assemblyStandardString());
+
+        auto result = (*target) == ObjectStoreAssembly(data);
+        EXPECT_EQ(result, true);
+    }
+
+    TEST(OrganizeStructure_class, xmlCore_getStoreItemFromString) {
+        OrganizeStructure testObj(OrganizeStructureType::XML_pugixml);
+        OsoOrganizeStructureDataXmlStoreFormat data;
+        auto target = testObj.getStoreItemFromString(OsoOrganizeStructureDataXmlStoreFormat::itemStandardString());
+
+        auto result = (*target) == ObjectStoreItem(data);
+        EXPECT_EQ(result, true);
+    }
+
 }
 
 OsoOrganizeStructureDataXmlStoreFormat::OsoOrganizeStructureDataXmlStoreFormat()

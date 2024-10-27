@@ -55,8 +55,17 @@ namespace oso_OrganizeStructure {
         OsoOrganizeStructureDataXmlStoreFormat data;
         auto target=testObj.getStoreAssemblyFromString(OsoOrganizeStructureDataXmlStoreFormat::assemblyStandardString());
 
-        auto result = (*target) == data;
+        auto result = (*target) == ObjectStoreAssembly(data);
         EXPECT_EQ(result,true);
+    }
+
+    TEST(OrganizeStructure_pugixml_class, getStoreItemFromString) {
+        OrganizeStructure_pugixml testObj;
+        OsoOrganizeStructureDataXmlStoreFormat data;
+        auto target = testObj.getStoreItemFromString(OsoOrganizeStructureDataXmlStoreFormat::itemStandardString());
+
+        auto result = (*target) == ObjectStoreItem(data);
+        EXPECT_EQ(result, true);
     }
 
     TEST(OrganizeStructure_pugixml_class, checkStringFormat_getAssemlyAndgetString) {
@@ -68,15 +77,6 @@ namespace oso_OrganizeStructure {
         auto standardString = data.itemStandardString();
         
         EXPECT_EQ(str, standardString);
-    }
-
-    TEST(OrganizeStructure_pugixml_class, getStoreItemFromString) {
-        OrganizeStructure_pugixml testObj;
-        OsoOrganizeStructureDataXmlStoreFormat data;
-        auto target = testObj.getStoreItemFromString(OsoOrganizeStructureDataXmlStoreFormat::itemStandardString());
-
-        auto result = (*target) == data;
-        EXPECT_EQ(result, true);
     }
 
     TEST(OrganizeStructure_pugixml_class, checkStringFormat_getItemAndgetString) {

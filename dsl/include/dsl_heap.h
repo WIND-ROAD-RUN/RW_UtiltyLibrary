@@ -15,7 +15,7 @@ namespace rw {
             int _value;
         public:
             int get_value() const { return _value; }
-            int set_value(int value) { _value = value; }
+            void set_value(int value) { _value = value; }
         public:
             void print() {
                 std::cout << "value: " << _value << std::endl;

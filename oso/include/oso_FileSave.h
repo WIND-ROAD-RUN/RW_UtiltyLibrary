@@ -40,13 +40,13 @@ namespace rw {
 
         };
 
-        class FileSaveRefactor_pugixml
+        class FileSave_pugixml
             :public FileSave_strategy {
         private:
             std::shared_ptr<OrganizeStructure> _organizeStructure;
         public:
-            explicit FileSaveRefactor_pugixml(OrganizeStructureType type);
-            ~FileSaveRefactor_pugixml() = default;
+            explicit FileSave_pugixml(OrganizeStructureType type);
+            ~FileSave_pugixml() = default;
         public:
             // 通过 FileSave_strategy 继承
             bool save(const std::filesystem::path& fileName, std::shared_ptr<ObjectStoreAssembly> assembly) override;

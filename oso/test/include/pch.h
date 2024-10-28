@@ -14,6 +14,7 @@
 #include<string>
 #include<random>
 #include<algorithm>
+#include<filesystem>
 
 using namespace rw::oso;
 using namespace std;

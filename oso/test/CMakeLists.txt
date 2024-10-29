@@ -11,6 +11,8 @@ enable_testing()
 find_package(GTest CONFIG REQUIRED)
 
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include)
+
+set(SRC_LIST)
 aux_source_directory(${CMAKE_CURRENT_SOURCE_DIR}/src SRC_LIST)
 
 # google test library
@@ -18,8 +20,9 @@ add_executable(${PROJECT_NAME} ${SRC_LIST})
 target_link_libraries(${PROJECT_NAME}  PRIVATE GTest::gtest GTest::gtest_main)
 
 ##test library
-add_dependencies(${PROJECT_NAME} oso)
 target_link_libraries(${PROJECT_NAME} PRIVATE oso)
+
+target_include_directories(${PROJECT_NAME} PRIVATE ${OSO_PRIVATE_PATH}/include)
 
 add_test(NAME ${PROJECT_NAME} COMMAND ${PROJECT_NAME})
 

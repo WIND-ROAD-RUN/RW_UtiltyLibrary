@@ -10,12 +10,19 @@ add_compile_options("$<$<CXX_COMPILER_ID:MSVC>:/utf-8>")
 find_package(pugixml CONFIG REQUIRED)
 find_package(jsoncpp CONFIG REQUIRED)
 
+set(OSO_PRIVATE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/private)
+
+set(SRC_LIST)
 aux_source_directory(${CMAKE_CURRENT_SOURCE_DIR}/src SRC_LIST)
 
-add_library(${PROJECT_NAME}  STATIC ${SRC_LIST})
+set(SRC_PRIVATE_LIST)
+aux_source_directory(${OSO_PRIVATE_PATH}/src SRC_PRIVATE_LIST)
+
+add_library(${PROJECT_NAME}  STATIC ${SRC_LIST} ${SRC_PRIVATE_LIST})
 target_link_libraries(${PROJECT_NAME}  PRIVATE pugixml::pugixml)
 target_link_libraries(${PROJECT_NAME}   PRIVATE JsonCpp::JsonCpp)
 target_include_directories(${PROJECT_NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
+target_include_directories(${PROJECT_NAME} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/private/include)
 
 add_subdirectory(./test)
 

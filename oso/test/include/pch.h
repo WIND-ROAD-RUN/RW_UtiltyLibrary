@@ -9,6 +9,7 @@
 #include "osoc_MVSCameraConfig.h"
 #include "osop_OcrDateProductConfig.h"
 #include "oso_OrganizeStructure.h"
+#include"oso_OrganizeStructure_private.h"
 #include "oso_FileSave.h"
 
 #include<string>

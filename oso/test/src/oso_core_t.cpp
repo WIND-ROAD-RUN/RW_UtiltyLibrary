@@ -1,5 +1,8 @@
-#include"pch.h"
+#include"oso_core.h"
+
 #include <random> 
+
+using namespace rw::oso;
 
 namespace oso_core{
     TEST(ObjectStoreCore_Class, attribute_name) {

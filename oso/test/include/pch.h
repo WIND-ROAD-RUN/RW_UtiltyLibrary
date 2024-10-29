@@ -5,19 +5,12 @@
 
 #include "gtest/gtest.h"
 
-#include "oso_core.h"
-#include "osoc_MVSCameraConfig.h"
-#include "osop_OcrDateProductConfig.h"
-#include "oso_OrganizeStructure.h"
-#include"oso_OrganizeStructure_private.h"
-#include "oso_FileSave.h"
-
 #include<string>
 #include<random>
 #include<algorithm>
 #include<filesystem>
 
-using namespace rw::oso;
 using namespace std;
+
 
 #endif // PCH_H

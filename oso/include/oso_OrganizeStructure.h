@@ -4,12 +4,7 @@
 #include<string>
 #include<memory>
 
-namespace rw {
-    namespace oso {
-        class ObjectStoreItem;
-        class ObjectStoreAssembly;
-    }
-}
+#include"oso_core.h"
 
 namespace pugi {
     class xml_node;

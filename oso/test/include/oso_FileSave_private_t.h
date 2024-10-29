@@ -3,7 +3,9 @@
 
 #include"pch.h"
 
-#include <filesystem>
+#include"oso_FileSave_private.h"
+
+using namespace rw::oso;
 
 class FileSave_pugixmlTest
     : public ::testing::Test {

@@ -1,8 +1,11 @@
 #ifndef OSO_ORGANIZESTRUCTURE_T_H
 #define OSO_ORGANIZESTRUCTURE_T_H
 
-#include <gtest/gtest.h>
 #include"pch.h"
+
+#include"oso_OrganizeStructure_private.h"
+
+using namespace rw::oso;
 
 class OrganizeStructure_pugixmlTest
     : public ::testing::Test {

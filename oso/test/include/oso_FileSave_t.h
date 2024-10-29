@@ -3,8 +3,11 @@
 
 #include"pch.h"
 
+#include"oso_FileSave.h"
+
 #include <filesystem>
 
+using namespace rw::oso;
 
 class FileSaveTest
     :public ::testing::TestWithParam<std::tuple<OrganizeStructureType>> {

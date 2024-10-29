@@ -1,7 +1,5 @@
 #include"oso_OrganizeStructure_private.h"
 
-#include"oso_core.h"
-
 #include<memory>
 #include<sstream>
 #include<string>

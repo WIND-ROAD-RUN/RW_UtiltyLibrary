@@ -6,8 +6,11 @@
 
 #include"oso_core.h"
 
-namespace pugi {
-    class xml_node;
+namespace rw {
+    namespace oso
+    {
+        class OrganizeStructure_core;
+    }
 }
 
 namespace rw {
@@ -18,29 +21,18 @@ namespace rw {
             JSON_jsonCpp,
         };
 
-        class OrganizeStructure_core {
-        public:
-            virtual std::string getString(const std::shared_ptr<ObjectStoreItem> source) = 0;
-            virtual std::string getString(const std::shared_ptr<ObjectStoreAssembly> source) = 0;
-
-            virtual std::shared_ptr<ObjectStoreItem> getStoreItemFromString(const std::string& source) = 0;
-            virtual std::shared_ptr<ObjectStoreAssembly> getStoreAssemblyFromString(const std::string& source) = 0;
-
-        };
-
-        class OrganizeStructure
-            :public OrganizeStructure_core {
+        class OrganizeStructure{
         public:
             explicit OrganizeStructure(OrganizeStructureType type);
             ~OrganizeStructure();
         private:
             std::shared_ptr<OrganizeStructure_core> _core;
         public:
-            std::string getString(const std::shared_ptr<ObjectStoreItem> source) override;
-            std::string getString(const std::shared_ptr<ObjectStoreAssembly> source) override;
+            std::string getString(const std::shared_ptr<ObjectStoreItem> source);
+            std::string getString(const std::shared_ptr<ObjectStoreAssembly> source);
 
-            std::shared_ptr<ObjectStoreItem> getStoreItemFromString(const std::string& source) override;
-            std::shared_ptr<ObjectStoreAssembly> getStoreAssemblyFromString(const std::string& source) override;
+            std::shared_ptr<ObjectStoreItem> getStoreItemFromString(const std::string& source);
+            std::shared_ptr<ObjectStoreAssembly> getStoreAssemblyFromString(const std::string& source);
         };
 
     }

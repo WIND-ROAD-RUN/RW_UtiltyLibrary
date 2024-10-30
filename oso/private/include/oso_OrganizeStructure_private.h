@@ -3,12 +3,26 @@
 
 #include"oso_OrganizeStructure.h"
 
+namespace pugi {
+    class xml_node;
+}
+
 namespace rw {
 	namespace oso
 	{
         class OrganizeStructureFactory {
         public:
             static std::shared_ptr<OrganizeStructure_core> create(OrganizeStructureType type);
+        };
+
+        class OrganizeStructure_core {
+        public:
+            virtual std::string getString(const std::shared_ptr<ObjectStoreItem> source) = 0;
+            virtual std::string getString(const std::shared_ptr<ObjectStoreAssembly> source) = 0;
+
+            virtual std::shared_ptr<ObjectStoreItem> getStoreItemFromString(const std::string& source) = 0;
+            virtual std::shared_ptr<ObjectStoreAssembly> getStoreAssemblyFromString(const std::string& source) = 0;
+
         };
 
         class OrganizeStructure_pugixml

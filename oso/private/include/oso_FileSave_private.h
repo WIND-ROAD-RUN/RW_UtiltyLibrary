@@ -5,6 +5,15 @@
 
 namespace rw {
     namespace oso {
+        class FileSave_strategy {
+        public:
+            virtual ~FileSave_strategy() = default;
+
+            virtual bool save(const std::filesystem::path& fileName, std::shared_ptr<ObjectStoreAssembly> assembly) = 0;
+
+            virtual std::shared_ptr<ObjectStoreAssembly> load(const std::filesystem::path& fileName) = 0;
+        };
+
         class FileSave_pugixml
             :public FileSave_strategy {
         private:

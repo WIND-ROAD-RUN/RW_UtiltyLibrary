@@ -9,27 +9,23 @@
 
 namespace rw {
     namespace oso {
-        class FileSave_strategy {
-        public:
-            virtual ~FileSave_strategy() = default;
+        class FileSave_strategy;
+    }
+}
 
-            virtual bool save(const std::filesystem::path& fileName, std::shared_ptr<ObjectStoreAssembly> assembly) = 0;
-
-            virtual std::shared_ptr<ObjectStoreAssembly> load(const std::filesystem::path& fileName) = 0;
-        };
-
+namespace rw {
+    namespace oso {
         class FileSave
-            :public FileSave_strategy {
+            {
         public:
             FileSave(OrganizeStructureType type);
             ~FileSave();
         private:
             std::shared_ptr<FileSave_strategy> _strategy;
         public:
-            // 通过 FileSave_strategy 继承
-            bool save(const std::filesystem::path& fileName, std::shared_ptr<ObjectStoreAssembly> assembly) override;
+            bool save(const std::filesystem::path& fileName, std::shared_ptr<ObjectStoreAssembly> assembly);
 
-            std::shared_ptr<ObjectStoreAssembly> load(const std::filesystem::path& fileName) override;
+            std::shared_ptr<ObjectStoreAssembly> load(const std::filesystem::path& fileName);
 
         };
     }

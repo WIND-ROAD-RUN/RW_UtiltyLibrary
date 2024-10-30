@@ -29,7 +29,7 @@ namespace oso_OrganizeStructure {
         auto& [type] = GetParam();
         initestObj(type);
 
-        auto target = _testObj->getStoreAssemblyFromString(_assemblyStandardString);
+        auto target = _testObj->getStoreAssemblyPtrFromString(_assemblyStandardString);
 
         auto result = (*target) == ObjectStoreAssembly(_OsoOrganizeStructureDataXmlStoreFormatAssemblySampleData);
         EXPECT_EQ(result, true);
@@ -39,7 +39,7 @@ namespace oso_OrganizeStructure {
         auto& [type] = GetParam();
         initestObj(type);
 
-        auto target = _testObj->getStoreItemFromString(_itemStandardString);
+        auto target = _testObj->getStoreItemPtrFromString(_itemStandardString);
 
         auto result = (*target) == ObjectStoreItem(_OsoOrganizeStructureDataXmlStoreFormatItemSampleData);
         EXPECT_EQ(result, true);
@@ -49,7 +49,7 @@ namespace oso_OrganizeStructure {
         auto& [type] = GetParam();
         initestObj(type);
 
-        auto target = _testObj->getStoreAssemblyFromString(_assemblyStandardString);
+        auto target = _testObj->getStoreAssemblyPtrFromString(_assemblyStandardString);
         auto str = _testObj->getString(std::make_shared<ObjectStoreItem>(_OsoOrganizeStructureDataXmlStoreFormatItemSampleData));
         str = removeNewlinesAndTabs(str);
         auto& standardString = _itemStandardString;
@@ -61,7 +61,7 @@ namespace oso_OrganizeStructure {
         auto& [type] = GetParam();
         initestObj(type);
 
-        auto target = _testObj->getStoreItemFromString(_itemStandardString);
+        auto target = _testObj->getStoreItemPtrFromString(_itemStandardString);
 
         auto str = _testObj->getString(std::make_shared<ObjectStoreItem>(_OsoOrganizeStructureDataXmlStoreFormatItemSampleData));
         str = removeNewlinesAndTabs(str);

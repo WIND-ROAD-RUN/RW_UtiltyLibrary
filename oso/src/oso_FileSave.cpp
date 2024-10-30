@@ -31,10 +31,23 @@ namespace rw {
             auto result=_strategy->save(fileName, assembly);
             return result;
         }
-        std::shared_ptr<ObjectStoreAssembly> FileSave::load(const std::filesystem::path& fileName)
+
+        bool FileSave::save(const std::filesystem::path &fileName, const ObjectStoreAssembly &assembly)
+        {
+            auto result = this->save(fileName, std::make_shared<ObjectStoreAssembly>(assembly));
+            return result;
+        }
+
+        std::shared_ptr<ObjectStoreAssembly> FileSave::loadPtr(const std::filesystem::path &fileName)
         {
             auto result = _strategy->load(fileName);
             return result;
+        }
+
+        ObjectStoreAssembly FileSave::load(const std::filesystem::path &fileName)
+        {
+            auto result = this->loadPtr(fileName);
+            return *result;
         }
     }
 }

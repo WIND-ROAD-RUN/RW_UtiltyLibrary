@@ -22,6 +22,12 @@ namespace rw {
             return _core->getString(source);
         }
 
+        std::string OrganizeStructure::getString(const ObjectStoreItem &source)
+        {
+            auto result = this->getString(std::make_shared<ObjectStoreItem>(source));
+            return result;
+        }
+
         std::string
             OrganizeStructure::getString
             (const std::shared_ptr<ObjectStoreAssembly> source)
@@ -29,19 +35,36 @@ namespace rw {
             return _core->getString(source);
         }
 
+        std::string OrganizeStructure::getString(const ObjectStoreAssembly &source)
+        {
+            auto result = this->getString(std::make_shared<ObjectStoreAssembly>(source));
+            return result;
+        }
+
         std::shared_ptr<ObjectStoreItem>
-            OrganizeStructure::getStoreItemFromString
+            OrganizeStructure::getStoreItemPtrFromString
             (const std::string& source)
         {
             return _core->getStoreItemFromString(source);
         }
 
+        ObjectStoreItem OrganizeStructure::getStoreItemFromString(const std::string &source)
+        {
+            auto result = this->getStoreItemPtrFromString(source);
+            return *result;
+        }
+
         std::shared_ptr<ObjectStoreAssembly>
-            OrganizeStructure::getStoreAssemblyFromString
+            OrganizeStructure::getStoreAssemblyPtrFromString
             (const std::string& source)
         {
             return _core->getStoreAssemblyFromString(source);
         }
-        
+
+        ObjectStoreAssembly OrganizeStructure::getStoreAssemblyFromString(const std::string &source)
+        {
+            auto result = this->getStoreAssemblyPtrFromString(source);
+            return *result;
+        }
     }
 }

@@ -24,9 +24,10 @@ namespace rw {
             std::shared_ptr<FileSave_strategy> _strategy;
         public:
             bool save(const std::filesystem::path& fileName, std::shared_ptr<ObjectStoreAssembly> assembly);
+            bool save(const std::filesystem::path& fileName, const ObjectStoreAssembly &assembly);
 
-            std::shared_ptr<ObjectStoreAssembly> load(const std::filesystem::path& fileName);
-
+            std::shared_ptr<ObjectStoreAssembly> loadPtr(const std::filesystem::path& fileName);
+            ObjectStoreAssembly load(const std::filesystem::path& fileName);
         };
     }
 

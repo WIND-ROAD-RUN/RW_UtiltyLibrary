@@ -14,7 +14,7 @@ namespace rw {
         class Account {
         public:
             Account();
-            Account(const std::string& name, const std::string& password);
+            Account(std::string name,std::string password);
             Account(const Account& account);
             Account& operator=(const Account& account);
             ~Account();

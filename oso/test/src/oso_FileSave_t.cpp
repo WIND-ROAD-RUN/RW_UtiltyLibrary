@@ -16,7 +16,7 @@ namespace oso_FileSave {
         auto saveResult = _testObj->save(_testFileName, _sampleAssembly);
         ASSERT_EQ(saveResult, true);
 
-        auto loadResult = _testObj->load(_testFileName);
+        auto loadResult = _testObj->loadPtr(_testFileName);
         ASSERT_TRUE(loadResult);
 
         ASSERT_EQ(*loadResult, *_sampleAssembly);

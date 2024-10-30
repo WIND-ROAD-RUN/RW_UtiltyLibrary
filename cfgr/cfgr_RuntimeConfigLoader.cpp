@@ -12,7 +12,7 @@ namespace rw {
         {
             bool isLoadSuccess = false;
             oso::FileSave fileSave(rw::oso::OrganizeStructureType::XML_pugixml);
-            auto config = fileSave.load(filePath);
+            auto config = fileSave.loadPtr(filePath);
             if (!config) {
                 isLoad = false;
                 return RutimeConfig();

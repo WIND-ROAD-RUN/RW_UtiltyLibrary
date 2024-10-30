@@ -35,7 +35,7 @@ namespace rw {
             std::ostringstream oss;
             root.print(oss);
             std::string str = oss.str();
-            auto assembly = _organizeStructure->getStoreAssemblyFromString(str);
+            auto assembly = _organizeStructure->getStoreAssemblyPtrFromString(str);
             return assembly;
         }
     }

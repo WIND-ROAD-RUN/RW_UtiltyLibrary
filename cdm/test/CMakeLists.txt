@@ -21,6 +21,7 @@ target_link_libraries(${PROJECT_NAME}  PRIVATE GTest::gtest GTest::gtest_main)
 
 ##test library
 target_link_libraries(${PROJECT_NAME} PRIVATE cdm)
+target_link_libraries(${PROJECT_NAME} PRIVATE oso)
 
 target_include_directories(${PROJECT_NAME} PRIVATE ${CDM_PRIVATE_PATH}/include)
 

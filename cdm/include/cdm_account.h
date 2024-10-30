@@ -13,11 +13,12 @@ namespace rw {
     namespace cdm {
         class Account {
         public:
-            Account();
+            Account() = default;
+            ~Account() = default;
+            Account(const rw::oso::ObjectStoreAssembly & assembly);
             Account(std::string name,std::string password);
             Account(const Account& account);
             Account& operator=(const Account& account);
-            ~Account();
         public:
             void setName(const std::string& name);
             void setPassword(const std::string& password);
@@ -31,6 +32,7 @@ namespace rw {
         public:
             operator rw::oso::ObjectStoreAssembly() const;
             bool operator==(const Account& account) const;
+            bool operator!=(const Account &account) const;
         };
 
 

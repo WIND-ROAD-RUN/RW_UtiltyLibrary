@@ -5,12 +5,6 @@
 
 namespace rw {
     namespace cdm {
-        class Message_core;
-        class Message_factory
-        {
-
-        };
-
         class Message_core {
 
 

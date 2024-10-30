@@ -57,7 +57,9 @@ namespace rw {
 
 
         public:
-            ObjectStoreCore();
+            ObjectStoreCore()=default;
+
+            ObjectStoreCore(std::vector<char> binary);
 
             virtual ~ObjectStoreCore() = default;
 
@@ -71,6 +73,9 @@ namespace rw {
             virtual bool operator==(const ObjectStoreCore& other) const;
 
             virtual bool operator!=(const ObjectStoreCore& other) const;
+
+        public:
+            virtual std::vector<char> getBinary();
         };
 
         //The type of data stored in the Object Data Item class
@@ -94,7 +99,9 @@ namespace rw {
             //The type of data stored in the object data item
             ObjectDataItemStoreType _type{ ObjectDataItemStoreType::item_int };
         public:
-            ObjectStoreItem();
+            ObjectStoreItem()=default;
+
+            ObjectStoreItem(std::vector<char> binary);
 
             virtual ~ObjectStoreItem() = default;
 
@@ -172,6 +179,9 @@ namespace rw {
 
             bool operator!=(const ObjectStoreItem& other)const;
 
+        public:
+            std::vector<char> getBinary()override;
+
         };
 
         //
@@ -182,7 +192,9 @@ namespace rw {
             std::vector<std::shared_ptr<ObjectStoreCore>> m_items;
 
         public:
-            ObjectStoreAssembly();
+            ObjectStoreAssembly()=default;
+
+            ObjectStoreAssembly(std::vector<char> binary);
 
             virtual ~ObjectStoreAssembly() = default;
 
@@ -260,6 +272,8 @@ namespace rw {
 
             bool operator!=(const ObjectStoreAssembly& other)const;
 
+        public:
+            std::vector<char> getBinary() override;
         };
 
         inline std::shared_ptr<ObjectStoreAssembly>

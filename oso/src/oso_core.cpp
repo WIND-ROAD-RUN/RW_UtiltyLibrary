@@ -175,6 +175,12 @@ namespace rw
             return !(*this == other);
         }
 
+        std::vector<char> ObjectStoreItem::getBinary()
+        {
+
+            return std::vector<char>();
+        }
+
         ObjectStoreAssembly::ObjectStoreAssembly()
         {
         }
@@ -279,6 +285,10 @@ namespace rw
             return !(*this == other);
         }
 
+        std::vector<char> ObjectStoreAssembly::getBinary()
+        {
+            return std::vector<char>();
+        }
 
         std::shared_ptr<ObjectStoreCore> ObjectStoreAssembly::operator[](const size_type& i)
         {
@@ -337,6 +347,11 @@ namespace rw
         bool ObjectStoreCore::operator!=(const ObjectStoreCore& other) const
         {
             return m_name != other.m_name;
+        }
+
+        std::vector<char> ObjectStoreCore::getBinary()
+        {
+            
         }
     }
 }

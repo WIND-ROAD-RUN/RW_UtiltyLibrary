@@ -1,11 +1,14 @@
 #ifndef CDM_MESSAGE_H_
 #define CDM_MESSAGE_H_
 
-#include<string>
-#include<vector>
-#include<memory>
+#include <string>
+#include <vector>
+#include <memory>
 
-namespace rw {
+#include"oso_OrganizeStructure.h"
+
+namespace rw
+{
     namespace cdm
     {
         class Message_factory;
@@ -16,24 +19,29 @@ namespace rw {
     }
 }
 
-namespace rw {
-	namespace cdm
-	{
-		enum class MessageType
-		{
-			TEXT,
+namespace rw
+{
+    namespace cdm
+    {
+        enum class MessageType
+        {
+            TEXT,
             IMAGE,
             VIDEO
-		};
-
-        class Message {
-        private:
-            std::vector<std::shared_ptr<Message_core>> _messageList;
-        
-
         };
 
-	}
+        class MessageFactory
+        {
+            static std::shared_ptr<Message_core> createMessage(MessageType type);
+        };
+
+        class Message
+        {
+        private:
+            std::vector<std::shared_ptr<Message_core>> _messageList;
+        };
+
+    }
 
 }
 

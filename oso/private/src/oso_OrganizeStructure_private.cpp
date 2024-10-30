@@ -101,6 +101,16 @@ namespace rw {
             return result;
         }
 
+        std::vector<char> OrganizeStructure_pugixml::getBinary(const std::shared_ptr<ObjectStoreAssembly> source)
+        {
+            return std::vector<char>();
+        }
+
+        std::vector<char> OrganizeStructure_pugixml::getBinary(const std::shared_ptr<ObjectStoreItem> source)
+        {
+            return std::vector<char>();
+        }
+
         std::shared_ptr<ObjectStoreItem>
             OrganizeStructure_pugixml::getStoreItemFromString
             (const std::string& source)
@@ -164,6 +174,16 @@ namespace rw {
 
             return result;
 
+        }
+
+        std::shared_ptr<ObjectStoreItem> OrganizeStructure_pugixml::getStoreItemFromBinary(const std::vector<char> &source)
+        {
+            return std::shared_ptr<ObjectStoreItem>();
+        }
+
+        std::shared_ptr<ObjectStoreAssembly> OrganizeStructure_pugixml::getStoreAssemblyFromBinary(const std::vector<char> &source)
+        {
+            return std::shared_ptr<ObjectStoreAssembly>();
         }
 
         void

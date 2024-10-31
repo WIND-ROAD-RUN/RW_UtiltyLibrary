@@ -75,7 +75,7 @@ namespace rw {
             virtual bool operator!=(const ObjectStoreCore& other) const;
 
         public:
-            virtual std::vector<char> getBinary();
+            //virtual std::vector<char> getBinary();
         };
 
         //The type of data stored in the Object Data Item class
@@ -180,7 +180,7 @@ namespace rw {
             bool operator!=(const ObjectStoreItem& other)const;
 
         public:
-            std::vector<char> getBinary()override;
+            //std::vector<char> getBinary()override;
 
         };
 
@@ -273,7 +273,7 @@ namespace rw {
             bool operator!=(const ObjectStoreAssembly& other)const;
 
         public:
-            std::vector<char> getBinary() override;
+            //std::vector<char> getBinary() override;
         };
 
         inline std::shared_ptr<ObjectStoreAssembly>

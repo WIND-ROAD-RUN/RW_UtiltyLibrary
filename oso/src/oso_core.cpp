@@ -7,14 +7,6 @@ namespace rw
 {
     namespace oso
     {
-        ObjectStoreCore::ObjectStoreCore()
-        {
-        }
-
-        ObjectStoreItem::ObjectStoreItem()
-        {
-        }
-
         void
             ObjectStoreItem::setValueFromString(const std::string& value)
         {
@@ -175,16 +167,6 @@ namespace rw
             return !(*this == other);
         }
 
-        std::vector<char> ObjectStoreItem::getBinary()
-        {
-
-            return std::vector<char>();
-        }
-
-        ObjectStoreAssembly::ObjectStoreAssembly()
-        {
-        }
-
         void
             ObjectStoreAssembly::addItem(std::shared_ptr<ObjectStoreCore> item)
         {
@@ -285,11 +267,6 @@ namespace rw
             return !(*this == other);
         }
 
-        std::vector<char> ObjectStoreAssembly::getBinary()
-        {
-            return std::vector<char>();
-        }
-
         std::shared_ptr<ObjectStoreCore> ObjectStoreAssembly::operator[](const size_type& i)
         {
             return m_items[i];
@@ -347,11 +324,6 @@ namespace rw
         bool ObjectStoreCore::operator!=(const ObjectStoreCore& other) const
         {
             return m_name != other.m_name;
-        }
-
-        std::vector<char> ObjectStoreCore::getBinary()
-        {
-            
         }
     }
 }

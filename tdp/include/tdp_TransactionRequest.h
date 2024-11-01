@@ -10,31 +10,65 @@
 namespace rw {
     namespace tdp {
         using TransactionRequestType = oso::OrganizeStructureType;
-        
-        using TransactionRequestType = oso::OrganizeStructureType;
 
-        class TransactionRequestBase {
-        public:
-            virtual ~TransactionRequestBase() = default;
-            virtual std::string getRequest(std::shared_ptr<void> handle) = 0;
-            virtual std::shared_ptr<void> analysisRequest(const std::string& s) = 0;
+        template <class TransactionClass, TransactionRequestType requestType >
+        class TransactionRequest_base {
+            virtual std::string getRequest(std::shared_ptr<TransactionHandle<TransactionClass>> handle)=0;
+
+            virtual std::shared_ptr<TransactionHandle<TransactionClass>> analysisRequest(const std::string& s) = 0;
+
         };
 
-        template <class TransactionClass, TransactionType type, TransactionRequestType requestType>
+        template <class TransactionClass, TransactionRequestType requestType= TransactionRequestType::XML_pugixml>
         class TransactionRequest;
 
 
-        template <class TransactionClass, TransactionType type>
-        class TransactionRequest<TransactionClass, type, TransactionRequestType::XML_pugixml> : public TransactionRequestBase {
+        template <class TransactionClass>
+        class TransactionRequest<TransactionClass ,TransactionRequestType::XML_pugixml> 
+            : public TransactionRequest_base<TransactionClass, TransactionRequestType::XML_pugixml>
+        {
         private:
-            using TransactionHandle = TransactionHandle<TransactionClass, type>;
+            oso::OrganizeStructure _organizeStructure;
         public:
-            std::string getRequest(std::shared_ptr<TransactionHandle> handle) override;
+            TransactionRequest();
+        public:
+            std::string getRequest(std::shared_ptr<TransactionHandle<TransactionClass>> handle) override;
 
-            std::shared_ptr<TransactionHandle> analysisRequest(const std::string& s) override;
+            std::shared_ptr<TransactionHandle<TransactionClass>> analysisRequest(const std::string& s) override;
         };
 
+        template <class TransactionClass>
+        inline 
+        TransactionRequest<TransactionClass, TransactionRequestType::XML_pugixml>::
+        TransactionRequest()
+        :_organizeStructure(TransactionRequestType::XML_pugixml)
+        {
+        }
 
+        template <class TransactionClass>
+        inline std::string 
+        TransactionRequest<TransactionClass, TransactionRequestType::XML_pugixml>::getRequest
+        (std::shared_ptr<TransactionHandle<TransactionClass>> handle)
+        {
+            return _organizeStructure.getString(handle->getTransactionAssembly());
+        }
+        
+        template <class TransactionClass>
+        inline std::shared_ptr<TransactionHandle<TransactionClass>> 
+        TransactionRequest<TransactionClass, TransactionRequestType::XML_pugixml>::analysisRequest(const std::string &s)
+        {
+            auto assembly = _organizeStructure.getStoreAssemblyFromString(s);
+            auto type = rw::to_TransactionType(assembly.getName());
+
+
+            auto context=ObjectStoreCoreToAssembly(assembly.getItems()[0]);
+
+            auto a = TransactionClass(*context);
+            auto result = std::make_shared<TransactionHandle<TransactionClass>>(a, type);
+
+            return result;
+            
+        }
     }
 }
 

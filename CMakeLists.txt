@@ -18,6 +18,7 @@ add_compile_options("$<$<CXX_COMPILER_ID:GNU>:-finput-charset=UTF-8>")
 add_compile_options("$<$<CXX_COMPILER_ID:GNU>:-fexec-charset=UTF-8>")
 add_compile_options("$<$<CXX_COMPILER_ID:Clang>:-finput-charset=UTF-8>")
 add_compile_options("$<$<CXX_COMPILER_ID:Clang>:-fexec-charset=UTF-8>")
+add_compile_options("/MP")  
 
 # 如果支持，请为 MSVC 编译器启用热重载。
 if (POLICY CMP0141)
@@ -33,13 +34,5 @@ endif()
 
 ##
 
-##在Windows额外构建
-if(${CMAKE_SYSTEM_NAME}  STREQUAL "Windows")
-    add_subdirectory(oulq)
-endif()
-
-add_subdirectory(cdm) #Common data models
-add_subdirectory(oso) 
-add_subdirectory(cfgr)
-add_subdirectory(dsl)
-add_subdirectory(tdp)
+add_subdirectory(RW)
+add_subdirectory(ThirdLibrary)

@@ -2,6 +2,9 @@ cmake_minimum_required(VERSION 3.27)
 
 project(RW_UtiltyLibrary VERSION 0.1 LANGUAGES CXX)
 
+set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake")
+include(iniEnvironmet)
+
 # 包含工具链文件
 if(DEFINED CMAKE_TOOLCHAIN_FILE)
     include(${CMAKE_TOOLCHAIN_FILE})

@@ -1,4 +1,4 @@
-message(STATUS "Setting compiler...")
+message(STATUS "Setting compiler")
 
 if (CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
     add_compile_options(/utf-8 /MP)

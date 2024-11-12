@@ -7,7 +7,6 @@ include(iniEnvironmet) # 初始化环境变量
 include(iniSubModule)  # 初始化子模块
 include(iniCompile)    # 初始化编译选项
 
-message(${CMAKE_TOOLCHAIN_FILE})
 # 包含工具链文件
 if(DEFINED CMAKE_TOOLCHAIN_FILE)
     include(${CMAKE_TOOLCHAIN_FILE})

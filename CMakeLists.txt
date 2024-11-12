@@ -4,6 +4,7 @@ project(RW_UtiltyLibrary VERSION 0.1 LANGUAGES CXX)
 
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake")
 include(iniEnvironmet)
+include(iniSubModule)
 
 # 包含工具链文件
 if(DEFINED CMAKE_TOOLCHAIN_FILE)

@@ -1,6 +1,6 @@
 message("检索符合的qt环境....")
 
-#检查QT_ROOT环境变量是否已定义
+#检查QT_ROOT环境变量并设置qt路径
 
 if(DEFINED ENV{QT_ROOT})
 	message("QT_ROOT：$ENV{QT_ROOT}")

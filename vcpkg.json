@@ -1,7 +1,7 @@
 {
   "dependencies": [
     "gtest",
-    "jsoncpp",
-    "pugixml"
+    "pugixml",
+    "jsoncpp"
   ]
 }

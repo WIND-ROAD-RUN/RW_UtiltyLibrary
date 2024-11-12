@@ -2,12 +2,15 @@ message(STATUS "Setting compiler")
 
 if (CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
     add_compile_options(/utf-8 /MP)
-    add_compile_options(/Zi)
+
     if (CMAKE_BUILD_TYPE STREQUAL "Debug")
+        add_compile_options(/Zi /RTC1)
         add_link_options(/INCREMENTAL)
     else()
+        add_compile_options(/O2) # 优化代码
         add_link_options(/PROFILE /DEBUG)
     endif()
+
 elseif (CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
     add_compile_options(-finput-charset=UTF-8 -fexec-charset=UTF-8)
     add_compile_options(-j) # 启用多线程编译

@@ -16,10 +16,9 @@ namespace rw {
         //BloomFilter: Bloom filter
         //          The false positive rate of the input will have an error of 0-0.035 compared to the actual value
         class BloomFilter {
+            static constexpr double ln2 = 0.6931471805599453;
 
-            const double ln2 = 0.6931471805599453;
-
-            const double ln2Square = 0.4804530139182014;
+            static constexpr double ln2Square = 0.4804530139182014;
 
         public:
             //Parameters:

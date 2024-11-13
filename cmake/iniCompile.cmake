@@ -6,7 +6,7 @@ if (CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
     if (CMAKE_BUILD_TYPE STREQUAL "Debug")
         add_compile_options(/Zi /RTC1)
         add_link_options(/INCREMENTAL)
-    else()
+    else(CMAKE_BUILD_TYPE STREQUAL "Release")
         add_compile_options(/O2) # 优化代码
         add_link_options(/PROFILE /DEBUG)
     endif()

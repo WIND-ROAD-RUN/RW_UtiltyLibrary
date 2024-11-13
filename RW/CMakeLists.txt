@@ -5,6 +5,6 @@ endif()
 
 add_subdirectory(cdm) #Common data models
 add_subdirectory(oso) 
-add_subdirectory(cfgr)
+#add_subdirectory(cfgr)
 add_subdirectory(dsl)
 add_subdirectory(tdp)

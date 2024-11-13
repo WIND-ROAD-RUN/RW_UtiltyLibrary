@@ -43,6 +43,30 @@
       }
     },
     {
+      "name": "windows-x64-MinSizeRel",
+      "displayName": "x64 MinSizeRel",
+      "inherits": "windows-base",
+      "architecture": {
+        "strategy": "external",
+        "value": "x64"
+      },
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "MinSizeRel"
+      }
+    },
+    {
+      "name": "windows-x64-RelWithDebInfo",
+      "displayName": "x64 RelWithDebInfo",
+      "inherits": "windows-base",
+      "architecture": {
+        "strategy": "external",
+        "value": "x64"
+      },
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "RelWithDebInfo"
+      }
+    },
+    {
       "name": "Linux-base",
       "hidden": true,
       "generator": "Ninja",

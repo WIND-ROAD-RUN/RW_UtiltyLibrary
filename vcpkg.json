@@ -2,6 +2,8 @@
   "dependencies": [
     "gtest",
     "pugixml",
-    "jsoncpp"
+    "jsoncpp",
+    "boost",
+    "rttr"
   ]
 }

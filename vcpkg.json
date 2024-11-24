@@ -4,6 +4,8 @@
     "pugixml",
     "jsoncpp",
     "boost",
-    "rttr"
+    "rttr",
+    "qtbase",
+    "pybind11"
   ]
 }

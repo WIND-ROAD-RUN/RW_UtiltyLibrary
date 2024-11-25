@@ -22,5 +22,5 @@ enable_testing()
 add_subdirectory(RW)
 add_subdirectory(ThirdLibrary)
 
-find_package(pybind11 REQUIRED)
-pybind11_add_module(example_ example.cpp)
+#find_package(pybind11 REQUIRED)
+#pybind11_add_module(example_ example.cpp)

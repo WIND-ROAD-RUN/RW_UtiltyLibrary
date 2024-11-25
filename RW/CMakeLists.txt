@@ -1,6 +1,6 @@
 ##在Windows额外构建
 if(${CMAKE_SYSTEM_NAME}  STREQUAL "Windows")
-    add_subdirectory(oulq)
+    #add_subdirectory(oulq)
 endif()
 
 add_subdirectory(cdm) #Common data models

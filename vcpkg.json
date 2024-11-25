@@ -3,6 +3,9 @@
     "gtest",
     "pugixml",
     "jsoncpp",
-    "boost"
+    "boost",
+    "rttr",
+    "qtbase",
+    "pybind11"
   ]
 }

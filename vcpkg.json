@@ -2,6 +2,7 @@
   "dependencies": [
     "gtest",
     "pugixml",
-    "jsoncpp"
+    "jsoncpp",
+    "opencv4"
   ]
 }

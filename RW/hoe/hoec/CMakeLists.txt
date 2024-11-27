@@ -14,7 +14,10 @@ aux_source_directory(${CMAKE_CURRENT_SOURCE_DIR}/src SRC_LIST)
 set(SRC_PRIVATE_LIST)
 aux_source_directory(${HOEC_PRIVATE_PATH}/src SRC_PRIVATE_LIST)
 
-add_library(${PROJECT_NAME} STATIC ${SRC_LIST} ${SRC_PRIVATE_LIST})
+file(GLOB HEADER_LIST "${CMAKE_CURRENT_SOURCE_DIR}/include/*.h")
+file(GLOB PRIVATE_HEADER_LIST "${HOEC_PRIVATE_PATH}/include/*.h")
+
+add_library(${PROJECT_NAME} STATIC ${SRC_LIST} ${SRC_PRIVATE_LIST} ${HEADER_LIST} ${PRIVATE_HEADER_LIST})
 target_include_directories(${PROJECT_NAME} PRIVATE ${MVS_PATH}/Includes)
 target_include_directories(${PROJECT_NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
 target_include_directories(${PROJECT_NAME} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/private/include)

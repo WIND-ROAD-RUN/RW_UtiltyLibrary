@@ -35,9 +35,12 @@ namespace hoec_Camera_MVS {
     }
 
     TEST(CAMERAMVS, CAMERA_CONNECT) {
-        Camera_MVS::initSDK();
+        //使用前初始化SDK也即相机模块
+        rw::hoec::Camera_MVS::initSDK();
 
+        //获取相机IP列表
         auto ipList = Camera_MVS::getCameraIpList();
+        //创建相机对象
         std::vector<std::shared_ptr<Camera_MVS>> cameraist;
         if (!ipList.size()) {
             std::cout << "No camera found" << std::endl;
@@ -50,8 +53,11 @@ namespace hoec_Camera_MVS {
             cameraist.push_back(std::move(camera));
         }
         for (auto& item : cameraist) {
+            //连接相机
             EXPECT_EQ(item->connectCamera(), true);
         }
+        //...其他操作
+        //使用相机后释放SDK
 
         Camera_MVS::uninitSDK();
     }

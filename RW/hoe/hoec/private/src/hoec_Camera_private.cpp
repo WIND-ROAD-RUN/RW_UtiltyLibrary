@@ -12,6 +12,7 @@ namespace rw{
         Camera_MVS::Camera_MVS() {
 
         }
+
         Camera_MVS::~Camera_MVS() {
             if (m_cameraHandle) {
                 MV_CC_CloseDevice(m_cameraHandle);

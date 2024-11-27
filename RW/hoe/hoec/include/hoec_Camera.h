@@ -6,6 +6,12 @@ namespace rw
 {
     namespace hoec
     {
+        struct CameraInfo
+        {
+            std::string ip;
+            std::string name;
+            std::string mac;
+        };
 
         enum class CameraMonitorMode
         {
@@ -20,6 +26,14 @@ namespace rw
 
         class ICamera
         {
+        public:
+            virtual ~ICamera() = default;
+            ICamera() = default;
+            ICamera(ICamera&&) = delete;
+            ICamera& operator=(ICamera&&) = delete;
+
+            ICamera(const ICamera&) = delete;
+            ICamera& operator=(const ICamera&) = delete;
         public:
             virtual void setIP(const std::string &ip) = 0;
             virtual std::string getIP() const = 0;

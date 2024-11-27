@@ -4,4 +4,6 @@
 #include"pch.h"
 #include"hoec_Camera_private.h"
 
+using namespace rw::hoec;
+
 #endif // !HOEC_CAMERA_PRIVATE_T_H_

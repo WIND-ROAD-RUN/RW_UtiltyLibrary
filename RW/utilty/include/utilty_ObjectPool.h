@@ -26,6 +26,7 @@ namespace rw {
         template<typename... Args>
         std::shared_ptr<T> acquireObject(Args && ... args);
 
+        std::size_t getTotalAllocatedMemory() const;
     private:
         void addChunk();
         std::vector<T*> m_pool;
@@ -87,7 +88,8 @@ namespace rw {
         return std::shared_ptr<T>{constructedObject, [this](T* object) {
             std::destroy_at(object);
             m_freeObjects.push_back(object);
-            }};
+            }
+        };
     }
 
     template<typename T, typename Allocator>
@@ -100,6 +102,18 @@ namespace rw {
             chunkSize *= 2;
         }
         m_pool.clear();
+    }
+
+    template<typename T, typename Allocator>
+    std::size_t ObjectPool<T, Allocator>::getTotalAllocatedMemory() const
+    {
+        std::size_t totalMemory = 0;
+        std::size_t chunkSize = ms_initialChunkSize;
+        for (const auto* chunk : m_pool) {
+            totalMemory += chunkSize * sizeof(T);
+            chunkSize *= 2;
+        }
+        return totalMemory;
     }
 
 }

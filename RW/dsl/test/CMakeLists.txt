@@ -19,7 +19,6 @@ target_include_directories(${PROJECT_NAME} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/i
 #set_target_properties(MyTests PROPERTIES EXCLUDE_FROM_ALL true)
 
 #rw库
-add_dependencies(${PROJECT_NAME} dsl)
 
 target_link_libraries(${PROJECT_NAME} PRIVATE dsl)
 

@@ -19,8 +19,10 @@ target_link_libraries(${PROJECT_NAME}  PRIVATE GTest::gtest GTest::gtest_main)
 
 ##test library
 target_link_libraries(${PROJECT_NAME} PRIVATE hoec)
-target_include_directories(${PROJECT_NAME} PRIVATE ${HOEC_PRIVATE_PATH}/include)
-target_include_directories(${PROJECT_NAME} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/include)
+target_include_directories(${PROJECT_NAME} 
+	PRIVATE ${HOEC_PRIVATE_PATH}/include
+	PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/include
+)
 
 add_test(NAME ${PROJECT_NAME} COMMAND ${PROJECT_NAME})
 

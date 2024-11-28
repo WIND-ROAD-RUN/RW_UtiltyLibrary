@@ -15,9 +15,11 @@ FIND_SOURCES_AND_HEADERS(SRC_LIST
     ${HOEC_PRIVATE_PATH}/src)
 
 add_library(${PROJECT_NAME} STATIC ${SRC_LIST})
-target_include_directories(${PROJECT_NAME} PRIVATE ${MVS_PATH}/Includes)
-target_include_directories(${PROJECT_NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
-target_include_directories(${PROJECT_NAME} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/private/include)
+target_include_directories(${PROJECT_NAME} 
+    PRIVATE ${MVS_PATH}/Includes
+    PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include
+    PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/private/include
+)
 
 # 检查是否为Windows操作系统
 if(WIN32)

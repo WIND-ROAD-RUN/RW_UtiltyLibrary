@@ -17,12 +17,16 @@ FIND_SOURCES_AND_HEADERS(SRC_LIST
 # google test library
 add_executable(${PROJECT_NAME} ${SRC_LIST})
 target_link_libraries(${PROJECT_NAME}  PRIVATE GTest::gtest GTest::gtest_main)
-target_include_directories(${PROJECT_NAME} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/include)
 
 ##test library
-target_link_libraries(${PROJECT_NAME} PRIVATE cdm)
-target_link_libraries(${PROJECT_NAME} PRIVATE oso)
-target_include_directories(${PROJECT_NAME} PRIVATE ${CDM_PRIVATE_PATH}/include)
+target_link_libraries(${PROJECT_NAME} 
+	PRIVATE cdm
+	PRIVATE oso
+)
+target_include_directories(${PROJECT_NAME} 
+	PRIVATE ${CDM_PRIVATE_PATH}/include
+	PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/include
+)
 
 add_test(NAME ${PROJECT_NAME} COMMAND ${PROJECT_NAME})
 

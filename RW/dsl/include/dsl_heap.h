@@ -1,79 +1,55 @@
 #ifndef DSL_HEAP_H
 #define DSL_HEAP_H
 
-#include"dsl_core.h"
-#include<iostream>
+#include "dsl_core.h"
+#include <iostream>
+#include <vector>
 
-namespace rw {
-    namespace dsl {
+namespace rw
+{
+    namespace dsl
+    {
 
-        class Heap_element {
+        template <class T>
+        class IPriorityQueue
+        {
         public:
-            Heap_element(int value);
-            ~Heap_element();
-        private:
-            int _value;
+            virtual ~IPriorityQueue() = 0;
+
         public:
-            int get_value() const { return _value; }
-            void set_value(int value) { _value = value; }
-        public:
-            void print() {
-                std::cout << "value: " << _value << std::endl;
-            }
+            virtual T top() = 0;
+            virtual T peek() = 0;
+            virtual void insert(T element, size_t priority) = 0;
+            virtual void remove(T element) = 0;
+            virtual void update(T element, size_t priority) = 0;
+            virtual size_t size() = 0;
         };
 
-        class Heap_node {
+        class DHeap
+            : public IPriorityQueue<int>
+        {
         public:
-            Heap_node(Shared_ptr<Heap_element> element,int n);
-            Heap_node(Heap_element && element,int n);
-            ~Heap_node(){}
-        private:
-            Shared_ptr<Heap_element> _element;
-            int _n;
-        private:
-            Shared_ptr<Heap_node> _parent;
-            Vector<Shared_ptr<Heap_node>> _children;
+            DHeap();
+            ~DHeap();
         public:
-            Shared_ptr<Heap_node> lhs() const { return _children[0]; }
-            Shared_ptr<Heap_node> rhs() const { return _children[1]; }
+            int top() override;
+            int peek() override;
+            void insert(int element, size_t priority) override;
+            void remove(int element) override;
+            void update(int element, size_t priority) override;
+            size_t size() override;
 
         public:
-            Shared_ptr<Heap_element> get_element() const { return _element; }
-            void set_element(Shared_ptr<Heap_element> element) { _element = element; }
-            Shared_ptr<Heap_node> get_parent() const { return _parent; }
-        public:
-            void appendChild(Shared_ptr<Heap_node> child) { _children.push_back(child); }
-        public:
-            void print() {
-                _element->print();
-                std::cout << "chilren:" ;
-                for (const auto & item : _children) {
-                    item->get_element()->print();
-                }
-
-            }
+            std::vector<size_t> heap_arrary;
+        private:
+            void bubble_up(size_t index);
+            void push_down(size_t index);
+            void insert();
+            
         };
-        
-        class Heap {
-        public:
-            Heap(int n);
-            ~Heap();
-        private:
-            int _n;
-        private:
-            Shared_ptr<Heap_node> _root;
-        public:
-            Shared_ptr<Heap_node> top() const;
-            Shared_ptr<Heap_node> peek() const;
-            void insert(Shared_ptr<Heap_element> element);
-            void remove(Shared_ptr<Heap_element> element);
-
-        };
-
 
     }
 
 }
-
 
 #endif

@@ -10,13 +10,13 @@ find_package(jsoncpp CONFIG REQUIRED)
 
 set(TDP_PRIVATE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/private)
 
-set(SRC_LIST)
-aux_source_directory(${CMAKE_CURRENT_SOURCE_DIR}/src SRC_LIST)
-
-set(SRC_PRIVATE_LIST)
-aux_source_directory(${TDP_PRIVATE_PATH}/src SRC_PRIVATE_LIST)
-
-add_library(${PROJECT_NAME}  STATIC ${SRC_LIST} ${SRC_PRIVATE_LIST})
+FIND_SOURCES_AND_HEADERS(SRC_LIST
+	${CMAKE_CURRENT_SOURCE_DIR}/include 
+	${CMAKE_CURRENT_SOURCE_DIR}/src
+	${TDP_PRIVATE_PATH}/include
+	${TDP_PRIVATE_PATH}/src
+)
+add_library(${PROJECT_NAME}  STATIC ${SRC_LIST})
 target_link_libraries(${PROJECT_NAME} PRIVATE cdm)
 target_link_libraries(${PROJECT_NAME} PUBLIC oso)
 target_include_directories(${PROJECT_NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)

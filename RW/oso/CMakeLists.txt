@@ -10,13 +10,14 @@ find_package(jsoncpp CONFIG REQUIRED)
 
 set(OSO_PRIVATE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/private)
 
-set(SRC_LIST)
-aux_source_directory(${CMAKE_CURRENT_SOURCE_DIR}/src SRC_LIST)
+FIND_SOURCES_AND_HEADERS(SRC_LIST
+	${CMAKE_CURRENT_SOURCE_DIR}/include 
+	${CMAKE_CURRENT_SOURCE_DIR}/src
+	${OSO_PRIVATE_PATH}/include
+	${OSO_PRIVATE_PATH}/src
+)
 
-set(SRC_PRIVATE_LIST)
-aux_source_directory(${OSO_PRIVATE_PATH}/src SRC_PRIVATE_LIST)
-
-add_library(${PROJECT_NAME}  STATIC ${SRC_LIST} ${SRC_PRIVATE_LIST})
+add_library(${PROJECT_NAME}  STATIC ${SRC_LIST})
 target_link_libraries(${PROJECT_NAME}  PRIVATE pugixml::pugixml)
 target_link_libraries(${PROJECT_NAME}   PRIVATE JsonCpp::JsonCpp)
 target_include_directories(${PROJECT_NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)

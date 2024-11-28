@@ -8,6 +8,7 @@ set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 include(iniEnvironmet) # 初始化环境变量
 include(iniSubModule)  # 初始化子模块
 include(iniCompile)    # 初始化编译选项
+include(rw_utiltyFunction)
 
 # 包含工具链文件
 if(DEFINED CMAKE_TOOLCHAIN_FILE)

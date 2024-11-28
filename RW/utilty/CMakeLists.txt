@@ -7,12 +7,12 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 set(utilty_PRIVATE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/private)
 
-set(SRC_LIST)
-aux_source_directory(${CMAKE_CURRENT_SOURCE_DIR}/src SRC_LIST)
+FIND_SOURCES_AND_HEADERS(SRC_LIST
+	${CMAKE_CURRENT_SOURCE_DIR}/include 
+	${CMAKE_CURRENT_SOURCE_DIR}/src
+)
 
-set(SRC_PRIVATE_LIST)
-
-add_library(${PROJECT_NAME} STATIC ${SRC_LIST} ${SRC_PRIVATE_LIST})
+add_library(${PROJECT_NAME} STATIC ${SRC_LIST})
 target_include_directories(${PROJECT_NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
 
 add_subdirectory(test)

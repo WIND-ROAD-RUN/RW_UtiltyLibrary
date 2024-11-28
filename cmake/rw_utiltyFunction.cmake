@@ -2,7 +2,7 @@
 function(find_sources_and_headers result_var)
     set(sources_and_headers)
     foreach(path IN LISTS ARGN)
-        file(GLOB_RECURSE headers "${path}/*.h")
+        file(GLOB_RECURSE headers "${path}/*.h" "${path}/*.hpp")
         file(GLOB_RECURSE sources "${path}/*.cpp")
         list(APPEND sources_and_headers ${headers} ${sources})
     endforeach()

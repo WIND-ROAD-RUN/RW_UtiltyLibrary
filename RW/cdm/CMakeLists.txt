@@ -34,5 +34,8 @@ target_link_libraries(${PROJECT_NAME} PRIVATE oso)
 
 add_subdirectory(./test)
 
+install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/include/ DESTINATION ${PROJECT_NAME}/include/)
+install(TARGETS ${PROJECT_NAME} ARCHIVE DESTINATION ${PROJECT_NAME}/lib/)
+
 
 

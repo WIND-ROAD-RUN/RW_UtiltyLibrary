@@ -19,3 +19,6 @@ add_library(${PROJECT_NAME} STATIC ${SRC_LIST} )
 target_include_directories(${PROJECT_NAME} PUBLIC include)
 
 add_subdirectory(./test)
+
+install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/include/ DESTINATION ${PROJECT_NAME}/include/)
+install(TARGETS ${PROJECT_NAME} ARCHIVE DESTINATION ${PROJECT_NAME}/lib/)

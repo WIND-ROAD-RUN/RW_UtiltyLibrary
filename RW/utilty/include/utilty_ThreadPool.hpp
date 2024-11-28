@@ -8,7 +8,9 @@
 #include <condition_variable>
 #include <future>
 #include <stdexcept>
+#include <type_traits>
 
+//TODO:添加异常处理
 namespace rw {
     class ThreadPool {
     public:
@@ -16,7 +18,7 @@ namespace rw {
         ~ThreadPool();
 
         template<class F, class... Args>
-        auto enqueue(F&& f, Args&&... args) -> std::future<typename std::result_of<F(Args...)>::type>;
+        auto enqueue(F&& f, Args&&... args) -> std::future<typename std::invoke_result<F, Args...>::type>;
 
     private:
         std::vector<std::thread> workers; // 工作线程的集合
@@ -27,7 +29,6 @@ namespace rw {
         bool stop; // 标志线程池是否停止
     };
 
-    // 构造函数
     ThreadPool::ThreadPool(size_t numThreads) : stop(false) {
         for (size_t i = 0; i < numThreads; ++i) {
             workers.emplace_back([this] {
@@ -52,8 +53,8 @@ namespace rw {
 
     // 添加任务到线程池
     template<class F, class... Args>
-    auto ThreadPool::enqueue(F&& f, Args&&... args) -> std::future<typename std::result_of<F(Args...)>::type> {
-        using returnType = typename std::result_of<F(Args...)>::type;
+    auto ThreadPool::enqueue(F&& f, Args&&... args) -> std::future<typename std::invoke_result<F, Args...>::type> {
+        using returnType = typename std::invoke_result<F, Args...>::type;
 
         auto task = std::make_shared<std::packaged_task<returnType()>>(std::bind(std::forward<F>(f), std::forward<Args>(args)...));
 
@@ -71,7 +72,6 @@ namespace rw {
         return res;
     }
 
-    // 析构函数
     ThreadPool::~ThreadPool() {
         {
             std::unique_lock<std::mutex> lock(queueMutex);

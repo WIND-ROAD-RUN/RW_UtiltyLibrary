@@ -17,6 +17,17 @@ FIND_SOURCES_AND_HEADERS(SRC_LIST
 	${OSO_PRIVATE_PATH}/src
 )
 
+group_sources_and_headers(
+	"Private"
+	${OSO_PRIVATE_PATH}/include
+	${OSO_PRIVATE_PATH}/src
+)
+
+group_interface_sources_and_headers(
+	${CMAKE_CURRENT_SOURCE_DIR}/include 
+	${CMAKE_CURRENT_SOURCE_DIR}/src
+)
+
 add_library(${PROJECT_NAME}  STATIC ${SRC_LIST})
 target_link_libraries(${PROJECT_NAME}  
 	PRIVATE pugixml::pugixml

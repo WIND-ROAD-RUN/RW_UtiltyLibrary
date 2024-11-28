@@ -16,6 +16,18 @@ FIND_SOURCES_AND_HEADERS(SRC_LIST
 	${TDP_PRIVATE_PATH}/include
 	${TDP_PRIVATE_PATH}/src
 )
+
+group_sources_and_headers(
+	"Private"
+	${TDP_PRIVATE_PATH}/include
+	${TDP_PRIVATE_PATH}/src
+)
+
+group_interface_sources_and_headers(
+	${CMAKE_CURRENT_SOURCE_DIR}/include 
+	${CMAKE_CURRENT_SOURCE_DIR}/src
+)
+
 add_library(${PROJECT_NAME}  STATIC ${SRC_LIST})
 target_link_libraries(${PROJECT_NAME} 
 	PRIVATE cdm

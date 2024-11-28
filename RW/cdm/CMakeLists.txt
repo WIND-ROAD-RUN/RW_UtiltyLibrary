@@ -14,6 +14,17 @@ FIND_SOURCES_AND_HEADERS(SRC_LIST
 	${CDM_PRIVATE_PATH}/src
 )
 
+group_sources_and_headers(
+	"Private"
+	${CDM_PRIVATE_PATH}/include
+	${CDM_PRIVATE_PATH}/src
+)
+
+group_interface_sources_and_headers(
+	${CMAKE_CURRENT_SOURCE_DIR}/include 
+	${CMAKE_CURRENT_SOURCE_DIR}/src
+)
+
 add_library(${PROJECT_NAME}  STATIC ${SRC_LIST})
 target_include_directories(${PROJECT_NAME} 
 	PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include

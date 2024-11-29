@@ -16,12 +16,11 @@ namespace rw {
     public:
         explicit ThreadPool(size_t numThreads);
         ~ThreadPool();
-
         template<class F, class... Args>
         auto enqueue(F&& f, Args&&... args) -> std::future<typename std::invoke_result<F, Args...>::type>;
 
     private:
-        std::vector<std::thread> workers; // 工作线程的集合
+        std::vector<std::thread> workers; 
         std::queue<std::function<void()>> tasks; // 任务队列
 
         std::mutex queueMutex; // 保护任务队列的互斥锁

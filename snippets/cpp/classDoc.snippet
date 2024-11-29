@@ -1,0 +1,41 @@
+<CodeSnippets xmlns="http://schemas.microsoft.com/VisualStudio/2005/CodeSnippet">
+    <CodeSnippet Format="1.0.0">
+        <Header>
+            <Title>class Documentation</Title>
+            <Shortcut>classdoc</Shortcut>
+            <Description>Code snippet for class documentation</Description>
+            <Author>RoadWind</Author>
+        </Header>
+        <Snippet>
+            <Declarations>
+                <Literal>
+                    <ID>brief</ID>
+                    <ToolTip>Brief description of the function</ToolTip>
+                    <Default>Brief description</Default>
+                </Literal>
+                <Literal>
+                    <ID>details</ID>
+                    <ToolTip>Detailed description of the function</ToolTip>
+                    <Default>Detailed description</Default>
+                </Literal>
+                <Literal>
+                    <ID>example</ID>
+                    <ToolTip>Example usage of the function</ToolTip>
+                    <Default>Example usage</Default>
+                </Literal>
+            </Declarations>
+            <Code Language="cpp">
+                <![CDATA[
+/*
+ * @brief $brief$
+ *
+ * $details$
+ * 
+ * $example$
+ * 
+ */
+                ]]>
+            </Code>
+        </Snippet>
+    </CodeSnippet>
+</CodeSnippets>

@@ -11,21 +11,80 @@
 #include <type_traits>
 
 //TODO:添加异常处理
+//TODO:更改为优先队列
 namespace rw {
     class ThreadPool {
     public:
+
+        /**
+         *@Parameters:
+         *  - numThreads: The number of threads in the thread pool,it usually equals to the number of cores in the CPU
+         *@Methods:
+         *  constructor: Create a thread pool with the specified number of threads
+         *@Returns: void
+         *
+         *@Throws:
+         *
+         */
         explicit ThreadPool(size_t numThreads);
+
+        /**
+         * @brief Destructor
+         *
+         * The destructor will stop the worker threads and join them
+         */
         ~ThreadPool();
+
+        /**
+         *@Parameters:
+         *  - f: The function to be executed
+         *  - args: The arguments to be passed to the function
+         *@Methods:
+         *  enqueue: Add a task to the task queue
+         *@Returns: std::future<typename std::invoke_result<F, Args...>::type>
+         *  return a future object that can be used to get the result of the function
+         *@Throws:
+         *  
+         */
         template<class F, class... Args>
         auto enqueue(F&& f, Args&&... args) -> std::future<typename std::invoke_result<F, Args...>::type>;
 
     private:
-        std::vector<std::thread> workers; 
-        std::queue<std::function<void()>> tasks; // 任务队列
 
-        std::mutex queueMutex; // 保护任务队列的互斥锁
-        std::condition_variable condition; // 条件变量，用于通知工作线程
-        bool stop; // 标志线程池是否停止
+        /**
+         * @brief The worker threads
+         *
+         * The worker threads will pull tasks from the task queue and execute
+         */
+        std::vector<std::thread> workers; 
+
+        /**
+         * @brief The task queue
+         *
+         * The task queue is a queue of tasks that need to be executed by the worker threads
+         */
+        std::queue<std::function<void()>> tasks;
+
+        /**
+         * @brief The mutex to protect the task queue
+         *
+         * The mutex is used to protect the task queue from being accessed by multiple threads at the same time
+         */
+        std::mutex queueMutex;
+
+        /**
+         * @brief The condition variable to notify the worker threads
+         *
+         * The condition variable is used to notify the worker threads that there is a new task in the task queue
+         */
+        std::condition_variable condition;
+
+        /**
+         * @brief A flag to indicate that the thread pool should stop
+         *
+         * The stop flag is used to indicate that the thread pool should stop and that the worker threads should exit
+         */
+        bool stop;
     };
 
     ThreadPool::ThreadPool(size_t numThreads) : stop(false) {

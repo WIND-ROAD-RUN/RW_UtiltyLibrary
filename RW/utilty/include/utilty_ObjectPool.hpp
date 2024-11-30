@@ -11,6 +11,19 @@ namespace rw {
     const bool ThreadSafe = true;
     const bool NotThreadSafe = false;
 
+
+
+    /**
+     * @brief: template class ObjectPool
+     *      This class is a template class that implements an object pool.
+     * @template variable:
+     *   - T: The type of the objects that the pool will manage.
+     *   - Allocator: The type of the allocator that will be used to allocate memory for the objects.
+     *   - isThreadSafe: A boolean value that indicates whether the object pool should be thread-safe.
+     *
+     * @details:
+     *
+     */
     template<typename T, typename Allocator = std::allocator<T>, bool isThreadSafe = NotThreadSafe>
     class ObjectPool;
 

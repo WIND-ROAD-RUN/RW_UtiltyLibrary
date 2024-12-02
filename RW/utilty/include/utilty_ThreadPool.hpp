@@ -10,9 +10,24 @@
 #include <stdexcept>
 #include <type_traits>
 
-//TODO:添加异常处理
-//TODO:更改为优先队列
+//TODO:使用优先队列实现线程池
 namespace rw {
+
+    /**
+     * @brief ThreadPool is a simple thread pool implementation
+     *
+     * This class provides a simple thread pool implementation that allows you to add tasks to the thread pool and have them executed by the worker threads.
+     *
+     * @warning
+     * 1.NotThreadSafe : The ThreadPool class is not thread-safe. You should not access the ThreadPool object from multiple threads at the same time.
+     * 2.NotHandleException : The ThreadPool class does not handle exceptions thrown by the tasks. If a task throws an exception, the exception will be propagated to the caller of the get() method.
+     *   Suggestions: You can use a try-catch block inside the task to catch the exception and handle it appropriately.
+     * 
+     * @example
+     *      ThreadPool pool(std::thread::hardware_concurrency());//create a thread pool with the number of threads equal to the number of cores in the CPU
+     *      auto result = pool.enqueue([] { return 42; });//add a task to the thread pool
+     *      std::cout << result.get() << std::endl;//get the result of the task
+    */
     class ThreadPool {
     public:
 

@@ -16,24 +16,31 @@ namespace rw {
     /**
      * @brief ThreadPool is a simple thread pool implementation
      *
-     * This class provides a simple thread pool implementation that allows you to add tasks to the thread pool and have them executed by the worker threads.
+     * This class provides a simple thread pool implementation that allows you to add tasks 
+     *to the thread pool and have them executed by the worker threads.
      *
      * @warning
-     * 1.NotThreadSafe : The ThreadPool class is not thread-safe. You should not access the ThreadPool object from multiple threads at the same time.
-     * 2.NotHandleException : The ThreadPool class does not handle exceptions thrown by the tasks. If a task throws an exception, the exception will be propagated to the caller of the get() method.
-     *   Suggestions: You can use a try-catch block inside the task to catch the exception and handle it appropriately.
+     *  1.NotThreadSafe : The ThreadPool class is not thread-safe. You should not access the 
+     * ThreadPool object from multiple threads at the same time.
+     *  2.NotHandleException : The ThreadPool class does not handle exceptions thrown by the 
+     * tasks. If a task throws an exception, the exception will be propagated to the caller 
+     * of the get() method.
+     *  Suggestions: You can use a try-catch block inside the task to catch the exception and 
+     * handle it appropriately.
      * 
      * @example
-     *      ThreadPool pool(std::thread::hardware_concurrency());//create a thread pool with the number of threads equal to the number of cores in the CPU
+     *      //create a thread pool with the number of threads equal to the number of cores in the CPU
+     *      ThreadPool pool(std::thread::hardware_concurrency());
      *      auto result = pool.enqueue([] { return 42; });//add a task to the thread pool
      *      std::cout << result.get() << std::endl;//get the result of the task
-    */
+     */
     class ThreadPool {
     public:
 
         /**
          *@Parameters:
-         *  - numThreads: The number of threads in the thread pool,it usually equals to the number of cores in the CPU
+         *  - numThreads: The number of threads in the thread pool,it usually equals to the 
+         *number of cores in the CPU
          *@Methods:
          *  constructor: Create a thread pool with the specified number of threads
          *@Returns: void
@@ -83,21 +90,24 @@ namespace rw {
         /**
          * @brief The mutex to protect the task queue
          *
-         * The mutex is used to protect the task queue from being accessed by multiple threads at the same time
+         * The mutex is used to protect the task queue from being accessed by multiple threads 
+         *at the same time
          */
         std::mutex queueMutex;
 
         /**
          * @brief The condition variable to notify the worker threads
          *
-         * The condition variable is used to notify the worker threads that there is a new task in the task queue
+         * The condition variable is used to notify the worker threads that there is a new 
+         *task in the task queue
          */
         std::condition_variable condition;
 
         /**
          * @brief A flag to indicate that the thread pool should stop
          *
-         * The stop flag is used to indicate that the thread pool should stop and that the worker threads should exit
+         * The stop flag is used to indicate that the thread pool should stop and that the 
+         *worker threads should exit
          */
         bool stop;
     };

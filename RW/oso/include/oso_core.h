@@ -10,38 +10,85 @@ namespace rw {
     namespace oso {
         class ObjectStoreCore {
         private:
-            /// Class member std:: string m_name of class ObjectiStoreCore
-            /// 
-            /// This is a private member of class ObjectStoreCore.Means the name representation of the instance object, which can serve as the node name in the class composition structure.
+            /**
+             * @brief The name of the object store
+             *
+             *  This is a private member of class ObjectStoreCore.Means the name representation of the instance object, which can serve as the node name in the class composition structure.
+             */
             std::string m_name;
 
         public:
-            //Parameters:
-            //      name:The name you are going to set as
-            // 
-            //setName: Set the name of the object store
+            /**
+             *@Parameters:
+             *  - name: The name you are going to set as
+             *@Methods:
+             *  Set the name of the object store
+             *@Returns: void
+             * 
+             *@Throws:
+             *
+             */
             void setName(const std::string& name);
 
-            //Get the name of the object store
+
+            /**
+             *@Parameters:
+             *  void
+             *@Methods:
+             *  Get the name of the object store
+             *@Returns: std::string
+             *  The name of the object store
+             *@Throws:
+             *
+             */
             std::string getName() const;
 
         public:
-            // Point to the parent object, if any
+            /**
+             * @brief The parent object of the object store
+             *
+             * Point to the parent object, if any
+             */
             ObjectStoreCore* parent{ nullptr };
 
         public:
-            // This variable is used to represent the hierarchy to which the class instance  in the composite instance.
-            //
-            //Supplement:
-            //      Hierarchical structure:He represents the level of the instance in the object tree, for example, if he has a parent object and the parent object has no parent bject, then his level is 1
+            /**
+             * @brief The level of the object store
+             * 
+             * This is a private member of class ObjectStoreCore.Means the level of the instance object, which can serve as the node level in the class composition structure.
+             * 
+             * @Supplement:
+             * 
+             * Hierarchical structure:He represents the level of the instance in the object tree, for example, if he has a parent object and the parent object has no parent bject, then his level is 1
+             */
             size_t level{ 0 };
 
-            //Increase the hierarchy of class instances
+
+            /**
+             *@Parameters:
+             * void
+             *@Methods:
+             * Increase the hierarchy of class instances
+             *@Returns: void
+             * 
+             *@Throws:
+             *
+             */
             virtual void addLevel() {
                 level++;
             }
 
-            //Reduce the hierarchy of class instances
+
+            /**
+             *@Parameters:
+             *  void
+             *@Methods:
+             *  Decrease the   
+             *@Returns: types hierarchy of class instances
+             *
+             *@Throws:
+             *
+             */
             virtual void subLevel() {
                 if (level == 0) {
                     return;
@@ -50,7 +97,17 @@ namespace rw {
             }
 
         public:
-            //Get the type of the object store
+
+            /**
+             *@Parameters:
+             *  void
+             *@Methods:
+             *  Get the type of the object store
+             *@Returns: std::string
+             *  The type of the object store
+             *@Throws:
+             *
+             */
             virtual std::string getStoreType() const {
                 return "core";
             }
@@ -64,9 +121,17 @@ namespace rw {
             virtual ~ObjectStoreCore() = default;
 
         public:
-            //Parameters:
-            //      os: Output stream
-            //Print the object tree of the Object Store with the current instance as the root node
+
+            /**
+             *@Parameters:
+             *  - os: Output stream
+             *@Methods:
+             *  Print the object tree of the Object Store with the current instance as the root node
+             *@Returns: void
+             *  
+             *@Throws:
+             *
+             */
             virtual void print(std::ostream& os);
 
         public:

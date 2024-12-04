@@ -170,6 +170,12 @@ namespace rw {
         mutable std::mutex m_mutex; // 互斥锁
     };
 
+
+    /*------------------------------------------------------------------------------------
+     *                          Inline implementation of ObjectPool<T, Allocator, NotThreadSafe>
+     *-----------------------------------------------------------------------------------*/
+
+
     template<typename T,typename Allocator>
     ObjectPool<T, Allocator, NotThreadSafe>::ObjectPool(const Allocator & allocator)
         :m_allocator{ allocator }
@@ -268,6 +274,10 @@ namespace rw {
         return totalMemory;
     }
 
+
+    /*------------------------------------------------------------------------------------
+     *                          Inline implementation of ObjectPool<T, Allocator, ThreadSafe>
+     *-----------------------------------------------------------------------------------*/
 
     template<typename T, typename Allocator>
     ObjectPool<T, Allocator, ThreadSafe>::ObjectPool(const Allocator& allocator)

@@ -112,6 +112,11 @@ namespace rw {
         bool stop;
     };
 
+
+    /*------------------------------------------------------------------------------------
+     *                          Inline implementation of ThreadPool
+     *-----------------------------------------------------------------------------------*/
+
     ThreadPool::ThreadPool(size_t numThreads) : stop(false) {
         for (size_t i = 0; i < numThreads; ++i) {
             workers.emplace_back([this] {

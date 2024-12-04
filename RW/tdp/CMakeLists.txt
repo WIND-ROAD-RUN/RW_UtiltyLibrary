@@ -16,6 +16,18 @@ FIND_SOURCES_AND_HEADERS(SRC_LIST
 	${TDP_PRIVATE_PATH}/include
 	${TDP_PRIVATE_PATH}/src
 )
+
+group_sources_and_headers(
+	"Private"
+	${TDP_PRIVATE_PATH}/include
+	${TDP_PRIVATE_PATH}/src
+)
+
+group_interface_sources_and_headers(
+	${CMAKE_CURRENT_SOURCE_DIR}/include 
+	${CMAKE_CURRENT_SOURCE_DIR}/src
+)
+
 add_library(${PROJECT_NAME}  STATIC ${SRC_LIST})
 target_link_libraries(${PROJECT_NAME} 
 	PRIVATE cdm
@@ -28,7 +40,8 @@ target_include_directories(${PROJECT_NAME}
 
 add_subdirectory(./test)
 
-install(TARGETS ${PROJECT_NAME} RUNTIME DESTINATION bin)
+install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/include/ DESTINATION ${PROJECT_NAME}/include/)
+install(TARGETS ${PROJECT_NAME} ARCHIVE DESTINATION ${PROJECT_NAME}/lib/)
 
 
 

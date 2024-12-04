@@ -12,7 +12,19 @@ FIND_SOURCES_AND_HEADERS(SRC_LIST
     ${CMAKE_CURRENT_SOURCE_DIR}/include 
     ${CMAKE_CURRENT_SOURCE_DIR}/src
     ${HOEC_PRIVATE_PATH}/include
-    ${HOEC_PRIVATE_PATH}/src)
+    ${HOEC_PRIVATE_PATH}/src
+)
+
+group_sources_and_headers(
+	"Private"
+	${HOEC_PRIVATE_PATH}/include
+	${HOEC_PRIVATE_PATH}/src
+)
+
+group_interface_sources_and_headers(
+	${CMAKE_CURRENT_SOURCE_DIR}/include 
+	${CMAKE_CURRENT_SOURCE_DIR}/src
+)
 
 add_library(${PROJECT_NAME} STATIC ${SRC_LIST})
 target_include_directories(${PROJECT_NAME} 
@@ -41,7 +53,8 @@ endif()
 
 add_subdirectory(./test)
 
-install(TARGETS ${PROJECT_NAME} RUNTIME DESTINATION bin)
+install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/include/ DESTINATION ${PROJECT_NAME}/include/)
+install(TARGETS ${PROJECT_NAME} ARCHIVE DESTINATION ${PROJECT_NAME}/lib/)
 
 
 

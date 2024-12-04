@@ -1,0 +1,33 @@
+<CodeSnippets xmlns="http://schemas.microsoft.com/VisualStudio/2005/CodeSnippet">
+    <CodeSnippet Format="1.0.0">
+        <Header>
+            <Title>Variable Documentation Chinese</Title>
+            <Shortcut>vardoc_ch</Shortcut>
+            <Description>Code snippet for variable documentation in Chinese</Description>
+            <Author>RoadWind</Author>
+        </Header>
+        <Snippet>
+            <Declarations>
+                <Literal>
+                    <ID>brief</ID>
+                    <ToolTip>Brief description of the function</ToolTip>
+                    <Default>摘要描述</Default>
+                </Literal>
+                <Literal>
+                    <ID>details</ID>
+                    <ToolTip>Detailed description of the function</ToolTip>
+                    <Default>细节描述</Default>
+                </Literal>
+            </Declarations>
+            <Code Language="cpp">
+                <![CDATA[
+/**
+ * @摘要 $brief$
+ *
+ * $details$
+ */
+                ]]>
+            </Code>
+        </Snippet>
+    </CodeSnippet>
+</CodeSnippets>

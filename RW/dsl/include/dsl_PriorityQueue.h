@@ -27,7 +27,7 @@ namespace rw
         class IPriorityQueue
         {
         public:
-            
+
 
             /**
              *@Parameters:
@@ -40,9 +40,9 @@ namespace rw
              *@Throws:
              *
              */
-            using CompareEqual = std::function<bool(const T&,const T&)>;
+            using CompareEqual = std::function<bool(const T&, const T&)>;
         public:
-            virtual ~IPriorityQueue(){};
+            virtual ~IPriorityQueue() {};
 
             /**
              *@Parameters:
@@ -53,11 +53,11 @@ namespace rw
              *@Returns: void
              *@Throws: void
              */
-            IPriorityQueue(bool isHighPriorityFirst = true, 
+            IPriorityQueue(bool isHighPriorityFirst = true,
                 CompareEqual compareEqual = [](const T& a, const T& b) {
                     return a == b;
                 })
-                : _isHighPriorityFirst(isHighPriorityFirst),_compareEqual(compareEqual) {
+                : _isHighPriorityFirst(isHighPriorityFirst), _compareEqual(compareEqual) {
             }
         protected:
             CompareEqual _compareEqual;
@@ -148,13 +148,24 @@ namespace rw
             }
         };
 
-
         template <class T>
         class DHeap
             : public IPriorityQueue<T>
         {
         public:
-            DHeap(size_t d = 2, bool isHighPriorityFirst = true);
+            /**
+             *@Parameters:
+             *  -d: The number of children of each node 
+             *     note: According to test,when d=4 or d=5, the performance of the heap is better
+             *  -isHighPriorityFirst: The priority queue is a high priority first queue or a low priority first queue
+             *@Methods:
+             *  Constructor
+             *@Returns: void
+             *
+             *@Throws:
+             *
+             */
+            DHeap(size_t d = 4, bool isHighPriorityFirst = true);
             DHeap(size_t d, bool isHighPriorityFirst, CompareEqual compareEqual);
             ~DHeap();
         public:
@@ -221,7 +232,7 @@ namespace rw
         template <class T>
         void DHeap<T>::remove(T element) {
             auto it = std::find_if(this->_heap_array.begin(), this->_heap_array.end(),
-                [element,this](const std::pair<T, size_t>& p) { return  _compareEqual(p.first, element); });
+                [element, this](const std::pair<T, size_t>& p) { return  _compareEqual(p.first, element); });
             if (it != this->_heap_array.end()) {
                 std::swap(*it, this->_heap_array.back());
                 this->_heap_array.pop_back();
@@ -235,7 +246,7 @@ namespace rw
         template <class T>
         void DHeap<T>::update(T element, size_t priority) {
             auto it = std::find_if(this->_heap_array.begin(), this->_heap_array.end(),
-                [element,this](const std::pair<T, size_t>& p) { return  _compareEqual(p.first, element); });
+                [element, this](const std::pair<T, size_t>& p) { return  _compareEqual(p.first, element); });
             if (it != this->_heap_array.end()) {
                 it->second = priority;
                 bubble_up(std::distance(this->_heap_array.begin(), it));

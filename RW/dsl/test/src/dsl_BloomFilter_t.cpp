@@ -1,13 +1,6 @@
-#include"gtest/gtest.h"
-
 #include"dsl_BloomFilter.h"
 
-#include <iostream>
-#include <string>
-#include <random>
-#include <thread>
-#include <vector>
-#include <future>
+#include"dsl_pch_t.h"
 
 using namespace rw::dsl;
 

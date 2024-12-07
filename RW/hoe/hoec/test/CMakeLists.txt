@@ -7,6 +7,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 enable_testing()
 find_package(GTest CONFIG REQUIRED)
+find_package(OpenCV REQUIRED)
 
 FIND_SOURCES_AND_HEADERS(SRC_LIST
 	${CMAKE_CURRENT_SOURCE_DIR}/include 
@@ -16,6 +17,7 @@ FIND_SOURCES_AND_HEADERS(SRC_LIST
 # google test library
 add_executable(${PROJECT_NAME} ${SRC_LIST})
 target_link_libraries(${PROJECT_NAME}  PRIVATE GTest::gtest GTest::gtest_main)
+target_link_libraries(${PROJECT_NAME} PRIVATE ${OpenCV_LIBS})
 
 ##test library
 target_link_libraries(${PROJECT_NAME} PRIVATE hoec)

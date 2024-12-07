@@ -15,8 +15,9 @@ namespace rw
 
         enum class CameraMonitorMode
         {
-            HARDWARE,
-            SOFTWARE
+            ActiveFlowCollection,
+            PassiveDataCollection_SoftwareTriggered,
+            PassiveDataCollection_HardwareTriggered,
         };
 
         enum class CameraProvider

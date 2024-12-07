@@ -1,5 +1,7 @@
 #include "hoec_Camera.h"
 
+#include"opencv2/opencv.hpp"
+
 #include<vector>
 namespace rw
 {
@@ -7,14 +9,17 @@ namespace rw
     {
 
         class Camera_MVS
-            : public ICamera
         {
+        public:
+            std::function<void(cv::Mat)> userCallBack;
         public:
             static bool isIniSDK;
             static std::vector<std::string> getCameraIpList();
             static std::vector<CameraInfo> getCameraInfoList();
             static bool initSDK();
             static bool uninitSDK();
+        public:
+            cv::Mat getImage(bool & isget);
         public:
             Camera_MVS();
             ~Camera_MVS();
@@ -38,10 +43,12 @@ namespace rw
             int getExposureTime();
         public:
             bool connectCamera();
+        private:
+            bool _isMonitor{ false };
         public:
             bool startMonitor();
-            bool stopMonitor();
 
+            bool stopMonitor();
         public:
             bool setExposureTime(size_t value);
             bool setGain(size_t value);

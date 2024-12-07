@@ -8,6 +8,8 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(HOEC_PRIVATE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/private)
 set(MVS_PATH ${CMAKE_CURRENT_SOURCE_DIR}/ThirdLibrary/MVS)
 
+find_package(OpenCV REQUIRED)
+
 FIND_SOURCES_AND_HEADERS(SRC_LIST
     ${CMAKE_CURRENT_SOURCE_DIR}/include 
     ${CMAKE_CURRENT_SOURCE_DIR}/src
@@ -32,6 +34,8 @@ target_include_directories(${PROJECT_NAME}
     PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include
     PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/private/include
 )
+
+target_link_libraries(${PROJECT_NAME} PRIVATE ${OpenCV_LIBS})
 
 # 检查是否为Windows操作系统
 if(WIN32)

@@ -1,6 +1,9 @@
 #include"hoec_Camera_private.h"
 
+#include"hoec_core_private.h"
+
 #include"MvCameraControl.h"
+#include"CameraParams.h"
 
 #include<algorithm>
 #include<iostream>
@@ -10,10 +13,15 @@ namespace rw{
         bool Camera_MVS::isIniSDK = false;
 
         Camera_MVS::Camera_MVS() {
-
+            MV_CC_RegisterImageCallBackEx(m_cameraHandle, nullptr, nullptr);
         }
 
         Camera_MVS::~Camera_MVS() {
+            //先停止采集
+            if (_isMonitor) {
+                stopMonitor();
+            }
+            //关闭相机
             if (m_cameraHandle) {
                 MV_CC_CloseDevice(m_cameraHandle);
                 MV_CC_DestroyHandle(m_cameraHandle);
@@ -87,14 +95,33 @@ namespace rw{
 
         bool Camera_MVS::startMonitor()
         {
-            //TODO: 开始监控
-            return false;
+            if (_isMonitor) { 
+                std::cerr << "Monitor has already started" << std::endl;
+                return false;
+            }
+
+            auto result=MV_CC_StartGrabbing(m_cameraHandle);
+            if (result != MV_OK) {
+                std::cerr << "Failed to stop grabbing with:" << result << std::endl;
+                return false;
+            }
+            _isMonitor = true;
+            return true;
         }
 
         bool Camera_MVS::stopMonitor()
         {
-            //TODO: 停止监控
-            return false;
+            if (!_isMonitor) {
+                std::cerr << "Monitor has already stopped" << std::endl;
+                return false;
+            }
+            auto result = MV_CC_StopGrabbing(m_cameraHandle);
+            if (result != MV_OK) {
+                std::cerr << "Failed to stop grabbing with:" << result << std::endl;
+                return false;
+            }
+            _isMonitor = false;
+            return true;
         }
 
         bool Camera_MVS::setExposureTime(size_t value)
@@ -204,6 +231,31 @@ namespace rw{
                 std::cerr << "Failed to uninitialize SDK" << std::endl;
                 return false;
             }
+        }
+
+        cv::Mat Camera_MVS::getImage(bool & isget)
+        {
+            MV_FRAME_OUT frameInfo;
+            auto getResult = MV_CC_GetImageBuffer(m_cameraHandle, &frameInfo, 1000);
+            if (getResult != MV_OK) {
+                std::cerr << "Failed to get image buffer with:" << getResult << std::endl;
+                isget = false;
+                return cv::Mat();
+            }
+            cv::Mat image = ImageFrameConvert::MVS_ConvertFrameToMat(frameInfo);
+            if (image.empty())
+            {
+                std::cerr << "Failed to convert frame to mat" << std::endl;
+                isget = false;
+                return cv::Mat();
+            }
+            isget = true;
+            auto freeResult = MV_CC_FreeImageBuffer(m_cameraHandle, &frameInfo);
+            if (freeResult != MV_OK) {
+                std::cerr << "Failed to free image buffer with:" << freeResult << std::endl;
+                return cv::Mat();
+            }
+            return image;
         }
     }
 }

@@ -13,11 +13,16 @@ namespace rw
             std::string mac;
         };
 
+        enum class CameraTakePictureMode
+        {
+            Active,
+            Passive
+        };
+
         enum class CameraMonitorMode
         {
-            ActiveFlowCollection,
-            PassiveDataCollection_SoftwareTriggered,
-            PassiveDataCollection_HardwareTriggered,
+            SoftwareTriggered,
+            HardwareTriggered,
         };
 
         enum class CameraProvider

@@ -10,13 +10,12 @@
 
 namespace rw{
     namespace hoec {
-        bool Camera_MVS::isIniSDK = false;
+        bool Camera_MVSToBeRefactor::isIniSDK = false;
 
-        Camera_MVS::Camera_MVS() {
-            MV_CC_RegisterImageCallBackEx(m_cameraHandle, nullptr, nullptr);
+        Camera_MVSToBeRefactor::Camera_MVSToBeRefactor() {
         }
 
-        Camera_MVS::~Camera_MVS() {
+        Camera_MVSToBeRefactor::~Camera_MVSToBeRefactor() {
             //先停止采集
             if (_isMonitor) {
                 stopMonitor();
@@ -27,17 +26,17 @@ namespace rw{
                 MV_CC_DestroyHandle(m_cameraHandle);
             }
         }
-        void Camera_MVS::setIP(const std::string &ip)
+        void Camera_MVSToBeRefactor::setIP(const std::string &ip)
         {
             this->m_ip = ip;
         }
 
-        std::string Camera_MVS::getIP() const
+        std::string Camera_MVSToBeRefactor::getIP() const
         {
             return m_ip;
         }
 
-        bool Camera_MVS::connectCamera()
+        bool Camera_MVSToBeRefactor::connectCamera()
         {
             MV_CC_DEVICE_INFO_LIST deviceList;
             memset(&deviceList, 0, sizeof(MV_CC_DEVICE_INFO_LIST));
@@ -93,7 +92,7 @@ namespace rw{
             return true;
         }
 
-        bool Camera_MVS::startMonitor()
+        bool Camera_MVSToBeRefactor::startMonitor()
         {
             if (_isMonitor) { 
                 std::cerr << "Monitor has already started" << std::endl;
@@ -109,7 +108,7 @@ namespace rw{
             return true;
         }
 
-        bool Camera_MVS::stopMonitor()
+        bool Camera_MVSToBeRefactor::stopMonitor()
         {
             if (!_isMonitor) {
                 std::cerr << "Monitor has already stopped" << std::endl;
@@ -124,31 +123,31 @@ namespace rw{
             return true;
         }
 
-        bool Camera_MVS::setExposureTime(size_t value)
+        bool Camera_MVSToBeRefactor::setExposureTime(size_t value)
         {
             //TODO: 设置曝光时间
             return false;
         }
 
-        bool Camera_MVS::setGain(size_t value)
+        bool Camera_MVSToBeRefactor::setGain(size_t value)
         {
             //TODO: 设置增益
             return false;
         }
 
-        bool Camera_MVS::setMonitorMode(CameraMonitorMode mode)
+        bool Camera_MVSToBeRefactor::setMonitorMode(CameraMonitorMode mode)
         {
             //TODO: 设置监控模式
             return false;
         }
 
-        bool Camera_MVS::setIOTime(size_t value)
+        bool Camera_MVSToBeRefactor::setIOTime(size_t value)
         {
             //TODO: 设置IO时间
             return false;
         }
         
-        int Camera_MVS::getExposureTime() {
+        int Camera_MVSToBeRefactor::getExposureTime() {
             if (!m_cameraHandle) {
                 return -1;
             }
@@ -157,7 +156,7 @@ namespace rw{
             return allMatchInfo.nInfoSize;
         }
 
-        std::vector<std::string> Camera_MVS::getCameraIpList() {
+        std::vector<std::string> Camera_MVSToBeRefactor::getCameraIpList() {
             MV_CC_DEVICE_INFO_LIST deviceList;
             memset(&deviceList, 0, sizeof(MV_CC_DEVICE_INFO_LIST));
 
@@ -183,7 +182,7 @@ namespace rw{
             return ipList;
         }
 
-        std::vector<CameraInfo> Camera_MVS::getCameraInfoList() {
+        std::vector<CameraInfo> Camera_MVSToBeRefactor::getCameraInfoList() {
             MV_CC_DEVICE_INFO_LIST deviceList;
             memset(&deviceList, 0, sizeof(MV_CC_DEVICE_INFO_LIST));
             // 枚举设备
@@ -209,8 +208,8 @@ namespace rw{
             return cameraInfoList;
         }
 
-        bool Camera_MVS::initSDK() {
-            Camera_MVS::isIniSDK = true;
+        bool Camera_MVSToBeRefactor::initSDK() {
+            Camera_MVSToBeRefactor::isIniSDK = true;
             auto result = MV_CC_Initialize();
             if (result==MV_OK) {
                 return true;
@@ -221,8 +220,8 @@ namespace rw{
             }
         }
 
-        bool Camera_MVS::uninitSDK() {
-            Camera_MVS::isIniSDK = false;
+        bool Camera_MVSToBeRefactor::uninitSDK() {
+            Camera_MVSToBeRefactor::isIniSDK = false;
             auto result = MV_CC_Finalize();
             if (result == MV_OK) {
                 return true;
@@ -233,7 +232,7 @@ namespace rw{
             }
         }
 
-        cv::Mat Camera_MVS::getImage(bool & isget)
+        cv::Mat Camera_MVSToBeRefactor::getImage(bool & isget)
         {
             MV_FRAME_OUT frameInfo;
             auto getResult = MV_CC_GetImageBuffer(m_cameraHandle, &frameInfo, 1000);

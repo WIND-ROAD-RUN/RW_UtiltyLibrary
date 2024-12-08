@@ -8,7 +8,7 @@ namespace rw
     namespace hoec
     {
 
-        class Camera_MVS
+        class Camera_MVSToBeRefactor
         {
         public:
             std::function<void(cv::Mat)> userCallBack;
@@ -21,8 +21,8 @@ namespace rw
         public:
             cv::Mat getImage(bool & isget);
         public:
-            Camera_MVS();
-            ~Camera_MVS();
+            Camera_MVSToBeRefactor();
+            ~Camera_MVSToBeRefactor();
         private:
             void* m_cameraHandle{nullptr};
         private:

@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<CodeSnippets xmlns="http://schemas.microsoft.com/VisualStudio/2005/CodeSnippet">
+    <CodeSnippet Format="1.0.0">
+        <Header>
+            <Title>Template Documentation</Title>
+            <Shortcut>templatedoc</Shortcut>
+            <Description>Documentation template for template classes</Description>
+            <Author>RoadWind</Author>
+        </Header>
+        <Snippet>
+            <Declarations>
+                <Literal>
+                    <ID>TemplateBrief</ID>
+                    <ToolTip>Brief description</ToolTip>
+                    <Default>Brief description of the template class</Default>
+                </Literal>
+                <Literal>
+                    <ID>TemplateDetails</ID>
+                    <ToolTip>Detailed description</ToolTip>
+                    <Default>Detailed description of the template class</Default>
+                </Literal>
+				<Literal>
+					<ID>VariableBrief</ID>
+					<ToolTip>Variable Brief</ToolTip>
+					<Default>Variable Brief</Default>
+				</Literal>
+            </Declarations>
+            <Code Language="cpp">
+                <![CDATA[
+/**
+ * @brief: $TemplateBrief$
+ * 
+ * @template variable:
+ *   - T: $VariableBrief$
+ * 
+ * @details: $TemplateDetails$
+ *
+ */
+]]>
+            </Code>
+        </Snippet>
+    </CodeSnippet>
+</CodeSnippets>

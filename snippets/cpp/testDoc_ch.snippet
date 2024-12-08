@@ -1,0 +1,51 @@
+<CodeSnippets xmlns="http://schemas.microsoft.com/VisualStudio/2005/CodeSnippet">
+    <CodeSnippet Format="1.0.0">
+        <Header>
+            <Title>Test Documentation In Chinese</Title>
+            <Shortcut>testdoc_ch</Shortcut>
+            <Description>Code snippet for test documentation</Description>
+            <Author>RoadWind</Author>
+        </Header>
+        <Snippet>
+            <Declarations>
+                <Literal>
+                    <ID>testPurpose</ID>
+                    <ToolTip>测试目的</ToolTip>
+                    <Default>测试目的</Default>
+                </Literal>
+                <Literal>
+                    <ID>testSteps</ID>
+                    <ToolTip>测试步骤</ToolTip>
+                    <Default>测试步骤</Default>
+                </Literal>
+                <Literal>
+                    <ID>expectedResult</ID>
+                    <ToolTip>预期结果</ToolTip>
+                    <Default>预期结果</Default>
+                </Literal>
+                <Literal>
+                    <ID>boundaryConditions</ID>
+                    <ToolTip>边界条件</ToolTip>
+                    <Default>边界条件</Default>
+                </Literal>
+            </Declarations>
+            <Code Language="cpp">
+                <![CDATA[
+/**
+ * @brief $testPurpose$
+ *
+ * @details
+ * 测试步骤:
+ * 1. $testSteps$
+ * 
+ * 预期结果:
+ * 1. $expectedResult$
+ * 
+ * 边界条件:
+ * 1. $boundaryConditions$
+ */
+                ]]>
+            </Code>
+        </Snippet>
+    </CodeSnippet>
+</CodeSnippets>

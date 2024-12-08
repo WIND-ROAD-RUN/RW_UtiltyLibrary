@@ -32,7 +32,14 @@
     {
       "name": "windows-Visual Studio 17 2022",
       "displayName": "Visual Studio 17 2022",
-      "inherits": "windows-MSBuild"
+      "inherits": "windows-MSBuild",
+      "architecture": {
+        "strategy": "external",
+        "value": "x64"
+      },
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Debug"
+      }
     },
     {
       "name": "windows-x64-debug",

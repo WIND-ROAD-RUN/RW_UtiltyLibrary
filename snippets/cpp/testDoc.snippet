@@ -1,0 +1,51 @@
+<CodeSnippets xmlns="http://schemas.microsoft.com/VisualStudio/2005/CodeSnippet">
+    <CodeSnippet Format="1.0.0">
+        <Header>
+            <Title>Test Documentation</Title>
+            <Shortcut>testdoc</Shortcut>
+            <Description>Code snippet for test documentation</Description>
+            <Author>RoadWind</Author>
+        </Header>
+        <Snippet>
+            <Declarations>
+                <Literal>
+                    <ID>testPurpose</ID>
+                    <ToolTip>Purpose of the test</ToolTip>
+                    <Default>Purpose of the test</Default>
+                </Literal>
+                <Literal>
+                    <ID>testSteps</ID>
+                    <ToolTip>Steps to perform the test</ToolTip>
+                    <Default>Steps to perform the test</Default>
+                </Literal>
+                <Literal>
+                    <ID>expectedResult</ID>
+                    <ToolTip>Expected result of the test</ToolTip>
+                    <Default>Expected result of the test</Default>
+                </Literal>
+                <Literal>
+                    <ID>boundaryConditions</ID>
+                    <ToolTip>Boundary conditions for the test</ToolTip>
+                    <Default>Boundary conditions for the test</Default>
+                </Literal>
+            </Declarations>
+            <Code Language="cpp">
+                <![CDATA[
+/**
+ * @brief $testPurpose$
+ *
+ * @details
+ * Test Steps:
+ * 1. $testSteps$
+ * 
+ * Expected Result:
+ * 1. $expectedResult$
+ * 
+ * Boundary Conditions:
+ * 1. $boundaryConditions$
+ */
+                ]]>
+            </Code>
+        </Snippet>
+    </CodeSnippet>
+</CodeSnippets>

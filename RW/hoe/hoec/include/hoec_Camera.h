@@ -2,6 +2,11 @@
 #define HOEC_ICAMERA_H_
 
 #include <string>
+#include<functional>
+
+namespace cv {
+    class Mat;
+}
 namespace rw
 {
     namespace hoec
@@ -56,6 +61,29 @@ namespace rw
             virtual bool setGain(size_t value) = 0;
             virtual bool setMonitorMode(CameraMonitorMode mode) = 0;
             virtual bool setIOTime(size_t value) = 0;
+
+            virtual size_t getExposureTime()=0;
+            virtual size_t getGain()=0;
+            virtual size_t getIOTime()=0;
+            virtual CameraMonitorMode getMonitorMode()=0;
+        };
+
+        class ICameraActive
+            : public ICamera
+        {
+        public:
+            virtual cv::Mat getImage(bool& isget)=0;
+            virtual cv::Mat getImage() = 0;
+        };
+
+        class ICameraPassive
+            : public ICamera
+        {
+        public:
+            using UserToCallBack = std::function<void(cv::Mat)>;
+        public:
+            virtual bool RegisterCallBackFunc()=0;
+
         };
 
         class Camera

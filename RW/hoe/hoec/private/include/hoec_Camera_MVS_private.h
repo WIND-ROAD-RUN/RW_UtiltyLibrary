@@ -81,7 +81,7 @@ namespace rw {
             bool RegisterCallBack();
         public:
 
-            static void __stdcall ImageCallBack(unsigned char* pData, MV_FRAME_OUT_INFO_EX* pFrameInfo, void* pUser);
+            static void __stdcall ImageCallBackFunc(unsigned char* pData, MV_FRAME_OUT_INFO_EX* pFrameInfo, void* pUser);
         };
 
 

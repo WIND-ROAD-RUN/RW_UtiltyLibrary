@@ -16,9 +16,9 @@ namespace rw {
         Camera_MVS::~Camera_MVS()
         {
             //先停止采集
-                if (_isMonitor) {
-                    stopMonitor();
-                }
+            if (_isMonitor) {
+                stopMonitor();
+            }
             //关闭相机
             if (m_cameraHandle) {
                 MV_CC_CloseDevice(m_cameraHandle);
@@ -202,6 +202,42 @@ namespace rw {
             return true;
         }
 
+        bool Camera_MVS::setExposureTime(size_t value)
+        {
+            //TODO::设置曝光时间
+            return false;
+        }
+
+        bool Camera_MVS::setGain(size_t value)
+        {
+            //TODO::设置增益
+            return false;
+        }
+
+        bool Camera_MVS::setIOTime(size_t value)
+        {
+            //TODO::设置IO时间
+            return false;
+        }
+
+        size_t Camera_MVS::getExposureTime()
+        {
+            //TODO::获取曝光时间
+            return size_t();
+        }
+
+        size_t Camera_MVS::getGain()
+        {
+            //TODO::获取增益
+            return size_t();
+        }
+
+        size_t Camera_MVS::getIOTime()
+        {
+            //TODO::获取IO时间
+            return size_t();
+        }
+
         Camera_MVS_Active::Camera_MVS_Active()
         {
         }
@@ -248,7 +284,7 @@ namespace rw {
 
         bool Camera_MVS_Passive::RegisterCallBack()
         {
-            auto result= MV_CC_RegisterImageCallBackEx(m_cameraHandle, Camera_MVS_Passive::ImageCallBack, this);
+            auto result = MV_CC_RegisterImageCallBackEx(m_cameraHandle, Camera_MVS_Passive::ImageCallBackFunc, this);
             if (result != MV_OK) {
                 std::cerr << "Failed to register image callback with:" << result << std::endl;
                 return false;
@@ -256,7 +292,7 @@ namespace rw {
             return true;
         }
 
-        void __stdcall Camera_MVS_Passive::ImageCallBack(unsigned char* pData, MV_FRAME_OUT_INFO_EX* pFrameInfo, void* pUser) {
+        void __stdcall Camera_MVS_Passive::ImageCallBackFunc(unsigned char* pData, MV_FRAME_OUT_INFO_EX* pFrameInfo, void* pUser) {
             Camera_MVS_Passive* pThis = static_cast<Camera_MVS_Passive*>(pUser);
             if (pFrameInfo)
             {
@@ -271,6 +307,6 @@ namespace rw {
 
         }
 
-} // namespace hoec
+    } // namespace hoec
 
 } // namespace rw

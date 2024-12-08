@@ -7,6 +7,10 @@
 
 #include<vector>
 #include<string>
+#include<functional>
+
+struct _MV_FRAME_OUT_INFO_EX_;
+typedef struct _MV_FRAME_OUT_INFO_EX_ MV_FRAME_OUT_INFO_EX;
 
 namespace rw {
     namespace hoec {
@@ -53,13 +57,31 @@ namespace rw {
 
         class Camera_MVS_Active 
             :public Camera_MVS {
- 
         public:
             Camera_MVS_Active();
             ~Camera_MVS_Active();
         public:
             cv::Mat getImage(bool& isget);
        
+        };
+
+        class Camera_MVS_Passive
+            :public Camera_MVS {
+        public:
+            using UserToCallBack = std::function<void(cv::Mat)>;
+        private:
+            UserToCallBack _userToCallBack;
+        public:
+            Camera_MVS_Passive(UserToCallBack userToCallback = [](cv::Mat mat) {
+                std::cout << "No callback function" << std::endl;
+                return;
+                });
+            ~Camera_MVS_Passive();
+        public:
+            bool RegisterCallBack();
+        public:
+
+            static void __stdcall ImageCallBack(unsigned char* pData, MV_FRAME_OUT_INFO_EX* pFrameInfo, void* pUser);
         };
 
 

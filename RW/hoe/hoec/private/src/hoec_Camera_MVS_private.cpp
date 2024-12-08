@@ -1,6 +1,6 @@
 #include"hoec_Camera_MVS_private.h"
 
-#include"hoec_core_private.h"
+#include"hoec_Camera_core_private.h"
 
 #include"MvCameraControl.h"
 #include"CameraParams.h"
@@ -233,6 +233,42 @@ namespace rw {
                 return cv::Mat();
             }
             return image;
+        }
+
+        Camera_MVS_Passive::Camera_MVS_Passive(UserToCallBack userToCallback)
+            :_userToCallBack(userToCallback)
+        {
+
+        }
+
+        Camera_MVS_Passive::~Camera_MVS_Passive()
+        {
+
+        }
+
+        bool Camera_MVS_Passive::RegisterCallBack()
+        {
+            auto result= MV_CC_RegisterImageCallBackEx(m_cameraHandle, Camera_MVS_Passive::ImageCallBack, this);
+            if (result != MV_OK) {
+                std::cerr << "Failed to register image callback with:" << result << std::endl;
+                return false;
+            }
+            return true;
+        }
+
+        void __stdcall Camera_MVS_Passive::ImageCallBack(unsigned char* pData, MV_FRAME_OUT_INFO_EX* pFrameInfo, void* pUser) {
+            Camera_MVS_Passive* pThis = static_cast<Camera_MVS_Passive*>(pUser);
+            if (pFrameInfo)
+            {
+                auto image = ImageFrameConvert::MVS_ConvertFrameToMat(*pFrameInfo, pData);
+                if (pThis) {
+                    pThis->_userToCallBack(image);
+                }
+                else {
+                    std::cerr << "Failed to get user pointer" << std::endl;
+                }
+            }
+
         }
 
 } // namespace hoec

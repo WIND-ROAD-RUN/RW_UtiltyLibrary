@@ -283,6 +283,106 @@ namespace rw {
                 std::cerr << "Failed to get ioTime with:" << result << std::endl;
                 return 0;
             }
+
+        }
+
+        CameraTrrigerMode Camera_MVS::getMonitorMode() {
+            return this->trriggerMode;
+        }
+
+        size_t Camera_MVS::getTriggerLine() {
+            if (!m_cameraHandle) {
+                std::cout << "The camera is not connected" << std::endl;
+                return -1;
+            }
+            MVCC_ENUMVALUE triggerSource = { 0 };
+            auto result = MV_CC_GetEnumValue(m_cameraHandle, "TriggerSource", &triggerSource);
+            if (result != MV_OK) {
+                std::cout << "Failed to get trigger line with : " << result << std::endl;
+                return -1;
+            }
+            if (triggerSource.nCurValue >= MV_TRIGGER_SOURCE_LINE0 &&
+                triggerSource.nCurValue <= MV_TRIGGER_SOURCE_LINE3) {
+                return triggerSource.nCurValue - MV_TRIGGER_SOURCE_LINE0;
+            }
+            else {
+                std::cout << "Invalid trigger source value: " << triggerSource.nCurValue << std::endl;
+                return -1;
+            }
+            //return triggerSource.nCurValue-MV_TRIGGER_SOURCE_LINE0;
+        }
+
+        bool Camera_MVS::setTriggerMode(CameraTrrigerMode mode)
+        {
+            if (!m_cameraHandle) {
+                std::cout << "Camera is not connected" << std::endl;
+            }
+            if (_isMonitor) {
+                if (!stopMonitor()) {
+                    return false;
+                }
+            }
+            this->trriggerMode = mode;
+            if (mode == CameraTrrigerMode::SoftwareTriggered) {
+                //将相机设置为触发模式
+                auto result = MV_CC_SetEnumValue(m_cameraHandle, "TriggerMode", MV_TRIGGER_MODE_ON);
+                if (result != MV_OK) {
+                    std::cout << "Set trriiger mode failed with:" << result;
+                    return false;
+                }
+                //设置触发源为SOFTWARE即软件触发
+                result = MV_CC_SetEnumValue(m_cameraHandle, "TriggerSource", MV_TRIGGER_SOURCE_SOFTWARE);
+                if (result != MV_OK) {
+                    std::cout << "Set software trriiger source failed with:" << result;
+                    return false;
+                }
+                ////发送软触发命令
+                //result = MV_CC_SetCommandValue(m_cameraHandle,"TriggerSoftware");
+                //if (result != MV_OK) {
+                //    std::cout << "Send trigger software command failed with:" << result;
+                //    return false;
+                //}
+            }
+            else if (mode == CameraTrrigerMode::HardwareTriggered) {
+                //将相机设置为触发模式
+                auto result = MV_CC_SetEnumValue(m_cameraHandle, "TriggerMode", MV_TRIGGER_MODE_ON);
+                if (result != MV_OK) {
+                    std::cout << "Set trriiger mode failed with:" << result;
+                    return false;
+                }
+                //将触发源设置为硬件触发
+                int triggerSource = MV_TRIGGER_SOURCE_LINE0 + getTriggerLine();
+                result = MV_CC_SetEnumValue(m_cameraHandle,"TriggerSource",triggerSource);
+                if (result != MV_OK) {
+                    std::cout << "Set hardware trriiger source failed with:" << result;
+                    return false;
+                }
+                //当电平信号变化的时候触发信号获取图像
+            }
+            return true;
+        }
+
+        bool Camera_MVS::setTriggerLine(size_t lineIndex) {
+            if (lineIndex > 3) {
+                std::cout << "Out of range 0-3" << std::endl;
+            }
+            // 确保相机处于触发模式
+            MVCC_ENUMVALUE stEnumValue = { 0 };
+           auto result = MV_CC_GetEnumValue(m_cameraHandle, "TriggerMode", &stEnumValue);
+            if (result != MV_OK) {
+                std::cout << "Get trigger mode failed with:" << std::hex << result << std::endl;
+                return false;
+            }
+            if (stEnumValue.nCurValue != 1) {  // 1表示触发模式开启
+                std::cout << "Set the trigger mode first" << std::endl;
+                return false;
+            }
+            result = MV_CC_SetEnumValue(m_cameraHandle, "TriggerSource", MV_TRIGGER_SOURCE_LINE0+lineIndex);
+            if (result != MV_OK) {
+                std::cout << "Set the trigger line failed with " << result << std::endl;
+                return false;
+            }
+            return true;
         }
 
         Camera_MVS_Active::Camera_MVS_Active()

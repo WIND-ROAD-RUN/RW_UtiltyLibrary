@@ -70,7 +70,7 @@ namespace dsl_BLoomFilter {
     TEST(DSL, BLOOMFILTER_REFACTOR_ADAPTIVETEST) {
         std::locale::global(std::locale("en_US.UTF-8"));
         std::wcout.imbue(std::locale());
-        int adaptiveCount{ 1 };//Number of iterations
+        int adaptiveCount{ 100 };//Number of iterations
         double ErrorRate{ 0.01 }; //Initial error rate
         double adptiveDifferenceRateStep{ 0.001 }; //Incremental error rate
 

@@ -205,37 +205,84 @@ namespace rw {
         bool Camera_MVS::setExposureTime(size_t value)
         {
             //TODO::设置曝光时间
-            return false;
+            float exposureTime = static_cast<float>(value);
+            auto result = MV_CC_SetExposureTime(m_cameraHandle, exposureTime);
+            if (result == MV_OK)
+                return true;
+            else {
+                std::cerr << "Failed to set exposuretime with:" << result << std::endl;
+                return false;
+            }
         }
 
         bool Camera_MVS::setGain(size_t value)
         {
             //TODO::设置增益
-            return false;
+            float gain = static_cast<float>(value);
+            auto result = MV_CC_SetExposureTime(m_cameraHandle, gain);
+            if (result == MV_OK)
+                return true;
+            else {
+                std::cerr << "Failed to set exposuretime with:" << result << std::endl;
+                return false;
+            }
         }
 
         bool Camera_MVS::setIOTime(size_t value)
         {
             //TODO::设置IO时间
-            return false;
+            auto result = MV_CC_SetIntValue(m_cameraHandle, "LineDebouncerTime ", value);
+            if (result == MV_OK)
+                return true;
+            else {
+                std::cerr << "Failed to set I/OTime with:" << result << std::endl;
+                return false;
+            }
         }
 
         size_t Camera_MVS::getExposureTime()
         {
             //TODO::获取曝光时间
-            return size_t();
+            MVCC_FLOATVALUE exposureTime;
+            memset(&exposureTime,0, sizeof(MVCC_FLOATVALUE));
+            auto result = MV_CC_GetExposureTime(m_cameraHandle, &exposureTime);
+            if (result == MV_OK) {
+                return static_cast<size_t>(exposureTime.fCurValue);
+            }
+            else {
+                std::cerr << "Failed to get exposure time with:" << result << std::endl;
+                return 0;
+            }
         }
 
         size_t Camera_MVS::getGain()
         {
             //TODO::获取增益
-            return size_t();
+            MVCC_FLOATVALUE gain;
+            memset(&gain, 0, sizeof(MVCC_FLOATVALUE));
+            auto result = MV_CC_GetGain(m_cameraHandle, &gain);
+            if (result == MV_OK) {
+                return static_cast<size_t>(gain.fCurValue);
+            }
+            else {
+                std::cerr << "Failed to get gain with:" << result << std::endl;
+                return 0;
+            }
         }
 
         size_t Camera_MVS::getIOTime()
         {
             //TODO::获取IO时间
-            return size_t();
+            MVCC_INTVALUE ioTime;
+            memset(&ioTime, 0, sizeof(MVCC_INTVALUE));
+            auto result = MV_CC_GetIntValue(m_cameraHandle, "Gain", &ioTime);
+            if (result == MV_OK) {
+                return size_t();
+            }
+            else {
+                std::cerr << "Failed to get ioTime with:" << result << std::endl;
+                return 0;
+            }
         }
 
         Camera_MVS_Active::Camera_MVS_Active()

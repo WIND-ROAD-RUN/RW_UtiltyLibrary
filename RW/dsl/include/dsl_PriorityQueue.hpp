@@ -1,7 +1,7 @@
 #ifndef DSL_PRIORITY_QUEUE_H
 #define DSL_PRIORITY_QUEUE_H
 
-#include "dsl_core.h"
+#include "dsl_core.hpp"
 #include <iostream>
 #include <vector>
 #include <stdexcept>

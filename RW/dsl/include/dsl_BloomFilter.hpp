@@ -1,7 +1,7 @@
 #ifndef DSL_BLOOMFILTERREFACTOR_H_
 #define DSL_BLOOMFILTERREFACTOR_H_
 
-#include"dsl_core.h"
+#include"dsl_core.hpp"
 
 #include<vector>
 #include <cmath> 

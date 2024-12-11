@@ -1,7 +1,7 @@
 #ifndef DSL_STRINGCONTAINER_H_
 #define DSL_STRINGCONTAINER_H_	
 
-#include"dsl_core.h"
+#include"dsl_core.hpp"
 
 namespace  rw{
 	namespace dsl {

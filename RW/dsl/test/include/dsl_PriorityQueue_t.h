@@ -1,6 +1,6 @@
 #include"dsl_pch_t.h"
 
-#include"dsl_PriorityQueue.h"
+#include"dsl_PriorityQueue.hpp"
 
 using namespace rw::dsl;
 class DHeap_int_Test

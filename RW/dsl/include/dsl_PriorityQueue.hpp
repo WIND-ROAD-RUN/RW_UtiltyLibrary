@@ -7,6 +7,7 @@
 #include <stdexcept>
 #include <functional>
 
+//TODO:实现迭代器
 namespace rw
 {
     namespace dsl
@@ -27,8 +28,6 @@ namespace rw
         class IPriorityQueue
         {
         public:
-
-
             /**
              *@Parameters:
              *  -a: The first element to be compared
@@ -166,7 +165,7 @@ namespace rw
              *
              */
             DHeap(size_t d = 4, bool isHighPriorityFirst = true);
-            DHeap(size_t d, bool isHighPriorityFirst, CompareEqual compareEqual);
+            DHeap(size_t d, bool isHighPriorityFirst, typename IPriorityQueue<T>::CompareEqual compareEqual);
             ~DHeap();
         public:
             T top() override;

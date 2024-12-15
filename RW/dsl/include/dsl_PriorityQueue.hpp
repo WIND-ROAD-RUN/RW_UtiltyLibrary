@@ -220,7 +220,7 @@ namespace rw
                 throw std::runtime_error("Heap is empty");
             }
             return this->_heap_array.front().first;
-        }
+        }   
 
         template <class T>
         void DHeap<T>::insert(T element, size_t priority) {

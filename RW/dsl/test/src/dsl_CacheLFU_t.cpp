@@ -28,7 +28,25 @@ namespace dsl_cache {
         cache.set("e", 3);
         cache.set("e", 3);
         cache.set("e", 3);
+    }
 
+    TEST(CacheLFU,awd) {
+        rw::dsl::CacheLFU<std::string, int> cache(3);
 
+        cache.set("a", 4);
+        cache.set("a", 4);
+        cache.set("a", 4);
+        cache.set("a", 4);
+        cache.set("b", 3);
+        cache.set("b", 3);
+        cache.set("b", 3);
+        cache.set("c", 2);
+        cache.set("c", 2);
+        cache.set("c", 2);
+        cache.set("d", 1);
+        cache.set("e", 3);
+        cache.set("e", 3);
+        cache.set("e", 3);
+    
     }
 }

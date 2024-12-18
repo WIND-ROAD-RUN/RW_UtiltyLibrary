@@ -55,8 +55,7 @@ namespace rw {
             void* m_cameraHandle{ nullptr };
         private:
             bool _isMonitor{ false };
-            //默认触发模式为内触发模式，自动获取图像
-            CameraTrrigerMode trriggerMode{ CameraTrrigerMode::TriggerMode_OFF};
+            CameraTrrigerMode triggerMode;
         };
 
         class Camera_MVS_Active 
@@ -87,9 +86,6 @@ namespace rw {
 
             static void __stdcall ImageCallBackFunc(unsigned char* pData, MV_FRAME_OUT_INFO_EX* pFrameInfo, void* pUser);
         };
-
-
-
 
     } // namespace hoec
 

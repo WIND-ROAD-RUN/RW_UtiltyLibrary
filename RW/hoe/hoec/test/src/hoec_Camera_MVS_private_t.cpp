@@ -54,6 +54,7 @@ namespace hoec_Camera_MVS {
 		for (auto& item : cameraList) {
 			EXPECT_EQ(item->connectCamera(), true);
 		}
+		cameraList.clear();
 		Camera_MVS::uninitSDK();
 	}
 
@@ -96,27 +97,25 @@ namespace hoec_Camera_MVS {
 		for (auto& item : cameraList) {
 			//连接相机
 			EXPECT_EQ(item->connectCamera(), true);
-			/*void* m_cameraHandle = item->getCameraHandle();
-			auto result = MV_CC_SetEnumValue(m_cameraHandle, "TriggerMode", MV_TRIGGER_MODE_OFF);
-			if (result != MV_OK) {
-				std::cout << "Set trriiger mode failed with:" << result;
-			}*/
+			EXPECT_EQ(item->setTriggerMode(::CameraTrrigerMode::SoftwareTriggered), true);
 			if (isfirst) {
 				EXPECT_EQ(item->setExposureTime(20000), true);
+				isfirst = false;
 			}
 			else {
-				EXPECT_EQ(item->setExposureTime(200), true);
+				EXPECT_EQ(item->setExposureTime(2000), true);
 				isfirst = true;
 			}
-			//item->startMonitor();
-			///*bool isGet{};
-			//auto image = item->getImage(isGet);
+			item->startMonitor();
+			bool isGet{};
+			auto image = item->getImage(isGet);
 
-			//ASSERT_EQ(isGet, true);*/
-			////cv::imshow("image", image);
-			////cv::waitKey(0);
-			//item->stopMonitor();
+			ASSERT_EQ(isGet, true);
+			//cv::imshow("image", image);
+			//cv::waitKey(0);
+			item->stopMonitor();
 		}
+		cameraList.clear();
 		Camera_MVS::uninitSDK();
 	}
 
@@ -142,15 +141,27 @@ namespace hoec_Camera_MVS {
 		for (auto& item : cameraList) {
 			//连接相机
 			EXPECT_EQ(item->connectCamera(), true);
-			EXPECT_EQ(item->setExposureTime(20000), true);
+			EXPECT_EQ(item->setTriggerMode(CameraTrrigerMode::SoftwareTriggered), true);
 			if (isfirst) {
-				EXPECT_EQ(item->setGain(5), true);
+				EXPECT_EQ(item->setExposureTime(20000), true);
+				EXPECT_EQ(item->setGain(15), true);
 				isfirst = false;
 			}
-			else{
+			else {
+     				EXPECT_EQ(item->setExposureTime(40000), true);
 				EXPECT_EQ(item->setGain(15), true);
+				isfirst = true;
 			}
+			item->startMonitor();
+			bool isGet{false};
+			auto image = item->getImage(isGet);
+
+			ASSERT_EQ(isGet, true);
+			//cv::imshow("image", image);
+			//cv::waitKey(0);
+			item->stopMonitor();
 		}
+		cameraList.clear();
 		Camera_MVS::uninitSDK();
 	}
 
@@ -175,6 +186,7 @@ namespace hoec_Camera_MVS {
 			EXPECT_EQ(item->setExposureTime(2000), true);
 			EXPECT_EQ(item->getExposureTime(), 2000);
 		}
+		cameraList.clear();
 		Camera_MVS::uninitSDK();
 	}
 
@@ -199,6 +211,7 @@ namespace hoec_Camera_MVS {
 			EXPECT_EQ(item->setGain(200), true);
 			EXPECT_EQ(item->getGain(), 200);
 		}
+		cameraList.clear();
 		Camera_MVS::uninitSDK();
 	}
 
@@ -220,9 +233,9 @@ namespace hoec_Camera_MVS {
 		}
 		for (auto& item : cameraList) {
 			EXPECT_EQ(item->connectCamera(), true);
-
 			EXPECT_EQ(item->setTriggerMode(CameraTrrigerMode::SoftwareTriggered), true);
 		}
+		cameraList.clear();
 		Camera_MVS::uninitSDK();
 	}
 
@@ -246,10 +259,11 @@ namespace hoec_Camera_MVS {
 			EXPECT_EQ(item->connectCamera(), true);
 			EXPECT_EQ(item->setTriggerMode(CameraTrrigerMode::HardwareTriggered), true);
 		}
+		cameraList.clear();
 		Camera_MVS::uninitSDK();
 	}
 
-	TEST(Camera_MVS_Test, setTriggerModeOFF_isSuccessfully) {
+	TEST(Camera_MVS_Test, setSoftwareTriggerMode_isSuccessfully) {
 		int status = 0;
 		rw::hoec::Camera_MVS::initSDK();
 
@@ -272,9 +286,7 @@ namespace hoec_Camera_MVS {
 		for (auto& item : cameraList) {
 			//连接相机
 			EXPECT_EQ(item->connectCamera(), true);
-			EXPECT_EQ(item->setTriggerMode(CameraTrrigerMode::TriggerMode_OFF), true);
-			EXPECT_EQ(item->setExposureTime(20000), true);
-			//EXPECT_EQ(item->setGain(20), true);
+			EXPECT_EQ(item->setTriggerMode(CameraTrrigerMode::SoftwareTriggered), true);
 			//注册回调函数
 			auto registerResult = item->RegisterCallBack();
 			EXPECT_EQ(registerResult, true);
@@ -292,10 +304,110 @@ namespace hoec_Camera_MVS {
 			//停止监控
 			EXPECT_EQ(item->stopMonitor(), true);
 		}
+		cameraList.clear();
 		Camera_MVS::uninitSDK();
 	}
 
-	TEST(Camera_MVS_Test, getTriggerMode) {
+	TEST(Camera_MVS_Test,my_SetHardwareTriggerMode)
+	{
+		int status = 0;
+		std::mutex mtx;
+		std::condition_variable cv;
+		bool callback_called = false;
+
+		rw::hoec::Camera_MVS::initSDK();
+
+		auto ipList = Camera_MVS::getCameraIpList();
+
+		std::vector<std::shared_ptr<Camera_MVS_Passive>> cameraList;
+		if (ipList.empty()) {
+			std::cout << "No camera found" << std::endl;
+			EXPECT_EQ(true, true);
+			return;
+		}
+
+		for (const auto& item : ipList) {
+			auto camera = std::make_shared<Camera_MVS_Passive>([&status, &cv, &mtx, &callback_called](cv::Mat a) {
+				std::cout << "We have gotten an image" << std::endl;
+				status = 1;
+				{
+					std::lock_guard<std::mutex> lock(mtx);
+					callback_called = true;
+				}
+				cv.notify_one();
+				});
+			camera->setIP(item);
+			cameraList.push_back(std::move(camera));
+		}
+
+		for (auto& item : cameraList) {
+			EXPECT_EQ(item->connectCamera(), true);
+			EXPECT_EQ(item->setTriggerMode(CameraTrrigerMode::HardwareTriggered), true);
+			auto registerResult = item->RegisterCallBack();
+			EXPECT_EQ(registerResult, true);
+			EXPECT_EQ(item->startMonitor(), true);
+
+			std::unique_lock<std::mutex> lock(mtx);
+			cv.wait_for(lock, std::chrono::seconds(5), [&callback_called]() { return callback_called; });
+			EXPECT_EQ(status, 1);
+
+			callback_called = false;
+			status = 0;
+
+			EXPECT_EQ(item->stopMonitor(), true);
+		}
+
+		cameraList.clear();
+		Camera_MVS::uninitSDK();
+	}
+
+	TEST(Camera_MVS_Test, setHardwareTriggerMode_isSuccessfully)
+	{
+		int status = 0;
+		rw::hoec::Camera_MVS::initSDK();
+
+		auto ipList = Camera_MVS::getCameraIpList();
+
+		std::vector<std::shared_ptr<Camera_MVS_Passive>>cameraList;
+		if (!ipList.size()) {
+			std::cout << "No camera found" << std::endl;
+			EXPECT_EQ(true, true);
+			return;
+		}
+		for (const auto& item : ipList) {
+			auto camera = std::make_shared<Camera_MVS_Passive>([&status](cv::Mat a) {
+				std::cout << "We have gotten a image" << std::endl;
+				status = 1;
+				});
+			camera->setIP(item);
+			cameraList.push_back(std::move(camera));
+		}
+		for (auto& item : cameraList) {
+			//连接相机
+			EXPECT_EQ(item->connectCamera(), true);
+			EXPECT_EQ(item->setTriggerMode(CameraTrrigerMode::HardwareTriggered), true);
+			//注册回调函数
+			auto registerResult = item->RegisterCallBack();
+			EXPECT_EQ(registerResult, true);
+			//开始监控
+			EXPECT_EQ(item->startMonitor(), true);
+
+			for (int i = 0; i < 500; i++) {
+				std::this_thread::sleep_for(std::chrono::milliseconds(10));
+				//wait for callback
+			}
+			EXPECT_EQ(status, 1);
+
+			status = 0;
+
+			//停止监控
+			EXPECT_EQ(item->stopMonitor(), true);
+		}
+		cameraList.clear();
+		Camera_MVS::uninitSDK();
+	}
+
+	TEST(Camera_MVS_Test, getSoftwareTriggerMode) {
 		rw::hoec::Camera_MVS::initSDK();
 
 		auto ipList = Camera_MVS::getCameraIpList();
@@ -313,10 +425,35 @@ namespace hoec_Camera_MVS {
 		}
 		for (auto& item : cameraList) {
 			EXPECT_EQ(item->connectCamera(), true);
-			EXPECT_EQ(item->getMonitorMode(), CameraTrrigerMode::TriggerMode_OFF);
 			EXPECT_EQ(item->setTriggerMode(CameraTrrigerMode::SoftwareTriggered), true);
 			EXPECT_EQ(item->getMonitorMode(), CameraTrrigerMode::SoftwareTriggered);
 		}
+		cameraList.clear();
+		Camera_MVS::uninitSDK();
+	}
+
+	TEST(Camera_MVS_Test, getHardwareTriggerMode)
+	{
+		rw::hoec::Camera_MVS::initSDK();
+		auto ipList = Camera_MVS::getCameraIpList();
+
+		std::vector<std::shared_ptr<Camera_MVS_Active >> cameraList;
+		if (!ipList.size()) {
+			std::cout << "No camera found" << std::endl;
+			EXPECT_EQ(true, true);
+			return;
+		}
+		for (auto& item : ipList) {
+			auto camera = std::make_shared<Camera_MVS_Active>();
+			camera->setIP(item);
+			cameraList.push_back(camera);
+		}
+		for (auto& item : cameraList) {
+			EXPECT_EQ(item->connectCamera(), true);
+			EXPECT_EQ(item->setTriggerMode(CameraTrrigerMode::HardwareTriggered), true);
+			EXPECT_EQ(item->getMonitorMode(), CameraTrrigerMode::HardwareTriggered);
+		}
+		cameraList.clear();
 		Camera_MVS::uninitSDK();
 	}
 
@@ -336,56 +473,41 @@ namespace hoec_Camera_MVS {
 			camera->setIP(item);
 			cameraList.push_back(camera);
 		}
-		bool issecond{ false };
+		//bool issecond{ false };
 		for (auto& item : cameraList) {
 			EXPECT_EQ(item->connectCamera(), true);
-			EXPECT_EQ(item->setTriggerMode(CameraTrrigerMode::HardwareTriggered), true);
-			/*if (!issecond) {
-				EXPECT_EQ(item->setTriggerLine(1), true);
-				issecond = true;
-			}
-			else {
-				EXPECT_EQ(item->setTriggerLine(2), true);
-			}*/
+			EXPECT_EQ(item->setTriggerLine(0), true);
 		}
+		cameraList.clear();
 		Camera_MVS::uninitSDK();
 	}
 
-	//TEST(Camera_MVS_Test, getTriggerLine) {
-	//	rw::hoec::Camera_MVS::initSDK();
+	TEST(Camera_MVS_Test, getTriggerLine)
+	{
+		rw::hoec::Camera_MVS::initSDK();
 
-	//	auto ipList = Camera_MVS::getCameraIpList();
+		auto ipList = Camera_MVS::getCameraIpList();
 
-	//	std::vector<std::shared_ptr<Camera_MVS_Active >> cameraList;
-	//	if (!ipList.size()) {
-	//		std::cout << "No camera found" << std::endl;
-	//		EXPECT_EQ(true, true);
-	//		return;
-	//	}
-	//	for (auto& item : ipList) {
-	//		auto camera = std::make_shared<Camera_MVS_Active>();
-	//		camera->setIP(item);
-	//		cameraList.push_back(camera);
-	//	}
-	//	bool issecond{ false };
-	//	for (auto& item : cameraList) {
-	//		EXPECT_EQ(item->connectCamera(), true);
-	//		if (!issecond) {
-	//			EXPECT_EQ(item->setTriggerMode(CameraTrrigerMode::HardwareTriggered), true);
-	//			EXPECT_EQ(item->setTriggerLine(1), true);
-	//			EXPECT_EQ(item->getTriggerLine(), 1);
-	//			issecond = true;
-	//		}
-	//		else {
-	//			EXPECT_EQ(item->setTriggerMode(CameraTrrigerMode::HardwareTriggered), true);
-	//			EXPECT_EQ(item->setTriggerLine(2), true);
-	//			EXPECT_EQ(item->getTriggerLine(), 2);
-	//		}
-	//		/*EXPECT_EQ(item->setTriggerLine(1), true);
-	//		EXPECT_EQ(item->getTriggerLine(),1);*/
-	//	}
-	//	Camera_MVS::uninitSDK();
-	//}
+		std::vector<std::shared_ptr<Camera_MVS_Active >> cameraList;
+		if (!ipList.size()) {
+			std::cout << "No camera found" << std::endl;
+			EXPECT_EQ(true, true);
+			return;
+		}
+		for (auto& item : ipList) {
+			auto camera = std::make_shared<Camera_MVS_Active>();
+			camera->setIP(item);
+			cameraList.push_back(camera);
+		}
+		//bool issecond{ false };
+		for (auto& item : cameraList) {
+			EXPECT_EQ(item->connectCamera(), true);
+			EXPECT_EQ(item->setTriggerLine(0), true);
+			EXPECT_EQ(item->getTriggerLine(), 0);
+		}
+		cameraList.clear();
+		Camera_MVS::uninitSDK();
+	}
 
 	TEST(Camera_MVS_Active_Test, CAMERA_CONNECT) {
 		//使用前初始化SDK也即相机模块
@@ -394,7 +516,7 @@ namespace hoec_Camera_MVS {
 		//获取相机IP列表
 		auto ipList = Camera_MVS_Active::getCameraIpList();
 		//创建相机对象
-		std::vector<std::shared_ptr<Camera_MVS_Active>> cameraist;
+		std::vector<std::shared_ptr<Camera_MVS_Active>> cameraList;
 		if (!ipList.size()) {
 			std::cout << "No camera found" << std::endl;
 			EXPECT_EQ(true, true);
@@ -403,15 +525,13 @@ namespace hoec_Camera_MVS {
 		for (const auto& item : ipList) {
 			auto camera = std::make_shared<Camera_MVS_Active>();
 			camera->setIP(item);
-			cameraist.push_back(std::move(camera));
+			cameraList.push_back(std::move(camera));
 		}
-		for (auto& item : cameraist) {
+		for (auto& item : cameraList) {
 			//连接相机
 			EXPECT_EQ(item->connectCamera(), true);
 		}
-		//...其他操作
-		//使用相机后释放SDK
-
+		cameraList.clear();
 		Camera_MVS_Active::uninitSDK();
 	}
 
@@ -421,7 +541,7 @@ namespace hoec_Camera_MVS {
 		//获取相机IP列表
 		auto ipList = Camera_MVS_Active::getCameraIpList();
 		//创建相机对象
-		std::vector<std::shared_ptr<Camera_MVS_Active>> cameraist;
+		std::vector<std::shared_ptr<Camera_MVS_Active>> cameraList;
 		if (!ipList.size()) {
 			std::cout << "No camera found" << std::endl;
 			EXPECT_EQ(true, true);
@@ -430,9 +550,9 @@ namespace hoec_Camera_MVS {
 		for (const auto& item : ipList) {
 			auto camera = std::make_shared<Camera_MVS_Active>();
 			camera->setIP(item);
-			cameraist.push_back(std::move(camera));
+			cameraList.push_back(std::move(camera));
 		}
-		for (auto& item : cameraist) {
+		for (auto& item : cameraList) {
 			//连接相机
 			EXPECT_EQ(item->connectCamera(), true);
 			//开始监控
@@ -444,8 +564,7 @@ namespace hoec_Camera_MVS {
 			//停止监控
 			EXPECT_EQ(item->stopMonitor(), true);
 		}
-		//...其他操作
-		//使用相机后释放SDK
+		cameraList.clear();
 		Camera_MVS_Active::uninitSDK();
 
 	}
@@ -457,7 +576,7 @@ namespace hoec_Camera_MVS {
 		//获取相机IP列表
 		auto ipList = Camera_MVS_Passive::getCameraIpList();
 		//创建相机对象
-		std::vector<std::shared_ptr<Camera_MVS_Passive>> cameraist;
+		std::vector<std::shared_ptr<Camera_MVS_Passive>> cameraList;
 		if (!ipList.size()) {
 			std::cout << "No camera found" << std::endl;
 			EXPECT_EQ(true, true);
@@ -469,12 +588,12 @@ namespace hoec_Camera_MVS {
 				status = 1;
 				});
 			camera->setIP(item);
-			cameraist.push_back(std::move(camera));
+			cameraList.push_back(std::move(camera));
 		}
-		for (auto& item : cameraist) {
+		for (auto& item : cameraList) {
 			//连接相机
 			EXPECT_EQ(item->connectCamera(), true);
-			EXPECT_EQ(item->setTriggerMode(CameraTrrigerMode::TriggerMode_OFF), true);
+			EXPECT_EQ(item->setTriggerMode(CameraTrrigerMode::SoftwareTriggered), true);
 			//注册回调函数
 			auto registerResult = item->RegisterCallBack();
 			EXPECT_EQ(registerResult, true);
@@ -494,6 +613,7 @@ namespace hoec_Camera_MVS {
 		}
 		//...其他操作
 		//使用相机后释放SDK
+		cameraList.clear();
 		Camera_MVS_Passive::uninitSDK();
 	}
 }

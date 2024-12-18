@@ -46,7 +46,6 @@ namespace rw
          */
         enum class CameraTrrigerMode
         {
-            TriggerMode_OFF,
             // Monitor the camera in the software triggered mode.
             // When use this mode, the camera will be monitored by the software trigger.
             // You can set frame rate or get a picture by calling the getImage() function.

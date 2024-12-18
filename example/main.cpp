@@ -1,18 +1,18 @@
-#include<QImage>
-#include<QWidget>
-#include <QApplication>
-#include <QPushButton>
-#include <QLabel>
-#include <QMainWindow>
-#include <iostream>
-#include <vector>
-#include <QPixmap>
-#include <QTimer>
-#include <QVBoxLayout>
-#include "hoec_Camera_MVS_private.h"
-
-using namespace rw::hoec;
-
+//#include<QImage>
+//#include<QWidget>
+//#include <QApplication>
+//#include <QPushButton>
+//#include <QLabel>
+//#include <QMainWindow>
+//#include <iostream>
+//#include <vector>
+//#include <QPixmap>
+//#include <QTimer>
+//#include <QVBoxLayout>
+//#include "hoec_Camera_MVS_private.h"
+//
+//using namespace rw::hoec;
+//
 //class MainWindow :public QMainWindow {
 //	Q_OBJECT
 //public:
@@ -58,7 +58,7 @@ using namespace rw::hoec;
 //	if (!result) {
 //		std::cout << "Failed to connect the camera" << std::endl;
 //	}
-//	mycamera->setTriggerMode(CameraTrrigerMode::TriggerMode_OFF);
+//	mycamera->setTriggerMode(CameraTrrigerMode::SoftwareTriggered);
 //	mycamera->setExposureTime(10000);
 //	mycamera->setGain(20);
 //
@@ -104,73 +104,72 @@ using namespace rw::hoec;
 //MainWindow::~MainWindow() {
 //	Camera_MVS::uninitSDK();
 //}
-
-class MainWindow :public QMainWindow {
-	Q_OBJECT
-public:
-	MainWindow(QWidget* parent = nullptr);
-	~MainWindow();
-
-private:
-	QLabel* label;
-	QPushButton* btnOK;
-	std::vector<std::shared_ptr<Camera_MVS_Passive>> cameraList;
-	std::shared_ptr<Camera_MVS_Passive> mycamera;
-};
-
-MainWindow::MainWindow(QWidget *parent) {
-	label = new QLabel(this);
-	btnOK = new QPushButton("开始采集", this);
-	QVBoxLayout* layout = new QVBoxLayout;
-	layout->addWidget(label);
-	layout->addWidget(btnOK);
-
-	QWidget* centralwidget = new QWidget(this);
-	centralwidget->setLayout(layout);
-	setCentralWidget(centralwidget);
-
-	Camera_MVS::initSDK();
-	auto ipList = Camera_MVS_Active::getCameraIpList();
-	if (!ipList.size()) {
-		std::cout << "No camera found" << std::endl;
-	}
-	for (auto item : ipList) {
-		auto camera = std::make_shared<Camera_MVS_Passive>([this](cv::Mat a) {
-			QImage disImage = QImage(a.data, a.cols, a.rows, a.step, QImage::Format_RGB888);
-			label->setPixmap(QPixmap::fromImage(disImage));
-			});
-		camera->setIP(item);
-		cameraList.push_back(camera);
-	}
-	mycamera = cameraList[0];
-	auto result = mycamera->connectCamera();
-	if (!result) {
-		std::cout << "Failed to connect camera" << std::endl;
-	} 
-	mycamera->setTriggerMode(CameraTrrigerMode::TriggerMode_OFF);
-	mycamera->setExposureTime(20000);
-	mycamera->setGain(20);
-	
-	result = mycamera->RegisterCallBack();
-	if (!result) {
-		std::cout << "Failed to register image callback" << std::endl;
-	}
-	 
-	mycamera->startMonitor();
-
-
-}
-
-MainWindow::~MainWindow() {}
-
-int main(int argc, char *argv[]) {
-	QApplication a(argc, argv);
-	MainWindow m;
-	m.resize(500, 500);
-	m.show();
-
-	return a.exec();
-}
-
-
-#include "main.moc"
+//
+////class MainWindow :public QMainWindow {
+////	Q_OBJECT
+////public:
+////	MainWindow(QWidget* parent = nullptr);
+////	~MainWindow();
+////
+////private:
+////	QLabel* label;
+////	QPushButton* btnOK;
+////	std::vector<std::shared_ptr<Camera_MVS_Passive>> cameraList;
+////	std::shared_ptr<Camera_MVS_Passive> mycamera;
+////};
+////
+////MainWindow::MainWindow(QWidget *parent) {
+////	label = new QLabel(this);
+////	btnOK = new QPushButton("开始采集", this);
+////	QVBoxLayout* layout = new QVBoxLayout;
+////	layout->addWidget(label);
+////	layout->addWidget(btnOK);
+////
+////	QWidget* centralwidget = new QWidget(this);
+////	centralwidget->setLayout(layout);
+////	setCentralWidget(centralwidget);
+////
+////	Camera_MVS::initSDK();
+////	auto ipList = Camera_MVS_Active::getCameraIpList();
+////	if (!ipList.size()) {
+////		std::cout << "No camera found" << std::endl;
+////	}
+////	for (auto item : ipList) {
+////		auto camera = std::make_shared<Camera_MVS_Passive>([this](cv::Mat a) {
+////			QImage disImage = QImage(a.data, a.cols, a.rows, a.step, QImage::Format_RGB888);
+////			label->setPixmap(QPixmap::fromImage(disImage));
+////			});
+////		camera->setIP(item);
+////		cameraList.push_back(camera);
+////	}
+////	mycamera = cameraList[0];
+////	auto result = mycamera->connectCamera();
+////	if (!result) {
+////		std::cout << "Failed to connect camera" << std::endl;
+////	} 
+////	mycamera->setTriggerMode(CameraTrrigerMode::SoftwareTriggered);
+////	mycamera->setExposureTime(20000);
+////	mycamera->setGain(20);
+////	
+////	result = mycamera->RegisterCallBack();
+////	if (!result) {
+////		std::cout << "Failed to register image callback" << std::endl;
+////	}
+////	 
+////	mycamera->startMonitor();
+////
+////
+////}
+////
+////MainWindow::~MainWindow() {}
+//
+//int main(int argc, char *argv[]) {
+//	QApplication a(argc, argv);
+//	MainWindow m;
+//	m.resize(500, 500);
+//	m.show();
+//
+//	return a.exec();
+//}
+//
+////#include "main.moc"

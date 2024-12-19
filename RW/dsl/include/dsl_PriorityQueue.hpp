@@ -1,5 +1,5 @@
-#ifndef DSL_PRIORITY_QUEUE_H
-#define DSL_PRIORITY_QUEUE_H
+#ifndef DSL_PRIORITYQUEUE_H
+#define DSL_PRIORITYQUEUE_H
 
 #include "dsl_core.hpp"
 #include <iostream>
@@ -7,24 +7,21 @@
 #include <stdexcept>
 #include <functional>
 
-//TODO:实现迭代器
 namespace rw
 {
     namespace dsl
     {
-        const bool HighPriorityFirst = true;
-        const bool LowPriorityFirst = false;
-
         /**
          * @brief: Priority Queue Interface
          *
          * @template variable:
          *   - T: The type of the elements in the priority queue
+         *   - Priority: The type of the priority of the elements in the priority queue
          *
          * @details: Detailed description of the template class
          *
          */
-        template <class T>
+        template <class T, class Priority=size_t>
         class IPriorityQueue
         {
         public:
@@ -39,52 +36,74 @@ namespace rw
              *@Throws:
              *
              */
-            using CompareEqual = std::function<bool(const T&, const T&)>;
-        public:
-            virtual ~IPriorityQueue() {};
+            using CompareNodeEqual = std::function<bool(const T&, const T&)>;
 
             /**
              *@Parameters:
-             *  1. bool isHighPriorityFirst: The priority queue is a high priority first queue or a low priority first queue
-             *  2. CompareEqual compareEqual: The function to compare two elements
+             *  -a: The first priority to be compared
+             *  -b: The second priority to be compared
+             *@Methods:
+             * Compare two priorities to determine the priority of the two elements
+             *@Returns: bool
+             * If the first priority is higher than the second priority, return true, otherwise return false
+             *@Throws:
+             *
+             */
+            using CompareNodePriority = std::function<bool(const Priority&, const Priority&)>;
+
+        public:
+            /**
+             *@Parameters:
+             *  -compareNodeEqual: The function to compare two elements
+             *  -compareNodePriority: The function to compare two priorities
+             *
              *@Methods:
              *  Constructor
              *@Returns: void
-             *@Throws: void
+             *
+             *@Throws:
+             *
              */
-            IPriorityQueue(bool isHighPriorityFirst = true,
-                CompareEqual compareEqual = [](const T& a, const T& b) {
-                    return a == b;
-                })
-                : _isHighPriorityFirst(isHighPriorityFirst), _compareEqual(compareEqual) {
+            IPriorityQueue(
+                CompareNodeEqual compareNodeEqual ,
+                CompareNodePriority compareNodePriority )
+                :_compareNodeEqual(compareNodeEqual),_compareNodePriority(compareNodePriority) {
             }
+
+            IPriorityQueue() = default;
+
+            virtual ~IPriorityQueue() {};
         protected:
-            CompareEqual _compareEqual;
+            CompareNodeEqual _compareNodeEqual{ [](const T& a,const T& b) {
+                    return a == b;
+                } };
+            CompareNodePriority _compareNodePriority{ [](const Priority& a, const Priority& b) {
+                    return a < b;
+                } };
 
         public:
-
             /**
-             *@Parameters:
-             *  void
-             *@Methods:
-             *  Get the top element of the priority queue and remove it
-             *@Returns: template variable T
-             *  The top element of the priority queue
-             *@Throws:
-             *  1. std::runtime_error: If the priority queue is empty
-             */
+           *@Parameters:
+           *  void
+           *@Methods:
+           *  Get the top element of the priority queue and remove it
+           *@Returns: template variable T
+           *  The top element of the priority queue
+           *@Throws:
+           *  1. std::runtime_error: If the priority queue is empty
+           */
             virtual T top() = 0;
 
             /**
-             *@Parameters:
-             *  void
-             *@Methods:
-             *  Get the top element of the priority queue without removing it
-             *@Returns: template variable T
-             *  The top element of the priority queue
-             *@Throws:
-             *  1. std::runtime_error: If the priority queue is empty
-             */
+            *@Parameters:
+            *  void
+            *@Methods:
+            *  Get the top element of the priority queue without removing it
+            *@Returns: template variable T
+            *  The top element of the priority queue
+            *@Throws:
+            *  1. std::runtime_error: If the priority queue is empty
+            */
             virtual T peek() = 0;
 
             /**
@@ -99,7 +118,7 @@ namespace rw
              *  1.If the insert element 's value is the same as the existing element, the new element will be inserted as a new element
              *  2.If some elements have the same priority, the order of the elements is not guaranteed
              */
-            virtual void insert(T element, size_t priority) = 0;
+            virtual void insert(T element, Priority priority) = 0;
 
             /**
              *@Parameters:
@@ -115,48 +134,90 @@ namespace rw
             virtual void remove(T element) = 0;
 
             /**
-             *@Parameters:
-             *  1. T element: The element to be updated
-             *  2. size_t priority: The new priority of the element
-             *@Methods:
-             *  Update the priority of an element in the priority queue
-             *@Returns: void
-             *@Throws: void
-             *@Warning:
-             * 1. If the element is not in the priority queue, the method will do nothing
-             * 2. If some elements in the priority queue have the same value,the element to be updated is not guaranteed
-             */
-            virtual void update(T element, size_t priority) = 0;
+            *@Parameters:
+            *  1. T element: The element to be updated
+            *  2. size_t priority: The new priority of the element
+            *@Methods:
+            *  Update the priority of an element in the priority queue
+            *@Returns: void
+            *@Throws: void
+            *@Warning:
+            * 1. If the element is not in the priority queue, the method will do nothing
+            * 2. If some elements in the priority queue have the same value,the element to be updated is not guaranteed
+            */
+            virtual void update(T element, Priority priority) = 0;
+
+            /**
+            *@Parameters:
+            *  void
+            *@Methods:
+            *  Get the size of the priority queue
+            *@Returns: size_t
+            *  The size of the priority queue
+            *@Throws: void
+            */
+            virtual size_t size() = 0;
+
 
             /**
              *@Parameters:
              *  void
              *@Methods:
-             *  Get the size of the priority queue
-             *@Returns: size_t
-             *  The size of the priority queue
-             *@Throws: void
+             *  Clear the priority queue
+             *@Returns: void
+             *
+             *@Throws:
+             *
              */
-            virtual size_t size() = 0;
-
-        protected:
-            bool _isHighPriorityFirst;
+            virtual void clear() = 0;
         public:
-            bool getIsHighPriorityFirst() {
-                return _isHighPriorityFirst;
+
+            /**
+             *@Parameters:
+             *  compareNodeEqual: The function to compare two elements
+             *@Methods:
+             *  Set the function to compare two elements, if the priority queue is not empty, throw an exception
+             *@Returns: void
+             *
+             *@Throws:
+             *  -std::runtime_error: If the priority queue is not empty
+             */
+            void setCompareNodeEqual(CompareNodeEqual compareNodeEqual)
+            {
+                if (this->size()) {
+                    throw std::runtime_error("Can not set compareNodeEqual");
+                }
+                this->_compareNodeEqual = compareNodeEqual;
+            }
+
+
+            /**
+             *@Parameters:
+             *  -compareNodePriority: The function to compare two priorities
+             *@Methods:
+             *  Set the function to compare two priorities, if the priority queue is not empty, throw an exception
+             *@Returns: void
+             *
+             *@Throws:
+             *  -std::runtime_error: If the priority queue is not empty
+             */
+            void setCompareNodePriority(CompareNodePriority compareNodePriority)
+            {
+                if (this->size()) {
+                    throw std::runtime_error("Can not set compareNodePriority");
+                }
+                this->_compareNodePriority = compareNodePriority;
             }
         };
 
-        template <class T>
-        class DHeap
-            : public IPriorityQueue<T>
+        template <class T, class Priority = size_t>
+        class DHeap : public IPriorityQueue<T, Priority>
         {
         public:
             /**
              *@Parameters:
-             *  -d: The number of children of each node 
+             *  -d: The number of children of each node
              *     note: According to test,when d=4 or d=5, the performance of the heap is better
-             *  -isHighPriorityFirst: The priority queue is a high priority first queue or a low priority first queue
              *@Methods:
              *  Constructor
              *@Returns: void
@@ -164,153 +225,129 @@ namespace rw
              *@Throws:
              *
              */
-            DHeap(size_t d = 4, bool isHighPriorityFirst = true);
-            DHeap(size_t d, bool isHighPriorityFirst, typename IPriorityQueue<T>::CompareEqual compareEqual);
-            ~DHeap();
+            DHeap(size_t d = 4) :_d(d) {}
+            
+            /**
+            *@Parameters:
+            *  -compareNodeEqual: The function to compare two elements
+            *  -compareNodePriority: The function to compare two priorities
+            *  -d: The number of children of each node
+            *@Methods:
+            *  Constructor
+            *@Returns: void
+            *
+            *@Throws:
+            *
+            */
+            DHeap(std::function<bool(const T&, const T&)> compareNodeEqual,
+                std::function<bool(const Priority&, const Priority&)> compareNodePriority,
+                size_t d = 4) :_d(d) {
+                this->_compareNodeEqual = compareNodeEqual;
+                this->_compareNodePriority = compareNodePriority;
+            }
+            ~DHeap() {}
+
         public:
-            T top() override;
-            T peek() override;
-            void insert(T element, size_t priority) override;
-            void remove(T element) override;
-            void update(T element, size_t priority) override;
-            size_t size() override;
-
-        private:
-            void bubble_up(size_t index);
-            void push_down(size_t index);
-            size_t parent(size_t index) const;
-            size_t child(size_t index, size_t k) const;
-            bool compare(size_t a, size_t b) const;
-
-        private:
-            size_t _d;
-            std::vector<std::pair<T, size_t>> _heap_array;
-        };
-
-        template <class T>
-        DHeap<T>::DHeap(size_t d, bool isHighPriorityFirst)
-            : IPriorityQueue<T>(isHighPriorityFirst), _d(d) {}
-
-        template<class T>
-        DHeap<T>::DHeap(size_t d, bool isHighPriorityFirst, CompareEqual compareEqual)
-            : IPriorityQueue<T>(isHighPriorityFirst, compareEqual), _d(d)
-        {
-        }
-
-        template <class T>
-        DHeap<T>::~DHeap() {}
-
-        template <class T>
-        T DHeap<T>::top() {
-            if (this->_heap_array.empty()) {
-                throw std::runtime_error("Heap is empty");
-            }
-            T top_element = this->_heap_array.front().first;
-            std::swap(this->_heap_array.front(), this->_heap_array.back());
-            this->_heap_array.pop_back();
-            if (!this->_heap_array.empty()) {
-                push_down(0);
-            }
-            return top_element;
-        }
-
-        template <class T>
-        T DHeap<T>::peek() {
-            if (this->_heap_array.empty()) {
-                throw std::runtime_error("Heap is empty");
-            }
-            return this->_heap_array.front().first;
-        }   
-
-        template <class T>
-        void DHeap<T>::insert(T element, size_t priority) {
-            this->_heap_array.emplace_back(element, priority);
-            bubble_up(this->_heap_array.size() - 1);
-        }
-
-        template <class T>
-        void DHeap<T>::remove(T element) {
-            auto it = std::find_if(this->_heap_array.begin(), this->_heap_array.end(),
-                [element, this](const std::pair<T, size_t>& p) { return  _compareEqual(p.first, element); });
-            if (it != this->_heap_array.end()) {
-                std::swap(*it, this->_heap_array.back());
+            T top() override {
+                if (this->_heap_array.empty()) {
+                    throw std::runtime_error("Heap is empty");
+                }
+                T top_element = this->_heap_array.front().first;
+                std::swap(this->_heap_array.front(), this->_heap_array.back());
                 this->_heap_array.pop_back();
+                if (!this->_heap_array.empty()) {
+                    push_down(0);
+                }
+                return top_element;
+            }
+
+            T peek() override {
+                if (this->_heap_array.empty()) {
+                    throw std::runtime_error("Heap is empty");
+                }
+                return this->_heap_array.front().first;
+            }
+            void insert(T element, Priority priority) override {
+                this->_heap_array.emplace_back(element, priority);
+                bubble_up(this->_heap_array.size() - 1);
+            }
+            void remove(T element) override {
+                auto it = std::find_if(this->_heap_array.begin(), this->_heap_array.end(),
+                    [element, this](const std::pair<T, Priority>& p) { return  this->_compareNodeEqual(p.first, element); });
                 if (it != this->_heap_array.end()) {
+                    std::swap(*it, this->_heap_array.back());
+                    this->_heap_array.pop_back();
+                    if (it != this->_heap_array.end()) {
+                        bubble_up(std::distance(this->_heap_array.begin(), it));
+                        push_down(std::distance(this->_heap_array.begin(), it));
+                    }
+                }
+            }
+            void update(T element, Priority priority) override {
+                auto it = std::find_if(this->_heap_array.begin(), this->_heap_array.end(),
+                    [element, this](const std::pair<T, Priority>& p) { return  this->_compareNodeEqual(p.first, element); });
+                if (it != this->_heap_array.end()) {
+                    it->second = priority;
                     bubble_up(std::distance(this->_heap_array.begin(), it));
                     push_down(std::distance(this->_heap_array.begin(), it));
                 }
             }
-        }
-
-        template <class T>
-        void DHeap<T>::update(T element, size_t priority) {
-            auto it = std::find_if(this->_heap_array.begin(), this->_heap_array.end(),
-                [element, this](const std::pair<T, size_t>& p) { return  _compareEqual(p.first, element); });
-            if (it != this->_heap_array.end()) {
-                it->second = priority;
-                bubble_up(std::distance(this->_heap_array.begin(), it));
-                push_down(std::distance(this->_heap_array.begin(), it));
+            size_t size() override {
+                return this->_heap_array.size();
             }
-        }
 
-        template <class T>
-        size_t DHeap<T>::size() {
-            return this->_heap_array.size();
-        }
-
-        template <class T>
-        void DHeap<T>::bubble_up(size_t index) {
-            while (index > 0) {
-                size_t p = parent(index);
-                if (compare(index, p)) {
-                    std::swap(this->_heap_array[index], this->_heap_array[p]);
-                    index = p;
-                }
-                else {
-                    break;
-                }
+            void clear() override {
+                this->_heap_array.clear();
             }
-        }
 
-        template <class T>
-        void DHeap<T>::push_down(size_t index) {
-            while (true) {
-                size_t min_index = index;
-                for (size_t k = 1; k <= _d; ++k) {
-                    size_t c = child(index, k);
-                    if (c < this->_heap_array.size() && compare(c, min_index)) {
-                        min_index = c;
+        private:
+            void bubble_up(size_t index) {
+                while (index > 0) {
+                    size_t p = parent(index);
+                    if (compare(index, p)) {
+                        std::swap(this->_heap_array[index], this->_heap_array[p]);
+                        index = p;
+                    }
+                    else {
+                        break;
                     }
                 }
-                if (min_index != index) {
-                    std::swap(this->_heap_array[index], this->_heap_array[min_index]);
-                    index = min_index;
+            }
+            void push_down(size_t index) {
+                size_t child_index = child(index, 1);
+                while (child_index < this->_heap_array.size()) {
+                    size_t min_index = index;
+                    for (size_t i = 0; i < _d; i++) {
+                        if (child_index + i < this->_heap_array.size() && compare(child_index + i, min_index)) {
+                            min_index = child_index + i;
+                        }
+                    }
+                    if (min_index != index) {
+                        std::swap(this->_heap_array[index], this->_heap_array[min_index]);
+                        index = min_index;
+                        child_index = child(index, 1);
+                    }
+                    else {
+                        break;
+                    }
                 }
-                else {
-                    break;
-                }
             }
-        }
-
-        template <class T>
-        size_t DHeap<T>::parent(size_t index) const {
-            return (index - 1) / _d;
-        }
-
-        template <class T>
-        size_t DHeap<T>::child(size_t index, size_t k) const {
-            return _d * index + k;
-        }
-
-        template <class T>
-        bool DHeap<T>::compare(size_t a, size_t b) const {
-            if (this->_isHighPriorityFirst) {
-                return this->_heap_array[a].second > this->_heap_array[b].second;
+            size_t parent(size_t index) const {
+                return (index - 1) / _d;
             }
-            else {
-                return this->_heap_array[a].second < this->_heap_array[b].second;
+            size_t child(size_t index, size_t k) const {
+                return index * _d + k;
             }
-        }
+            bool compare(size_t i, size_t j) {
+                return this->_compareNodePriority(this->_heap_array[i].second, this->_heap_array[j].second);
+            }
+
+        private:
+            size_t _d;
+            std::vector<std::pair<T, Priority>> _heap_array;
+        };
+
+      
 
     }
 

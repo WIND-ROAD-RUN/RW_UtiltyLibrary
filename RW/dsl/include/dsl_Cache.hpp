@@ -6,6 +6,7 @@
 
 
 FORWARD_DECLARE_TEST_CLASS(CacheLRU_Test)
+FORWARD_DECLARE_TEST_CLASS(CacheLMFU_Api_Test)
 
 namespace rw {
     namespace dsl {

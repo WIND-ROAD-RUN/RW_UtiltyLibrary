@@ -60,7 +60,7 @@ namespace dsl_cache {
         testObj->set("d", 4);
         testObj->set("e", 5);
         EXPECT_EQ(testObj->size(), 5);
-        testObj->resize(3);
+        testObj->resizeCapacity(3);
         EXPECT_EQ(testObj->size(), 3);
         EXPECT_EQ(testObj->get("a"), std::nullopt);
         EXPECT_EQ(testObj->get("b"), std::nullopt);
@@ -76,7 +76,7 @@ namespace dsl_cache {
         testObj->set("d", 4);
         testObj->set("e", 5);
         EXPECT_EQ(testObj->size(), 5);
-        testObj->resize(7);
+        testObj->resizeCapacity(7);
         EXPECT_EQ(testObj->size(), 5);
         EXPECT_EQ(testObj->get("a"), 1);
         EXPECT_EQ(testObj->get("b"), 2);
@@ -92,9 +92,9 @@ namespace dsl_cache {
         testObj->set("d", 4);
         testObj->set("e", 5);
         EXPECT_EQ(testObj->size(), 5);
-        testObj->resize(3);
+        testObj->resizeCapacity(3);
         EXPECT_EQ(testObj->size(), 3);
-        testObj->resize(7);
+        testObj->resizeCapacity(7);
         EXPECT_EQ(testObj->size(), 3);
         EXPECT_EQ(testObj->get("a"), std::nullopt);
         EXPECT_EQ(testObj->get("b"), std::nullopt);

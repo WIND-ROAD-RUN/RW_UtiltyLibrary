@@ -4,7 +4,7 @@
 
 using namespace rw::dsl;
 
-class DHeapRefactor_int_Test
+class DHeap_int_Test
     : public ::testing::Test {
 protected:
     void SetUp() override {
@@ -85,7 +85,7 @@ struct PriorityNode
 
 };
 
-class DHeapRefactor_AccountEnity_Test
+class DHeap_AccountEnity_Test
     : public ::testing::Test {
 protected:
     void SetUp() override {

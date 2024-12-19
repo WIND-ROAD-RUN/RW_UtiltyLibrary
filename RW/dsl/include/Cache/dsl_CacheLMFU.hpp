@@ -152,7 +152,7 @@ namespace rw {
                 //Return the size of the cache
                 return this->_cache.size();
             }
-            bool resize(size_t capacity) override {
+            bool resizeCapacity(size_t capacity) override {
                 //Resize the cache
                 this->_capacity = capacity;
                 //Remove the node with the lowest priority until the size of the cache is less than the capacity

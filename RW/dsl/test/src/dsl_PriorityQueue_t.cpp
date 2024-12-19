@@ -21,7 +21,7 @@ namespace dsl_PriorityQueue
      * Boundary Conditions:
      * 1. The heap is empty
      */
-    TEST_F(DHeapRefactor_int_Test, topCanTrow) {
+    TEST_F(DHeap_int_Test, topCanTrow) {
         bool isException = false;
         try {
             testObj->top();
@@ -48,7 +48,7 @@ namespace dsl_PriorityQueue
      * Boundary Conditions:
      * 1. The heap is not empty
      */
-    TEST_F(DHeapRefactor_int_Test, topCanGetValueAndDeleteFromHeap) {
+    TEST_F(DHeap_int_Test, topCanGetValueAndDeleteFromHeap) {
         std::function<bool(const size_t&, const size_t&)> compareNodePriority = [](const size_t& a, const size_t& b) {
             return a > b;
             };
@@ -84,7 +84,7 @@ namespace dsl_PriorityQueue
      * Boundary Conditions:
      * 1. The heap is empty
      */
-    TEST_F(DHeapRefactor_int_Test, peekCanTrow) {
+    TEST_F(DHeap_int_Test, peekCanTrow) {
         bool isException = false;
         try {
             testObj->peek();
@@ -111,7 +111,7 @@ namespace dsl_PriorityQueue
      * Boundary Conditions:
      * 1. The heap is not empty
      */
-    TEST_F(DHeapRefactor_int_Test, peekCanGetValueWithoutDeleteFromHeap) {
+    TEST_F(DHeap_int_Test, peekCanGetValueWithoutDeleteFromHeap) {
         std::function<bool(const size_t&, const size_t&)> compareNodePriority = [](const size_t& a, const size_t& b) {
             return a > b;
             };
@@ -142,7 +142,7 @@ namespace dsl_PriorityQueue
      * Boundary Conditions:
      * 1. The heap is empty
      */
-    TEST_F(DHeapRefactor_int_Test, insertCanInsertElement) {
+    TEST_F(DHeap_int_Test, insertCanInsertElement) {
         testObj->insert(1, 1);
         testObj->insert(2, 2);
         testObj->insert(3, 3);
@@ -166,7 +166,7 @@ namespace dsl_PriorityQueue
      * Boundary Conditions:
      * 1. The heap is empty
      */
-    TEST_F(DHeapRefactor_int_Test, insertCanInsertElementWithSamePriority) {
+    TEST_F(DHeap_int_Test, insertCanInsertElementWithSamePriority) {
         testObj->insert(1, 1);
         testObj->insert(2, 1);
         testObj->insert(3, 1);
@@ -190,7 +190,7 @@ namespace dsl_PriorityQueue
      * Boundary Conditions:
      * 1. The heap insert element 's value is the same as the existing element
      */
-    TEST_F(DHeapRefactor_int_Test, insertCanInsertElementWithSameValue) {
+    TEST_F(DHeap_int_Test, insertCanInsertElementWithSameValue) {
         testObj->insert(1, 1);
         testObj->insert(1, 2);
         testObj->insert(1, 3);
@@ -216,7 +216,7 @@ namespace dsl_PriorityQueue
      * Boundary Conditions:
      * 1. The heap is not empty
      */
-    TEST_F(DHeapRefactor_int_Test, removeCanRemoveTheElementsWhichIsNotExisting) {
+    TEST_F(DHeap_int_Test, removeCanRemoveTheElementsWhichIsNotExisting) {
         testObj->insert(1, 1);
         testObj->insert(2, 2);
         testObj->insert(3, 3);
@@ -246,7 +246,7 @@ namespace dsl_PriorityQueue
      * Boundary Conditions:
      * 1. Boundary conditions for the test
      */
-    TEST_F(DHeapRefactor_int_Test, insertSameElementAndUpdateHeap) {
+    TEST_F(DHeap_int_Test, insertSameElementAndUpdateHeap) {
         std::function<bool(const size_t&, const size_t&)> compareNodePriority = [](const size_t& a, const size_t& b) {
             return a > b;
             };
@@ -293,7 +293,7 @@ namespace dsl_PriorityQueue
      * Boundary Conditions:
      * 1. The heap is empty
      */
-    TEST_F(DHeapRefactor_int_Test, updateCanUpdateElement) {
+    TEST_F(DHeap_int_Test, updateCanUpdateElement) {
         std::function<bool(const size_t&, const size_t&)> compareNodePriority = [](const size_t& a, const size_t& b) {
             return a > b;
             };
@@ -334,7 +334,7 @@ namespace dsl_PriorityQueue
      * Boundary Conditions:
      * 1. The heap is empty
      */
-    TEST_F(DHeapRefactor_int_Test, updateElementWhichIsNotExisting) {
+    TEST_F(DHeap_int_Test, updateElementWhichIsNotExisting) {
         std::function<bool(const size_t&, const size_t&)> compareNodePriority = [](const size_t& a, const size_t& b) {
             return a > b;
             };
@@ -365,7 +365,7 @@ namespace dsl_PriorityQueue
   * Boundary Conditions:
   * 1. Boundary conditions for the test
   */
-    TEST_F(DHeapRefactor_AccountEnity_Test, getOrderByDefaultCompare) {
+    TEST_F(DHeap_AccountEnity_Test, getOrderByDefaultCompare) {
         std::function<bool(const AccountEnity&, const AccountEnity&)> compareNodeEqual = [](const AccountEnity& a, const AccountEnity& b) {
             return a.AccountName == b.AccountName;
             };

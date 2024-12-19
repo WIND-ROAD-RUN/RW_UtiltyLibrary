@@ -59,15 +59,16 @@ namespace rw {
                 return _cache.size();
             }
 
-            bool resize(size_t capacity)override {
+            bool resizeCapacity(size_t capacity)override {
                 if (capacity < this->_capacity) {
                     // Remove the least recently used keys until the size of the cache is less than the new capacity
                     while (_cache.size() > capacity) {
-                        _cache.erase(_list.back().first);
                         if constexpr (isLRU) {
+                            _cache.erase(_list.back().first);
                             _list.pop_back();
                         }
                         else {
+                            _cache.erase(_list.front().first);
                             _list.pop_front();
                         }
                     }

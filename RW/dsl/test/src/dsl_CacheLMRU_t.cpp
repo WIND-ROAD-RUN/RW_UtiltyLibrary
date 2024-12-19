@@ -97,7 +97,7 @@ namespace dsl_cache {
         
         ASSERT_EQ(capacity, testObj->capacity());
         auto newCapacity = generateRandomNumber(200, 300);
-        testObj->resize(newCapacity);
+        testObj->resizeCapacity(newCapacity);
         ASSERT_EQ(newCapacity, testObj->capacity());
         auto currentCapacity = testObj->capacity();
         if (currentCapacity>=capacity) {

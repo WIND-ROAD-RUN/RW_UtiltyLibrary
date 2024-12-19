@@ -16,7 +16,8 @@ namespace rw {
             LRU,
             LFU,
             MRU,
-            MFU
+            MFU,
+            CLOCK
         };
 
         template <typename Key, typename Value>
@@ -44,7 +45,7 @@ namespace rw {
             // Virtual destructor
             virtual ~ICache() = default;
 
-            virtual bool resize(size_t capacity) = 0;
+            virtual bool resizeCapacity(size_t capacity) = 0;
 
         protected:
             size_t _capacity;

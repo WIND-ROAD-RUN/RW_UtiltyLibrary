@@ -6,12 +6,13 @@
 
 namespace rw {
     namespace dsl {
-        template <typename Key, typename Value>
-        class CacheLRU
+        template <typename Key, typename Value,bool isLRU =true>
+        class CacheLMRU
         :public ICache<Key,Value> {
             MAKE_FRIEND_TEST_CLASS(CacheLRU_Test)
+            MAKE_FRIEND_TEST_CLASS(CacheMRU_Test_Api)
         public:
-            explicit CacheLRU(size_t capacity) 
+            explicit CacheLMRU(size_t capacity) 
                 : ICache<Key, Value>(capacity){
                 _cache.reserve(capacity);
             }
@@ -39,7 +40,12 @@ namespace rw {
                 if (_cache.size() >= this->_capacity) {
                     // Remove the least recently used key
                     _cache.erase(_list.back().first);
-                    _list.pop_back();
+                    if constexpr (isLRU) {
+                        _list.pop_back();
+                    }
+                    else {
+                        _list.pop_front();
+                    }
                 }
                 // Insert the new key at the front of the list
                 _list.emplace_front(key, value);
@@ -53,21 +59,32 @@ namespace rw {
                 return _cache.size();
             }
 
-            bool resize(size_t capacity) {
+            bool resize(size_t capacity)override {
                 if (capacity < this->_capacity) {
                     // Remove the least recently used keys until the size of the cache is less than the new capacity
                     while (_cache.size() > capacity) {
                         _cache.erase(_list.back().first);
-                        _list.pop_back();
+                        if constexpr (isLRU) {
+                            _list.pop_back();
+                        }
+                        else {
+                            _list.pop_front();
+                        }
                     }
                 }
                 this->_capacity = capacity;
                 return true;
             }
+
+            void clear() override {
+                _list.clear();
+                _cache.clear();
+            }
         private:
             std::list<std::pair<Key, Value>> _list;
             std::unordered_map<Key, typename std::list<std::pair<Key, Value>>::iterator> _cache;
         };
+
 
 
     } // namespace dsl

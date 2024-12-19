@@ -7,9 +7,18 @@
 
 FORWARD_DECLARE_TEST_CLASS(CacheLRU_Test)
 FORWARD_DECLARE_TEST_CLASS(CacheLMFU_Api_Test)
+FORWARD_DECLARE_TEST_CLASS(CacheMRU_Test_Api)
 
 namespace rw {
     namespace dsl {
+        enum class CachePolicy
+        {
+            LRU,
+            LFU,
+            MRU,
+            MFU
+        };
+
         template <typename Key, typename Value>
         class ICache {
         public:
@@ -29,6 +38,8 @@ namespace rw {
 
             // Get the capacity of the cache
             virtual size_t capacity() const { return _capacity; }
+
+            virtual void clear() = 0;
 
             // Virtual destructor
             virtual ~ICache() = default;

@@ -162,6 +162,12 @@ namespace rw {
                 }
                 return true;
             }
+
+            void clear() override {
+                //Clear the cache
+                this->_cache.clear();
+                this->_heap.clear();
+            }
      
         private:
             std::unordered_map<std::string, std::shared_ptr<Node> > _cache;

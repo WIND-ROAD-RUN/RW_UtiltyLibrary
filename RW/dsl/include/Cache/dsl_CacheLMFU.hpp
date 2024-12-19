@@ -86,7 +86,7 @@ namespace rw {
                 Value value;
                 Counter counter;
                 TimePoint timePoint;
-                Node(std::string key, int value, Counter counter, TimePoint timePoint)
+                Node(Key key, int value, Counter counter, TimePoint timePoint)
                     : key(key), value(value), counter(counter), timePoint(timePoint) {
                 }
             };
@@ -170,7 +170,7 @@ namespace rw {
             }
      
         private:
-            std::unordered_map<std::string, std::shared_ptr<Node> > _cache;
+            std::unordered_map<Key, std::shared_ptr<Node> > _cache;
             DHeap<std::shared_ptr<Node>, Priority> _heap;
 
         };

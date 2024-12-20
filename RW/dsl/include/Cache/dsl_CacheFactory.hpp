@@ -3,6 +3,7 @@
 #include"dsl_Cache.hpp"
 #include"dsl_CacheLMRU.hpp"
 #include"dsl_CacheLMFU.hpp"
+#include"dsl_CacheClock.hpp"
 
 namespace rw {
     namespace dsl {
@@ -20,6 +21,8 @@ namespace rw {
                     return std::make_shared<CacheLMRU<Key, Value, false>>(capacity);
                 case CachePolicy::MFU:
                     return std::make_shared<CacheLMFU<Key, Value, false>>(capacity);
+                case CachePolicy::CLOCK:
+                    return std::make_shared<CacheClock<Key, Value>>(capacity);
                 default:
                     return nullptr;
                 }

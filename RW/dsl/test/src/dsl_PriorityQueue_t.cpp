@@ -4,7 +4,7 @@
 
 namespace dsl_PriorityQueue
 {
-
+    ///
     /**
      * @brief Test the top method can throw exception when the heap is empty
      *
@@ -49,28 +49,22 @@ namespace dsl_PriorityQueue
      * 1. The heap is not empty
      */
     TEST_F(DHeap_int_Test, topCanGetValueAndDeleteFromHeap) {
-        auto isHighPriorityFirst = testObj->getIsHighPriorityFirst();
+        std::function<bool(const size_t&, const size_t&)> compareNodePriority = [](const size_t& a, const size_t& b) {
+            return a > b;
+            };
+        testObj->setCompareNodePriority(compareNodePriority);
         testObj->insert(1, 1);
         testObj->insert(2, 2);
         testObj->insert(3, 3);
         testObj->insert(4, 4);
         testObj->insert(5, 5);
-        if (isHighPriorityFirst)
-        {
-            ASSERT_EQ(testObj->top(), 5);
-            ASSERT_EQ(testObj->top(), 4);
-            ASSERT_EQ(testObj->top(), 3);
-            ASSERT_EQ(testObj->top(), 2);
-            ASSERT_EQ(testObj->top(), 1);
-        }
-        else
-        {
-            ASSERT_EQ(testObj->top(), 1);
-            ASSERT_EQ(testObj->top(), 2);
-            ASSERT_EQ(testObj->top(), 3);
-            ASSERT_EQ(testObj->top(), 4);
-            ASSERT_EQ(testObj->top(), 5);
-        }
+
+        ASSERT_EQ(testObj->top(), 5);
+        ASSERT_EQ(testObj->top(), 4);
+        ASSERT_EQ(testObj->top(), 3);
+        ASSERT_EQ(testObj->top(), 2);
+        ASSERT_EQ(testObj->top(), 1);
+
 
     }
 
@@ -118,22 +112,19 @@ namespace dsl_PriorityQueue
      * 1. The heap is not empty
      */
     TEST_F(DHeap_int_Test, peekCanGetValueWithoutDeleteFromHeap) {
-        auto isHighPriorityFirst = testObj->getIsHighPriorityFirst();
+        std::function<bool(const size_t&, const size_t&)> compareNodePriority = [](const size_t& a, const size_t& b) {
+            return a > b;
+            };
+        testObj->setCompareNodePriority(compareNodePriority);
         testObj->insert(1, 1);
         testObj->insert(2, 2);
         testObj->insert(3, 3);
         testObj->insert(4, 4);
         testObj->insert(5, 5);
-        if (isHighPriorityFirst)
-        {
-            ASSERT_EQ(testObj->peek(), 5);
-            ASSERT_EQ(testObj->peek(), 5);
-        }
-        else
-        {
-            ASSERT_EQ(testObj->peek(), 1);
-            ASSERT_EQ(testObj->peek(), 1);
-        }
+
+        ASSERT_EQ(testObj->peek(), 5);
+        ASSERT_EQ(testObj->peek(), 5);
+
     }
 
     /**
@@ -256,6 +247,10 @@ namespace dsl_PriorityQueue
      * 1. Boundary conditions for the test
      */
     TEST_F(DHeap_int_Test, insertSameElementAndUpdateHeap) {
+        std::function<bool(const size_t&, const size_t&)> compareNodePriority = [](const size_t& a, const size_t& b) {
+            return a > b;
+            };
+        testObj->setCompareNodePriority(compareNodePriority);
         testObj->insert(1, 1);
         testObj->insert(4, 4);
         testObj->insert(2, 2);
@@ -271,19 +266,12 @@ namespace dsl_PriorityQueue
         testObj->insert(1, 1);
         testObj->insert(10, 10);
         testObj->insert(11, 11);
-        if (testObj->getIsHighPriorityFirst()) {
-            std::vector<int> expected = { 11, 10, 9, 8, 7, 6, 5, 4, 4, 4, 4, 3, 2, 1, 1 };
-            for (size_t i = 0; i < expected.size(); ++i) {
-                ASSERT_EQ(testObj->top(), expected[i]);
-            }
+        std::vector<int> expected = { 11, 10, 9, 8, 7, 6, 5, 4, 4, 4, 4, 3, 2, 1, 1 };
+        for (size_t i = 0; i < expected.size(); ++i) {
+            auto top = testObj->top();
+            ASSERT_EQ(top, expected[i]);
         }
-        else {
-            std::vector<int> expected = { 1, 1, 2, 3, 4, 4, 4, 4, 5, 6, 7, 8, 9, 10, 11 };
-            for (size_t i = 0; i < expected.size(); ++i) {
-                ASSERT_EQ(testObj->top(), expected[i]);
-            }
-        
-        }
+
     }
 
 
@@ -306,7 +294,11 @@ namespace dsl_PriorityQueue
      * 1. The heap is empty
      */
     TEST_F(DHeap_int_Test, updateCanUpdateElement) {
-        testObj->insert(1,1);
+        std::function<bool(const size_t&, const size_t&)> compareNodePriority = [](const size_t& a, const size_t& b) {
+            return a > b;
+            };
+        testObj->setCompareNodePriority(compareNodePriority);
+        testObj->insert(1, 1);
         testObj->insert(2, 2);
         testObj->insert(3, 3);
         testObj->insert(4, 4);
@@ -316,20 +308,11 @@ namespace dsl_PriorityQueue
         testObj->update(3, 3);
         testObj->update(4, 2);
         testObj->update(5, 1);
-        if (testObj->getIsHighPriorityFirst()) {
-            std::vector<int> expected = { 1, 2, 3, 4, 5 };
-            for (size_t i = 0; i < expected.size(); ++i) {
-                ASSERT_EQ(testObj->top(), expected[i]);
-            }
+        std::vector<int> expected = { 1, 2, 3, 4, 5 };
+        for (size_t i = 0; i < expected.size(); ++i) {
+            ASSERT_EQ(testObj->top(), expected[i]);
         }
-        else {
-            std::vector<int> expected = { 5, 4, 3, 2, 1 };
-            for (size_t i = 0; i < expected.size(); ++i) {
-                ASSERT_EQ(testObj->top(), expected[i]);
-            }
-        }
-        
-    
+
     }
 
 
@@ -352,95 +335,119 @@ namespace dsl_PriorityQueue
      * 1. The heap is empty
      */
     TEST_F(DHeap_int_Test, updateElementWhichIsNotExisting) {
+        std::function<bool(const size_t&, const size_t&)> compareNodePriority = [](const size_t& a, const size_t& b) {
+            return a > b;
+            };
+        testObj->setCompareNodePriority(compareNodePriority);
         testObj->insert(1, 1);
         testObj->insert(2, 2);
         testObj->insert(3, 3);
         testObj->insert(4, 4);
         testObj->insert(5, 5);
         testObj->update(6, 6);
-        if (testObj->getIsHighPriorityFirst()) {
-            std::vector<int> expected = { 5, 4, 3, 2, 1 };
-            ASSERT_EQ(testObj->size(), 5);
-            for (size_t i = 0; i < expected.size(); ++i) {
-                ASSERT_EQ(testObj->top(), expected[i]);
-            }
-
-        }
-        else {
-            std::vector<int> expected = { 1, 2, 3, 4, 5 };
-            ASSERT_EQ(testObj->size(), 5);
-            for (size_t i = 0; i < expected.size(); ++i) {
-                ASSERT_EQ(testObj->top(), expected[i]);
-            }
+        std::vector<int> expected = { 5, 4, 3, 2, 1 };
+        ASSERT_EQ(testObj->size(), 5);
+        for (size_t i = 0; i < expected.size(); ++i) {
+            ASSERT_EQ(testObj->top(), expected[i]);
         }
     }
 
-
     /**
-     * @brief Test the heap which template is AccountEnity
-     *
-     * @details
-     * Test Steps:
-     * 1. Steps to perform the test
-     *
-     * Expected Result:
-     * 1. Expected result of the test
-     *
-     * Boundary Conditions:
-     * 1. Boundary conditions for the test
-     */
+  * @brief Test the heap which template is AccountEnity
+  *
+  * @details
+  * Test Steps:
+  * 1. Steps to perform the test
+  *
+  * Expected Result:
+  * 1. Expected result of the test
+  *
+  * Boundary Conditions:
+  * 1. Boundary conditions for the test
+  */
     TEST_F(DHeap_AccountEnity_Test, getOrderByDefaultCompare) {
+        std::function<bool(const AccountEnity&, const AccountEnity&)> compareNodeEqual = [](const AccountEnity& a, const AccountEnity& b) {
+            return a.AccountName == b.AccountName;
+            };
+        std::function<bool(const size_t&, const size_t&)> compareNodePriority = [](const size_t& a, const size_t& b) {
+            return a > b;
+            };
+        testObj->setCompareNodeEqual(compareNodeEqual);
+        testObj->setCompareNodePriority(compareNodePriority);
         testObj->insert({ 1, 1, 1 }, 1);
         testObj->insert({ 2, 2, 2 }, 2);
         testObj->insert({ 3, 3, 3 }, 3);
         testObj->insert({ 4, 4, 4 }, 4);
         testObj->insert({ 5, 5, 5 }, 5);
-        if (testObj->getIsHighPriorityFirst()) {
-            std::vector<AccountEnity> expected = { {5, 5, 5}, {4, 4, 4}, {3, 3, 3}, {2, 2, 2}, {1, 1, 1} };
-            for (size_t i = 0; i < expected.size(); ++i) {
-                ASSERT_EQ(testObj->top(), expected[i]);
-            }
-        }
-        else {
-            std::vector<AccountEnity> expected = { {1, 1, 1}, {2, 2, 2}, {3, 3, 3}, {4, 4, 4}, {5, 5, 5} };
-            for (size_t i = 0; i < expected.size(); ++i) {
-                ASSERT_EQ(testObj->top(), expected[i]);
-            }
-        }
-    }
-
-
-    /**
-     * @brief Test the heap which template is AccountEnity and the compare function is different
-     *
-     * @details
-     * Test Steps:
-     * 1. Create a heap
-     * 2. Insert some elements into the heap
-     * 3. Update the elements
-     * 4. Check the order of the elements
-     *
-     * Expected Result:
-     * 1. The order of the elements should be correct
-     *
-     * Boundary Conditions:
-     * 1. The heap is empty
-     */
-
-    TEST(DHeap_AccountEnity_CompareConstructor_Test, update) {
-        DHeap<AccountEnity> testObj(2, true, [](const AccountEnity& a, const AccountEnity& b) { return a.AccountName == b.AccountName; });
-        testObj.insert({ 1, 1, 1 }, 1);
-        testObj.insert({ 1, 2, 2 }, 2);
-        testObj.insert({ 3, 3, 3 }, 3);
-        testObj.insert({ 4, 4, 4 }, 4);
-
-        testObj.update({ 3, 4, 6 }, 5);
-
-        std::vector<AccountEnity> expected = { {3,3,3},{4,4,4},{2,2,2},{1,1,1} };
+        std::vector<AccountEnity> expected = { {5, 5, 5}, {4, 4, 4}, {3, 3, 3}, {2, 2, 2}, {1, 1, 1} };
         for (size_t i = 0; i < expected.size(); ++i) {
-            ASSERT_EQ(testObj.top(), expected[i]);
+            ASSERT_EQ(testObj->top(), expected[i]);
         }
+
     }
 
+    TEST(DHeapRefactor_PriorityNode,testThePriorityTem) {
+        DHeap<int, PriorityNode> testObj;
+        std::function<bool(const PriorityNode&, const PriorityNode&)> compareNodePriority = [](const PriorityNode& a, const PriorityNode& b) {
+            if (a.priorityFirst==b.priorityFirst) {
+                return a.prioritySecond > b.prioritySecond;
+            }
+            else {
+                return a.priorityFirst > b.priorityFirst;
+            }
+            };
+        testObj.setCompareNodePriority(compareNodePriority);
+        testObj.insert(1, { 1, 1 });
+        testObj.insert(2, { 1, 2 });
+        testObj.insert(3, { 1, 3 });
+        testObj.insert(4, { 2, 4 });
+        testObj.insert(5, { 2, 5 });
+        testObj.insert(6, { 2, 6 });
+        testObj.insert(7, { 3, 7 });
+        testObj.insert(8, { 3, 8 });
+        testObj.insert(9, { 3, 9 });
+        testObj.insert(10, { 4, 10 });
 
+        std::vector<int> expectedValue = { 10,9,8,7,6,5,4,3,2,1 };
+        for (size_t i = 0; i < expectedValue.size(); ++i) {
+            auto top = testObj.top();
+            ASSERT_EQ(top, expectedValue[i]);
+        }
+    
+    }
+
+    TEST(DHeapRefactor_PriorityNode,testTheExpectionWhenSetCompare) {
+        DHeap<int, size_t> testObj;
+        testObj.insert(1, 1);
+        testObj.insert(2, 2);
+        testObj.insert(3, 3);
+        std::function<bool(const size_t&, const size_t&)> compareNodePriority = [](const size_t& a, const size_t& b) {
+            return a > b;
+            };
+        bool isException = false;
+        try
+        {
+            testObj.setCompareNodePriority(compareNodePriority);
+        }
+        catch (const std::exception&)
+        {
+            isException = true;
+        }
+        EXPECT_EQ(isException, true);
+
+        std::function<bool(const size_t&, const size_t&)> compareNodeEqual = [](const size_t& a, const size_t& b) {
+            return a == b;
+            };
+        isException = false;
+        try
+        {
+            testObj.setCompareNodeEqual(compareNodeEqual);
+        }
+        catch (const std::exception&)
+        {
+            isException = true;
+        }
+        EXPECT_EQ(isException, true);
+    
+    }
 }

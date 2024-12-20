@@ -5,6 +5,9 @@
 #include<memory>
 #include<string>
 
+#define MAKE_FRIEND_TEST_CLASS(ClassName) friend class ClassName;
+#define FORWARD_DECLARE_TEST_CLASS(ClassName) class ClassName;
+
 namespace rw {
     namespace dsl {
         using String = std::string;

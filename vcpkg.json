@@ -3,6 +3,7 @@
     "gtest",
     "pugixml",
     "jsoncpp",
-    "opencv4"
+    "opencv4",
+    "openvino"
   ]
 }

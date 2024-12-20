@@ -1,4 +1,4 @@
-#include "dsl_BloomFilter.h"
+#include "dsl_BloomFilter.hpp"
 
 #include <functional>
 #include <cmath> 

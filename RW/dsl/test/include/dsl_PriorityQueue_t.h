@@ -1,17 +1,16 @@
 #include"dsl_pch_t.h"
 
-#include"dsl_PriorityQueue.h"
+#include"dsl_PriorityQueue.hpp"
 
 using namespace rw::dsl;
+
 class DHeap_int_Test
     : public ::testing::Test {
 protected:
     void SetUp() override {
         int d = generateRandomNumber(2, 20);
-        int isHighPriorityFirst = generateRandomNumber(0, 1);
-        testObj = new DHeap<int>(d, isHighPriorityFirst);
+        testObj = new DHeap<int>(d);
     }
-
     void TearDown() override {
         delete testObj;
     }
@@ -23,7 +22,7 @@ private:
         return dis(gen);
     }
 public:
-    DHeap<int>* testObj{nullptr};
+    DHeap<int>* testObj{ nullptr };
 };
 
 struct AccountEnity 
@@ -53,13 +52,45 @@ struct AccountEnity
     }
 };
 
+struct PriorityNode
+{
+    size_t priorityFirst;
+    size_t prioritySecond;
+    bool operator==(const PriorityNode& other) const
+    {
+        return priorityFirst == other.priorityFirst && prioritySecond == other.prioritySecond;
+    }
+    bool operator!=(const PriorityNode& other) const
+    {
+        return priorityFirst != other.priorityFirst || prioritySecond != other.prioritySecond;
+    }
+    bool operator>(const PriorityNode& other) const
+    {
+        if (priorityFirst == other.priorityFirst) {
+            return prioritySecond > other.prioritySecond;
+        }
+        else {
+            return priorityFirst > other.priorityFirst;
+        }
+    }
+    bool operator<(const PriorityNode& other) const
+    {
+        if (priorityFirst == other.priorityFirst) {
+            return prioritySecond < other.prioritySecond;
+        }
+        else {
+            return priorityFirst < other.priorityFirst;
+        }
+    }
+
+};
+
 class DHeap_AccountEnity_Test
     : public ::testing::Test {
 protected:
     void SetUp() override {
         int d = generateRandomNumber(2, 20);
-        int isHighPriorityFirst = generateRandomNumber(0, 1);
-        testObj = new DHeap<AccountEnity>(d, isHighPriorityFirst);
+        testObj = new DHeap<AccountEnity>(d);
     }
     void TearDown() override {
         delete testObj;
@@ -74,3 +105,5 @@ private:
 public:
     DHeap<AccountEnity>* testObj{ nullptr };
 };
+
+

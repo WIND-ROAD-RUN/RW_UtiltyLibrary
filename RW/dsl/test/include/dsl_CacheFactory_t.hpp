@@ -18,6 +18,8 @@ INSTANTIATE_TEST_SUITE_P(
         std::make_tuple(rw::dsl::CachePolicy::LFU),
         std::make_tuple(rw::dsl::CachePolicy::MRU),
         std::make_tuple(rw::dsl::CachePolicy::MFU),
-        std::make_tuple(rw::dsl::CachePolicy::CLOCK)
+        std::make_tuple(rw::dsl::CachePolicy::CLOCK),
+        std::make_tuple(rw::dsl::CachePolicy::FIFO),
+        std::make_tuple(rw::dsl::CachePolicy::LIFO)
     )
 );

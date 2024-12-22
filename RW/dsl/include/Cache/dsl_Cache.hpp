@@ -17,7 +17,9 @@ namespace rw {
             LFU,
             MRU,
             MFU,
-            CLOCK
+            CLOCK,
+            FIFO,
+            LIFO
         };
 
         template <typename Key, typename Value>

@@ -10,7 +10,7 @@ namespace rw {
     namespace dsl {
 
         template <typename Key, typename Value>
-        class CacheLIFO : public ICache<Key, Value> {
+        class CacheLIFO final : public ICache<Key, Value> {
         public:
             using CacheNode = typename ICache<Key, Value>::CacheNode;
         public:
@@ -40,7 +40,7 @@ namespace rw {
                 return true;
             }
             // Get the number of key-value pairs in the cache
-            size_t size() const override {
+            [[nodiscard]] size_t size() const override {
                 return _cache.size();
             }
             void clear() override {

@@ -54,8 +54,8 @@ namespace rw
         public:
             /**
              *@Parameters:
-             *  -compareNodeEqual: The function to compare two elements
-             *  -compareNodePriority: The function to compare two priorities
+             *  -CompareNodeEqual: The function to compare two elements
+             *  -CompareNodePriority: The function to compare two priorities
              *
              *@Methods:
              *  Constructor
@@ -72,7 +72,7 @@ namespace rw
 
             IPriorityQueue() = default;
 
-            virtual ~IPriorityQueue() {};
+            virtual ~IPriorityQueue() = default;
         protected:
             CompareNodeEqual _compareNodeEqual{ [](const T& a,const T& b) {
                     return a == b;
@@ -245,7 +245,7 @@ namespace rw
                 this->_compareNodeEqual = compareNodeEqual;
                 this->_compareNodePriority = compareNodePriority;
             }
-            ~DHeap() {}
+            ~DHeap() = default;
 
         public:
             T top() override {

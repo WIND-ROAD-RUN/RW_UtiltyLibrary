@@ -37,10 +37,10 @@ namespace rw {
             virtual bool set(const Key& key, const Value& value) = 0;
 
             // Get the number of key-value pairs in the cache
-            virtual size_t size() const = 0;
+            [[nodiscard]] virtual size_t size() const = 0;
 
             // Get the capacity of the cache
-            virtual size_t capacity() const { return _capacity; }
+            [[nodiscard]] virtual size_t capacity() const { return _capacity; }
 
             virtual void clear() = 0;
 

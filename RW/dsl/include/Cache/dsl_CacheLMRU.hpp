@@ -6,9 +6,9 @@
 
 namespace rw {
     namespace dsl {
-        template <typename Key, typename Value,bool isLRU =true>
-        class CacheLMRU
-        :public ICache<Key,Value> {
+        template <typename Key, typename Value,bool IsLRU =true>
+        class CacheLMRU final
+            :public ICache<Key,Value> {
             MAKE_FRIEND_TEST_CLASS(CacheLRU_Test)
             MAKE_FRIEND_TEST_CLASS(CacheMRU_Test_Api)
         public:
@@ -40,7 +40,7 @@ namespace rw {
                 if (_cache.size() >= this->_capacity) {
                     // Remove the least recently used key
                     _cache.erase(_list.back().first);
-                    if constexpr (isLRU) {
+                    if constexpr (IsLRU) {
                         _list.pop_back();
                     }
                     else {
@@ -55,7 +55,7 @@ namespace rw {
                 return true;
             }
 
-            size_t size() const override {
+            [[nodiscard]] size_t size() const override {
                 return _cache.size();
             }
 
@@ -63,7 +63,7 @@ namespace rw {
                 if (capacity < this->_capacity) {
                     // Remove the least recently used keys until the size of the cache is less than the new capacity
                     while (_cache.size() > capacity) {
-                        if constexpr (isLRU) {
+                        if constexpr (IsLRU) {
                             _cache.erase(_list.back().first);
                             _list.pop_back();
                         }

@@ -16,9 +16,9 @@ namespace rw {
         //BloomFilter: Bloom filter
         //          The false positive rate of the input will have an error of 0-0.035 compared to the actual value
         class BloomFilter {
-            static constexpr double ln2 = 0.6931471805599453;
+            static constexpr double cln2 = 0.6931471805599453;
 
-            static constexpr double ln2Square = 0.4804530139182014;
+            static constexpr double cln2Square = 0.4804530139182014;
 
         public:
             //Parameters:
@@ -59,17 +59,17 @@ namespace rw {
             //Supplement
             //      The formula is m=- n * ln (p)/(ln (2) ^ 2), where m is the number of buffer bits in the Bloom filter, n is the expected number of inserted elements, and p is the false positive rate 
             inline size_t getBloomFilterBitNum(size_t estimatedStorageSize, double maxTolerance) {
-                auto bloomFilterBitNum = -(estimatedStorageSize * log(maxTolerance) / (ln2Square));
-                size_t size = static_cast<size_t>(std::ceil(bloomFilterBitNum));
+                const auto bloomFilterBitNum = -(estimatedStorageSize * log(maxTolerance) / (cln2Square));
+                const size_t size = static_cast<size_t>(std::ceil(bloomFilterBitNum));
                 return size;
             }
 
         private:
-            std::function<uint32_t(const std::string&)> murmurHash = [](const std::string& str) {
+            std::function<uint32_t(const std::string&)> _murmurHash = [](const std::string& str) {
                 return MurmurHash3(str.c_str(), str.size(), 0);
                 };
 
-            std::function<uint32_t(const std::string&)> fnv1Hash = [this](const std::string& str) {
+            std::function<uint32_t(const std::string&)> _fnv1Hash = [this](const std::string& str) {
                 return Fnv1Hash(str);
                 };
 
@@ -85,7 +85,7 @@ namespace rw {
 
         private:
             //Buffer bits of Bloom filter
-            Vector<bool> _bloomFilterbuffer;
+            Vector<bool> _bloomFilterBuffer;
 
             //Expected number of elements to be stored
             size_t _estimatedStorageSize;

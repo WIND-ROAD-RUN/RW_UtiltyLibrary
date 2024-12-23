@@ -24,11 +24,11 @@ namespace rw {
             size_t _clockHand;
 
         public:
-            CacheClock(size_t capacity)
+            explicit CacheClock(size_t capacity)
                 : ICache<Key, Value>(capacity), _clockHand(0) {
             }
 
-            ~CacheClock() {}
+            ~CacheClock() override {}
 
             std::optional<Value> get(const Key& key) override {
                 auto it = _cacheMap.find(key);
@@ -47,15 +47,15 @@ namespace rw {
                     return false;
                 }
 
-                if (_cache.size() >= _capacity) {
+                if (_cache.size() >= this->capacity()) {
                     while (_cache[_clockHand]->referenceBit) {
                         _cache[_clockHand]->referenceBit = false;
-                        _clockHand = (_clockHand + 1) % _capacity;
+                        _clockHand = (_clockHand + 1) % this->capacity();
                     }
                     _cacheMap.erase(_cache[_clockHand]->key);
                     _cache[_clockHand] = std::make_shared<Node>(key, value);
                     _cacheMap[key] = _cache[_clockHand];
-                    _clockHand = (_clockHand + 1) % _capacity;
+                    _clockHand = (_clockHand + 1) % this->capacity();
                 }
                 else {
                     auto node = std::make_shared<Node>(key, value);
@@ -65,16 +65,16 @@ namespace rw {
                 return true;
             }
 
-            size_t size() const override {
+            [[nodiscard]] size_t size() const override {
                 return _cacheMap.size();
             }
 
             bool resizeCapacity(size_t capacity) override {
-                _capacity = capacity;
-                while (_cache.size() > _capacity) {
+                this->_capacity = capacity;
+                while (_cache.size() > this->capacity()) {
                     while (_cache[_clockHand]->referenceBit) {
                         _cache[_clockHand]->referenceBit = false;
-                        _clockHand = (_clockHand + 1) % _capacity;
+                        _clockHand = (_clockHand + 1) % this->capacity();
                     }
                     _cacheMap.erase(_cache[_clockHand]->key);
                     _cache.erase(_cache.begin() + _clockHand);

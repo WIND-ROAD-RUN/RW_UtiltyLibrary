@@ -11,7 +11,7 @@
 namespace rw {
     namespace dsl {
         template <typename Key, typename Value,bool IsLFU = true >
-        class CacheLMFU : public ICache<Key, Value> {
+        class CacheLMFU final : public ICache<Key, Value> {
         private:
 
             /**
@@ -101,7 +101,7 @@ namespace rw {
                     });
 
             }
-            ~CacheLMFU() {}
+            ~CacheLMFU() override = default;
         public:
             std::optional<Value> get(const Key& key) override {
                 // If the key is not in the cache, return nullopt
@@ -113,7 +113,7 @@ namespace rw {
                 auto now = std::chrono::system_clock::now();
 
                 //Update the counter and timePoint of the node
-                it->second->counter++;
+                ++it->second->counter;
                 Priority newPriority(it->second->counter, now);
 
                 //Update the priority of the node in the heap
@@ -129,7 +129,7 @@ namespace rw {
                 //Record the time when the node is set
                 if (it != this->_cache.end()) {
                     it->second->value = value;
-                    it->second->counter++;
+                    ++it->second->counter;
                     it->second->timePoint = now;
                     Priority newPriority(it->second->counter, now);
                     _heap.update(it->second, newPriority);
@@ -148,7 +148,7 @@ namespace rw {
                 return true;
             }
 
-            size_t size() const override {
+            [[nodiscard]] size_t size() const override {
                 //Return the size of the cache
                 return this->_cache.size();
             }

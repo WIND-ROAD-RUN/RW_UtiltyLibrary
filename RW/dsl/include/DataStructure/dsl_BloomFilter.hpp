@@ -111,16 +111,16 @@ namespace rw {
         //MurmurHash3: MurmurHash3 hash function
         inline uint32_t MurmurHash3(const void* key, int len, uint32_t seed)
         {
-            const uint8_t* data = (const uint8_t*)key;
-            const int nblocks = len / 4;
+            const auto data = static_cast<const uint8_t*>(key);
+            const int nBlocks = len / 4;
             uint32_t h1 = seed;
 
-            const uint32_t c1 = 0xcc9e2d51;
-            const uint32_t c2 = 0x1b873593;
+            constexpr uint32_t c1 = 0xcc9e2d51;
+            constexpr uint32_t c2 = 0x1b873593;
 
             // Body
-            const uint32_t* blocks = (const uint32_t*)(data + nblocks * 4);
-            for (int i = -nblocks; i; i++) {
+            const auto blocks = reinterpret_cast<const uint32_t*>(data + nBlocks * 4);
+            for (int i = -nBlocks; i; i++) {
                 uint32_t k1 = blocks[i];
 
                 k1 *= c1;
@@ -133,7 +133,7 @@ namespace rw {
             }
 
             // Tail
-            const uint8_t* tail = (const uint8_t*)(data + nblocks * 4);
+            const auto tail = (const uint8_t*)(data + nBlocks * 4);
             uint32_t k1 = 0;
 
             switch (len & 3) {
@@ -162,10 +162,10 @@ namespace rw {
         // 
         //Fnv1Hash: FNV-1 hash function
         inline uint32_t Fnv1Hash(const std::string& str) {
-            const uint32_t fnv_prime = 16777619;
             uint32_t hash = 2166136261;
 
-            for (char c : str) {
+            for (const char c : str) {
+                constexpr uint32_t fnv_prime = 16777619;
                 hash *= fnv_prime;
                 hash ^= c;
             }

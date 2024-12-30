@@ -4,7 +4,6 @@
     "pugixml",
     "jsoncpp",
     "opencv4",
-    "openvino",
     "pybind11"
   ]
 }

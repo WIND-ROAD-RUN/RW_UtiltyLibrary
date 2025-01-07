@@ -17,7 +17,7 @@ namespace rw {
             LFU,
             MRU,
             MFU,
-            CLOCK,
+            Clock,
             FIFO,
             LIFO
         };
@@ -48,7 +48,18 @@ namespace rw {
             virtual ~ICache() = default;
 
             virtual bool resizeCapacity(size_t capacity) = 0;
+        public:
+            // Prevent move construction
+            ICache(ICache &&) = delete;
 
+            // Prevent move assignment
+            ICache& operator=(ICache&&) = delete;
+
+            // Prevent copy construction
+            ICache(const ICache&) = delete;
+
+            // Prevent copy assignment
+            ICache& operator=(const ICache&) = delete;
         protected:
             size_t _capacity;
         };

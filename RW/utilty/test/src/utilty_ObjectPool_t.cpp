@@ -66,14 +66,14 @@ namespace utilty_ObjectPool {
     }
 
     TEST(ObjectPoolTest_threadSafeTrue, AcquireObject) {
-        rw::ObjectPool<TestObject, std::allocator<TestObject>, rw::ThreadSafe> pool;
+        rw::ObjectPool<TestObject, std::allocator<TestObject>, rw::gThreadSafe> pool;
         auto obj = pool.acquireObject(42);
         ASSERT_NE(obj, nullptr);
         EXPECT_EQ(obj->getValue(), 42);
     }
 
     TEST(ObjectPoolTest_threadSafeTrue, AcquireMultipleObjects) {
-        rw::ObjectPool<TestObject, std::allocator<TestObject>, rw::ThreadSafe> pool;
+        rw::ObjectPool<TestObject, std::allocator<TestObject>, rw::gThreadSafe> pool;
         auto obj1 = pool.acquireObject(1);
         auto obj2 = pool.acquireObject(2);
         ASSERT_NE(obj1, nullptr);
@@ -84,7 +84,7 @@ namespace utilty_ObjectPool {
     }
 
     TEST(ObjectPoolTest_threadSafeTrue, ReleaseObject) {
-        rw::ObjectPool<TestObject, std::allocator<TestObject>, rw::ThreadSafe> pool;
+        rw::ObjectPool<TestObject, std::allocator<TestObject>, rw::gThreadSafe> pool;
         auto obj = pool.acquireObject(42);
         ASSERT_NE(obj, nullptr);
         EXPECT_EQ(obj.use_count(), 1);
@@ -96,7 +96,7 @@ namespace utilty_ObjectPool {
     }
 
     TEST(ObjectPoolTest_threadSafeTrue, Destructor) {
-        rw::ObjectPool<TestObject, std::allocator<TestObject>, rw::ThreadSafe>* pool = new rw::ObjectPool<TestObject, std::allocator<TestObject>, true>();
+        rw::ObjectPool<TestObject, std::allocator<TestObject>, rw::gThreadSafe>* pool = new rw::ObjectPool<TestObject, std::allocator<TestObject>, true>();
         auto obj = pool->acquireObject(42);
         ASSERT_NE(obj, nullptr);
         obj.reset();
@@ -105,7 +105,7 @@ namespace utilty_ObjectPool {
     }
 
     TEST(ObjectPoolTest_threadSafeTrue, ConcurrentAccess) {
-        rw::ObjectPool<TestObject, std::allocator<TestObject>, rw::ThreadSafe> pool;
+        rw::ObjectPool<TestObject, std::allocator<TestObject>, rw::gThreadSafe> pool;
         const int numThreads = 10;
         const int numIterations = 1000;
         std::vector<std::thread> threads;

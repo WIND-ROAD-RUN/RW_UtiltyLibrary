@@ -12,7 +12,7 @@ PYBIND11_MODULE(dslPy, m) {
         .value("LFU", CachePolicy::LFU)
         .value("MRU", CachePolicy::MRU)
         .value("MFU", CachePolicy::MFU)
-        .value("CLOCK", CachePolicy::CLOCK)
+        .value("CLOCK", CachePolicy::Clock)
         .export_values();
 
     py::class_<ICache<int, int>, std::shared_ptr<ICache<int, int>>>(m, "ICache")

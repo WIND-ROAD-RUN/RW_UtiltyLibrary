@@ -23,7 +23,7 @@ namespace rw {
                     return std::make_shared<CacheLMRU<Key, Value, false>>(capacity);
                 case CachePolicy::MFU:
                     return std::make_shared<CacheLMFU<Key, Value, false>>(capacity);
-                case CachePolicy::CLOCK:
+                case CachePolicy::Clock:
                     return std::make_shared<CacheClock<Key, Value>>(capacity);
                 case CachePolicy::FIFO:
                     return std::make_shared<CacheFIFO<Key, Value>>(capacity);

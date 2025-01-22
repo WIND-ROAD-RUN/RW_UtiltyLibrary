@@ -9,16 +9,18 @@ namespace rw {
             //TODO
         }
 
-        SetInventoryCore::VariantItem
+        VariantItem
         SetInventoryAssembly::getValue()
         {
             //TODO
+            return VariantItem(static_cast<int>(0));
         }
 
         ItemStoreType
         SetInventoryAssembly::getValueType()
         {
             //TODO
+            return ItemStoreType();
         }
 
         void
@@ -42,11 +44,17 @@ namespace rw {
             //TODO
         }
 
-        SetInventoryAssembly::operator
-        oso::ObjectStoreAssembly()
+        std::vector<std::pair<std::shared_ptr<SetInventoryCore>, ItemType>> SetInventoryAssembly::getSetList()
+        {
+            return std::vector<std::pair<std::shared_ptr<SetInventoryCore>, ItemType>>();
+        }
+
+        SetInventoryAssembly::operator rw::oso::ObjectStoreAssembly()
         {
             //TODO
+            return rw::oso::ObjectStoreAssembly();
         }
+
 
         SetInventory::SetInventory
         (rw::oso::ObjectStoreAssembly assembly)
@@ -137,7 +145,78 @@ namespace rw {
 
         }
 
-    } // namespace sim
+        SetInventoryItem::SetInventoryItem(rw::oso::ObjectStoreAssembly assembly)
+        {
+
+        }
+
+        SetInventoryItem::SetInventoryItem()
+        {
+
+        }
+
+        VariantItem SetInventoryItem::getValue()
+        {
+            auto itemType = _item.getType();
+            switch (itemType)
+            {
+            case rw::oso::ObjectDataItemStoreType::item_string:
+                return VariantItem(_item.getValueAsString());
+            case rw::oso::ObjectDataItemStoreType::item_int:
+                return VariantItem(_item.getValueAsInt());
+            case rw::oso::ObjectDataItemStoreType::item_long:
+                return VariantItem(_item.getValueAsLong());
+            case rw::oso::ObjectDataItemStoreType::item_float:
+                return VariantItem(_item.getValueAsFloat());
+            case rw::oso::ObjectDataItemStoreType::item_double:
+                return VariantItem(_item.getValueAsDouble());
+            case rw::oso::ObjectDataItemStoreType::item_bool:
+                return VariantItem(_item.getValueAsBool());
+            default:
+                throw std::runtime_error("Invalid item type");
+            }
+        }
+
+        ItemStoreType SetInventoryItem::getValueType()
+        {
+            switch (auto itemType = _item.getType())
+            {
+            case rw::oso::ObjectDataItemStoreType::item_string:
+                return ItemStoreType::Item_String;
+            case rw::oso::ObjectDataItemStoreType::item_int:
+                return ItemStoreType::Item_Int;
+            case rw::oso::ObjectDataItemStoreType::item_long:
+                return ItemStoreType::Item_Long;
+            case rw::oso::ObjectDataItemStoreType::item_float:
+                return ItemStoreType::Item_Float;
+            case rw::oso::ObjectDataItemStoreType::item_double:
+                return ItemStoreType::Item_Double;
+            case rw::oso::ObjectDataItemStoreType::item_bool:
+                return ItemStoreType::Item_Bool;
+            default:
+                throw std::runtime_error("Invalid item type");
+            }
+        }
+
+        SetInventoryItem::operator rw::oso::ObjectStoreAssembly()
+        {
+            rw::oso::ObjectStoreAssembly result;
+            /*result.setName("SetInventoryItem");
+
+            rw::oso::ObjectStoreItem item;
+            item.setName("Name");
+            item.setValueFromString(this->name);
+            result.addItem(std::move(item));*/
+
+            return result;
+           
+        }
+
+        SetInventoryCore::~SetInventoryCore()
+        {
+        }
+
+} // namespace sim
 
 } // namespace rw
 

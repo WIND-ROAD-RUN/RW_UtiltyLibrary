@@ -12,7 +12,7 @@ namespace rw {
             Item,
             Assembly
         };
-
+        struct SetInventoryItem;
         enum class ItemStoreType
         {
             Item_String,
@@ -24,16 +24,14 @@ namespace rw {
             Item_Item,
             Item_Assembly
         };
+        using VariantItem = std::variant<int, long, float, double, std::string, bool, std::vector<SetInventoryItem>>;
 
-        struct SetInventoryItem;
         struct SetInventoryCore
         {
         public:
-            using VariantItem = std::variant<int, long, float, double, std::string, bool, std::vector<SetInventoryItem>>;
-        public:
             std::string name{"Undefined"};
         public:
-            virtual ~SetInventoryCore() = default;
+            virtual ~SetInventoryCore();
             virtual ItemType getType() = 0;
 
             virtual VariantItem getValue()=0;
@@ -43,8 +41,11 @@ namespace rw {
         struct SetInventoryItem final
             :public SetInventoryCore
         {
+        private:
+            rw::oso::ObjectStoreItem _item;
         public:
             explicit SetInventoryItem(rw::oso::ObjectStoreAssembly assembly);
+            SetInventoryItem();
         public:
             ItemType getType() override { return ItemType::Item; }
             VariantItem getValue() override;
@@ -61,6 +62,7 @@ namespace rw {
         {
         public:
             explicit SetInventoryAssembly(rw::oso::ObjectStoreAssembly assembly);
+            SetInventoryAssembly() = default;
         public:
             ItemType getType() override { return ItemType::Assembly; }
             VariantItem getValue() override;
@@ -81,9 +83,10 @@ namespace rw {
             std::vector<std::pair<std::shared_ptr<SetInventoryCore>, ItemType>> _items;
         public:
             explicit SetInventory(rw::oso::ObjectStoreAssembly assembly);
+            SetInventory() = default;
         public:
-            std::string name;
-            std::string guid;
+            std::string name{"Undefined"};
+            std::string guid{"Undefined"};
         public:
             std::vector<std::pair<std::shared_ptr<SetInventoryCore>, ItemType>> getSetList();
         public:
@@ -92,6 +95,12 @@ namespace rw {
         public:
             operator rw::oso::ObjectStoreAssembly() const;
         };
+
+        template<typename Value, ItemStoreType Type>
+        inline void SetInventoryItem::setValue(Value value)
+        {
+            //TODO
+        }
 
     } // namespace sim
 

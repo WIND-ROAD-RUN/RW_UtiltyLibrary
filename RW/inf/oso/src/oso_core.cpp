@@ -7,6 +7,21 @@ namespace rw
 {
     namespace oso
     {
+        ObjectStoreItem::ObjectStoreItem(const ObjectStoreItem& item)
+         : ObjectStoreCore(item)
+     {
+            _value = item._value;
+            _type = item._type;
+        }
+
+        ObjectStoreItem& ObjectStoreItem::operator=(const ObjectStoreItem& other)
+        {
+            this->setName(other.getName());
+            _value = other._value;
+            _type = other._type;
+            return *this;
+        }
+
         void
             ObjectStoreItem::setValueFromString(const std::string& value)
         {
@@ -167,36 +182,70 @@ namespace rw
             return !(*this == other);
         }
 
+        ObjectStoreAssembly::ObjectStoreAssembly(const ObjectStoreAssembly& assembly)
+         : ObjectStoreCore(assembly)
+        {
+            for (auto& item : assembly._items)
+            {
+                if (auto p = std::dynamic_pointer_cast<ObjectStoreItem>(item))
+                {
+                    _items.push_back(std::make_shared<ObjectStoreItem>(*p));
+                }
+                else if (auto p = std::dynamic_pointer_cast<ObjectStoreAssembly>(item))
+                {
+                    _items.push_back(std::make_shared<ObjectStoreAssembly>(*p));
+                }
+            }
+        }
+
+        ObjectStoreAssembly& ObjectStoreAssembly::operator=(const ObjectStoreAssembly& other)
+        {
+            this->setName(other.getName());
+            _items.clear();
+            for (auto& item : other._items)
+            {
+                if (auto p = std::dynamic_pointer_cast<ObjectStoreItem>(item))
+                {
+                    _items.push_back(std::make_shared<ObjectStoreItem>(*p));
+                }
+                else if (auto p = std::dynamic_pointer_cast<ObjectStoreAssembly>(item))
+                {
+                    _items.push_back(std::make_shared<ObjectStoreAssembly>(*p));
+                }
+            }
+            return *this;
+        }
+
         void
             ObjectStoreAssembly::addItem(std::shared_ptr<ObjectStoreCore> item)
         {
             item->addLevel();
-            m_items.push_back(item);
+            _items.push_back(item);
             item->parent = this;
         }
 
         void ObjectStoreAssembly::addItem(ObjectStoreAssembly&& assembly)
         {
             assembly.addLevel();
-            m_items.push_back(std::make_shared<ObjectStoreAssembly>(std::move(assembly)));
-            m_items.back()->parent = this;
+            _items.push_back(std::make_shared<ObjectStoreAssembly>(std::move(assembly)));
+            _items.back()->parent = this;
         }
 
         void ObjectStoreAssembly::addItem(ObjectStoreItem&& item)
         {
             item.addLevel();
-            m_items.push_back(std::make_shared<ObjectStoreItem>(std::move(item)));
-            m_items.back()->parent = this;
+            _items.push_back(std::make_shared<ObjectStoreItem>(std::move(item)));
+            _items.back()->parent = this;
         }
 
         void
             ObjectStoreAssembly::removeItem(std::shared_ptr<ObjectStoreCore> item)
         {
             item->subLevel();
-            m_items.erase(std::remove_if(m_items.begin(), m_items.end(),
+            _items.erase(std::remove_if(_items.begin(), _items.end(),
                 [&item](const std::shared_ptr<ObjectStoreCore>& i)
                 { return i == item; }),
-                m_items.end());
+                _items.end());
             item->parent = nullptr;
         }
 
@@ -205,7 +254,7 @@ namespace rw
         {
             ObjectStoreCore::print(os);
             os << "-" << this->getName() << "" << std::endl;
-            for (auto& item : m_items)
+            for (auto& item : _items)
             {
                 item->print(os);
             }
@@ -214,7 +263,7 @@ namespace rw
         void ObjectStoreAssembly::addLevel()
         {
             level++;
-            for (auto& item : m_items)
+            for (auto& item : _items)
             {
                 item->addLevel();
             }
@@ -223,7 +272,7 @@ namespace rw
         void ObjectStoreAssembly::subLevel()
         {
             level--;
-            for (auto& item : m_items)
+            for (auto& item : _items)
             {
                 item->subLevel();
             }
@@ -234,7 +283,7 @@ namespace rw
 
             auto nameIsSame = this->getName() == other.getName();
 
-            auto sizeIsSame = this->m_items.size() == other.m_items.size();
+            auto sizeIsSame = this->_items.size() == other._items.size();
 
             for (int i = 0; i < this->getItems().size(); ++i)
             {
@@ -269,24 +318,24 @@ namespace rw
 
         std::shared_ptr<ObjectStoreCore> ObjectStoreAssembly::operator[](const size_type& i)
         {
-            return m_items[i];
+            return _items[i];
         }
 
         const std::shared_ptr<ObjectStoreCore> ObjectStoreAssembly::at(const size_type& i) const
         {
-            return m_items.at(i);
+            return _items.at(i);
         }
 
         std::vector<std::shared_ptr<ObjectStoreCore>>
             ObjectStoreAssembly::getItems() const
         {
-            return m_items;
+            return _items;
         }
 
-        const std::shared_ptr<ObjectStoreCore>
-            ObjectStoreAssembly::getItem(const std::string& name) const
+        std::shared_ptr<ObjectStoreCore>
+        ObjectStoreAssembly::getItem(const std::string& name) const
         {
-            for (auto& item : m_items)
+            for (auto& item : _items)
             {
                 if (item->getName() == name)
                 {
@@ -308,12 +357,23 @@ namespace rw
             return m_name;
         }
 
+        ObjectStoreCore::ObjectStoreCore(const ObjectStoreCore& core)
+        {
+            m_name = core.m_name;
+        }
+
         void ObjectStoreCore::print(std::ostream& os)
         {
             for (size_t i = 0; i < level; ++i)
             {
                 os << "  ";
             }
+        }
+
+        ObjectStoreCore& ObjectStoreCore::operator=(const ObjectStoreCore& other)
+        {
+            m_name = other.m_name;
+            return *this;
         }
 
         bool ObjectStoreCore::operator==(const ObjectStoreCore& other) const

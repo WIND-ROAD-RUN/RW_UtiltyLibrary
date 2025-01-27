@@ -58,6 +58,88 @@ namespace oso_core{
         EXPECT_NE(testObj.getStoreType(), errorStoreType);
     }
 
+    TEST(ObjectStoreCore_Class,CopyConstructor)
+    {
+        ObjectStoreCore testObj;
+        testObj.setName("testName");
+        ObjectStoreCore testObj1(testObj);
+        EXPECT_EQ(testObj1.getName(), "testName");
+    }
+
+    TEST(ObjectStoreCore_Class, AssignmentOperator)
+    {
+        ObjectStoreCore testObj;
+        testObj.setName("testName");
+        ObjectStoreCore testObj1;
+        testObj1 = testObj;
+        EXPECT_EQ(testObj1.getName(), "testName");
+    }
+
+    TEST(ObjectStoreCore_Class, opeatorEuqa_true) {
+        ObjectStoreCore testCore;
+        ObjectStoreCore testCore1;
+        testCore.setName("testName");
+        testCore1.setName("testName");
+        auto result = testCore == testCore1;
+        EXPECT_EQ(result, true);
+    }
+
+    TEST(ObjectStoreCore_Class, opeatorEuqa_false) {
+        ObjectStoreCore testCore;
+        ObjectStoreCore testCore1;
+        testCore.setName("testName");
+        testCore1.setName("ErrorName");
+        auto result = testCore == testCore1;
+        EXPECT_EQ(result, false);
+    }
+
+    TEST(ObjectStoreCore_Class, opeatorNeEuqa_true) {
+        ObjectStoreCore testObj;
+        ObjectStoreCore testObj1;
+        testObj.setName("testName");
+        testObj1.setName("errorName");
+        auto result = testObj != testObj1;
+        EXPECT_EQ(result, true);
+
+    }
+
+    TEST(ObjectStoreCore_Class, opeatorNeEuqa_false) {
+        ObjectStoreCore testObj;
+        ObjectStoreCore testObj1;
+        testObj.setName("testName");
+        testObj1.setName("testName");
+        auto result = testObj != testObj1;
+        EXPECT_EQ(result, false);
+    }
+}
+
+namespace oso_core
+{
+    TEST(ObjectStoreItem_Class, CopyConstructor)
+    {
+        ObjectStoreItem item;
+        item.setName("testName");
+        item.setValueFromDouble(3.14);
+        ObjectStoreItem item1(item);
+
+        EXPECT_EQ(item1.getName(), "testName");
+        EXPECT_EQ(item1.getType(), ObjectDataItemStoreType::item_double);
+        EXPECT_EQ(item1.getValueAsDouble(), 3.14);
+    }
+
+    TEST(ObjectStoreItem_Class, AssignmentOperator)
+    {
+        ObjectStoreItem item;
+        item.setName("testName");
+        item.setValueFromDouble(3.14);
+        ObjectStoreItem item1;
+        item1 = item;
+        EXPECT_EQ(item1.getName(), "testName");
+        EXPECT_EQ(item1.getType(), ObjectDataItemStoreType::item_double);
+        EXPECT_EQ(item1.getValueAsDouble(), 3.14);
+    }
+
+
     TEST(ObjectStoreItem_Class, attribute_storeType) {
         ObjectStoreItem testObj;
         EXPECT_EQ(testObj.getStoreType(), "item");
@@ -65,7 +147,7 @@ namespace oso_core{
 
     TEST(ObjectStoreItem_Class, operate_setValueFromString) {
         ObjectStoreItem testObj;
-        
+
         string value = "string";
         string errorValue = "error";
 
@@ -127,43 +209,6 @@ namespace oso_core{
         testObj.setValueFromBool(value);
         EXPECT_EQ(testObj.getValueAsBool(), value);
         EXPECT_EQ(testObj.getType(), ObjectDataItemStoreType::item_bool);
-    }
-
-    TEST(ObjectStoreCore_Class, opeatorEuqa_true) {
-        ObjectStoreCore testCore;
-        ObjectStoreCore testCore1;
-        testCore.setName("testName");
-        testCore1.setName("testName");
-        auto result = testCore == testCore1;
-        EXPECT_EQ(result, true);
-    }
-
-    TEST(ObjectStoreCore_Class, opeatorEuqa_false) {
-        ObjectStoreCore testCore;
-        ObjectStoreCore testCore1;
-        testCore.setName("testName");
-        testCore1.setName("ErrorName");
-        auto result = testCore == testCore1;
-        EXPECT_EQ(result, false);
-    }
-
-    TEST(ObjectStoreCore_Class, opeatorNeEuqa_true) {
-        ObjectStoreCore testObj;
-        ObjectStoreCore testObj1;
-        testObj.setName("testName");
-        testObj1.setName("errorName");
-        auto result = testObj != testObj1;
-        EXPECT_EQ(result, true);
-
-    }
-
-    TEST(ObjectStoreCore_Class, opeatorNeEuqa_false) {
-        ObjectStoreCore testObj;
-        ObjectStoreCore testObj1;
-        testObj.setName("testName");
-        testObj1.setName("testName");
-        auto result = testObj != testObj1;
-        EXPECT_EQ(result, false);
     }
 
     TEST(ObjectStoreItem_Class, opeatorEuqa_true) {
@@ -295,7 +340,7 @@ namespace oso_core{
         testObj1.setValueFromFloat(1);
         result = testObj != testObj1;
         EXPECT_EQ(result, false);
-        
+
         testObj.setValueFromInt(1);
         testObj1.setValueFromInt(1);
         result = testObj != testObj1;
@@ -310,6 +355,46 @@ namespace oso_core{
         testObj1.setValueFromString("test");
         result = testObj != testObj1;
         EXPECT_EQ(result, false);
+    }
+}
+
+namespace oso_core
+{
+    TEST(ObjectStoreAssembly_Class, CopyConstructor)
+    {
+        ObjectStoreAssembly testAssembly;
+        testAssembly.setName("testName");
+        auto testItem = std::make_shared<ObjectStoreItem>();
+        testItem->setName("testItem");
+        testItem->setValueFromBool(false);
+        testAssembly.addItem(testItem);
+        ObjectStoreAssembly testAssembly1(testAssembly);
+        EXPECT_EQ(testAssembly1.getName(), "testName");
+        auto sourcePtr = testAssembly1.getItem("testItem");
+        auto item = std::dynamic_pointer_cast<ObjectStoreItem>(sourcePtr);
+        EXPECT_EQ(item->getName(), "testItem");
+        EXPECT_EQ(item->getValueAsBool(), false);
+        testItem->setName("error");
+        EXPECT_EQ(item->getName(), "testItem");
+
+    }
+
+    TEST(ObjectStoreAssembly_Class, AssignmentOperator)
+    {
+        ObjectStoreAssembly testAssembly;
+        testAssembly.setName("testName");
+        auto testItem = std::make_shared<ObjectStoreItem>();
+        testItem->setName("testItem");
+        testItem->setValueFromBool(false);
+        testAssembly.addItem(testItem);
+        ObjectStoreAssembly testAssembly1;
+        testAssembly1 = testAssembly;
+        EXPECT_EQ(testAssembly1.getName(), "testName");
+        auto item = std::dynamic_pointer_cast<ObjectStoreItem>(testAssembly1.getItem("testItem"));
+        EXPECT_EQ(item->getName(), "testItem");
+        EXPECT_EQ(item->getValueAsBool(), false);
+        testItem->setName("error");
+        EXPECT_EQ(item->getName(), "testItem");
     }
 
     TEST(ObjectStoreAssembly_Class, opeatorEuqa_true) {
@@ -397,6 +482,4 @@ namespace oso_core{
         EXPECT_EQ(result, false);
 
     }
-
-
 }

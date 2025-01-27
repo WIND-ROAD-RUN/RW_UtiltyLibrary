@@ -116,6 +116,8 @@ namespace rw {
         public:
             ObjectStoreCore()=default;
 
+            ObjectStoreCore(const ObjectStoreCore & core);
+
             ObjectStoreCore(std::vector<char> binary);
 
             virtual ~ObjectStoreCore() = default;
@@ -133,7 +135,8 @@ namespace rw {
              *
              */
             virtual void print(std::ostream& os);
-
+        public:
+           ObjectStoreCore& operator=(const ObjectStoreCore& other);
         public:
             virtual bool operator==(const ObjectStoreCore& other) const;
 
@@ -166,9 +169,13 @@ namespace rw {
         public:
             ObjectStoreItem()=default;
 
+            ObjectStoreItem(const ObjectStoreItem & item);
+
             ObjectStoreItem(std::vector<char> binary);
 
-            virtual ~ObjectStoreItem() = default;
+            ~ObjectStoreItem() override = default ;
+        public:
+            ObjectStoreItem& operator=(const ObjectStoreItem& other);
 
         public:
             //Parameters:
@@ -254,14 +261,19 @@ namespace rw {
             :public ObjectStoreCore {
         private:
             //Store sub objects, which can be Object Store Assembly and Object Store Item
-            std::vector<std::shared_ptr<ObjectStoreCore>> m_items;
+            std::vector<std::shared_ptr<ObjectStoreCore>> _items;
 
         public:
             ObjectStoreAssembly()=default;
 
+            ObjectStoreAssembly(const ObjectStoreAssembly & assembly);
+
             ObjectStoreAssembly(std::vector<char> binary);
 
             virtual ~ObjectStoreAssembly() = default;
+
+        public:
+            ObjectStoreAssembly& operator=(const ObjectStoreAssembly & other);
 
         public:
             //Parameters:
@@ -311,7 +323,7 @@ namespace rw {
             //      name: The name of the item you are going to get
             //
             //getItem: Get the item by name if it exists, otherwise return nullptr
-            const std::shared_ptr<ObjectStoreCore> getItem(const std::string& name) const;
+            std::shared_ptr<ObjectStoreCore> getItem(const std::string& name) const;
 
         public:
             //Parameters:

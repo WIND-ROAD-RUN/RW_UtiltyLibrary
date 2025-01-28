@@ -20,11 +20,9 @@ namespace rw {
             Item_Float,
             Item_Double,
             Item_Bool,
-            Item_Long,
-            Item_Item,
-            Item_Assembly
+            Item_Long
         };
-        using VariantItem = std::variant<int, long, float, double, std::string, bool, std::vector<SetInventoryItem>>;
+        using VariantItem = std::variant<int, long, float, double, std::string, bool>;
 
         struct SetInventoryCore
         {
@@ -32,10 +30,9 @@ namespace rw {
             std::string name{"Undefined"};
         public:
             virtual ~SetInventoryCore();
-            virtual ItemType getType() = 0;
-
-            virtual VariantItem getValue()=0;
-            virtual ItemStoreType getValueType()=0;
+            virtual ItemType getObjectType() = 0;
+            virtual VariantItem getValue() =0;
+            virtual ItemStoreType getValueType() =0;
         };
 
         struct SetInventoryItem final
@@ -47,32 +44,38 @@ namespace rw {
             explicit SetInventoryItem(rw::oso::ObjectStoreAssembly assembly);
             SetInventoryItem();
         public:
-            ItemType getType() override { return ItemType::Item; }
-            VariantItem getValue() override;
+            ItemType getObjectType() override { return ItemType::Item; }
+            VariantItem getValue() override ;
             ItemStoreType getValueType() override;
         public:
             template<typename Value, ItemStoreType Type>
             void setValue(Value value);
         public:
-            operator rw::oso::ObjectStoreAssembly();
+            operator rw::oso::ObjectStoreAssembly() const;
         };
 
         struct SetInventoryAssembly final
             :public SetInventoryCore
         {
-        public:
-            explicit SetInventoryAssembly(rw::oso::ObjectStoreAssembly assembly);
-            SetInventoryAssembly() = default;
-        public:
-            ItemType getType() override { return ItemType::Assembly; }
+        private:
             VariantItem getValue() override;
             ItemStoreType getValueType() override;
+        private:
+            std::vector<std::shared_ptr<SetInventoryCore>> _items;
         public:
-            void setConfigs(std::vector<SetInventoryItem> configs);
-            void appendSetItem(SetInventoryItem item);
-            void appendSetAssembly(SetInventoryAssembly assembly);
+            explicit SetInventoryAssembly(rw::oso::ObjectStoreAssembly assembly);
+            SetInventoryAssembly();
         public:
-            std::vector<std::pair<std::shared_ptr<SetInventoryCore>, ItemType>> getSetList();
+            ItemType getObjectType() override { return ItemType::Assembly; }
+        public:
+            void appendSetItem(const SetInventoryItem & item);
+            void appendSetItem(SetInventoryItem&& item);
+
+            void appendSetAssembly(const SetInventoryAssembly & assembly);
+            void appendSetAssembly(SetInventoryAssembly&& assembly);
+
+        public:
+            std::vector<std::shared_ptr<SetInventoryCore>> getSetList();
         public:
             operator rw::oso::ObjectStoreAssembly();
         };
@@ -80,7 +83,7 @@ namespace rw {
         struct SetInventory
         {
         private:
-            std::vector<std::pair<std::shared_ptr<SetInventoryCore>, ItemType>> _items;
+            std::vector<std::shared_ptr<SetInventoryCore>> _items;
         public:
             explicit SetInventory(rw::oso::ObjectStoreAssembly assembly);
             SetInventory() = default;
@@ -88,10 +91,10 @@ namespace rw {
             std::string name{"Undefined"};
             std::string guid{"Undefined"};
         public:
-            std::vector<std::pair<std::shared_ptr<SetInventoryCore>, ItemType>> getSetList();
+            std::vector<std::shared_ptr<SetInventoryCore>> getSetList();
         public:
-            void appendSetItem(SetInventoryItem item);
-            void appendSetAssembly(SetInventoryAssembly assembly);
+            void appendSetItem(const SetInventoryItem & item);
+            void appendSetAssembly(const SetInventoryAssembly & assembly);
         public:
             operator rw::oso::ObjectStoreAssembly() const;
         };
@@ -99,7 +102,34 @@ namespace rw {
         template<typename Value, ItemStoreType Type>
         inline void SetInventoryItem::setValue(Value value)
         {
-            //TODO
+            if constexpr (Type == ItemStoreType::Item_String)
+            {
+                _item.setValueFromString(value);
+            }
+            else if constexpr (Type == ItemStoreType::Item_Int)
+            {
+                _item.setValueFromInt(value);
+            }
+            else if constexpr (Type == ItemStoreType::Item_Float)
+            {
+                _item.setValueFromFloat(value);
+            }
+            else if constexpr (Type == ItemStoreType::Item_Double)
+            {
+                _item.setValueFromDouble(value);
+            }
+            else if constexpr (Type == ItemStoreType::Item_Bool)
+            {
+                _item.setValueFromBool(value);
+            }
+            else if constexpr (Type == ItemStoreType::Item_Long)
+            {
+                _item.setValueFromLong(value);
+            }
+            else
+            {
+                throw std::runtime_error("Invalid assembly type");
+            }
         }
 
     } // namespace sim

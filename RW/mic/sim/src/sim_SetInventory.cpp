@@ -6,53 +6,90 @@ namespace rw {
         SetInventoryAssembly::SetInventoryAssembly
         (rw::oso::ObjectStoreAssembly assembly)
         {
-            //TODO
+            if (assembly.getName() != "$Struct$SetInventoryAssembly$")
+            {
+                throw std::runtime_error("Invalid assembly type");
+            }
+            for (const auto& item : assembly.getItems())
+            {
+                if (item->getName() == "$Field$Name$")
+                {
+                    auto itemPtr = std::dynamic_pointer_cast<rw::oso::ObjectStoreItem>(item);
+                    name = itemPtr->getValueAsString();
+                }
+                else
+                {
+                    if (item->getName() == "Item")
+                    {
+                        auto itemPtr = std::dynamic_pointer_cast<rw::oso::ObjectStoreAssembly>(item);
+                        appendSetItem(SetInventoryItem(*itemPtr));
+                    }
+                    else if (item->getName() == "Assembly")
+                    {
+                        auto itemPtr = std::dynamic_pointer_cast<rw::oso::ObjectStoreAssembly>(item);
+                        appendSetAssembly(SetInventoryAssembly(*itemPtr));
+                    }
+                    else
+                    {
+                        throw std::runtime_error("Invalid assembly type");
+                    }
+                }
+            }
         }
 
-        VariantItem
-        SetInventoryAssembly::getValue()
+        SetInventoryAssembly::SetInventoryAssembly()
         {
-            //TODO
-            return VariantItem(static_cast<int>(0));
+            name = "Undefined";
         }
 
-        ItemStoreType
-        SetInventoryAssembly::getValueType()
+        void SetInventoryAssembly::appendSetItem(const SetInventoryItem& item)
         {
-            //TODO
-            return ItemStoreType();
+            _items.push_back(std::make_shared<SetInventoryItem>(item));
         }
 
-        void
-        SetInventoryAssembly::setConfigs
-        (std::vector<SetInventoryItem> configs)
+        void SetInventoryAssembly::appendSetItem(SetInventoryItem&& item)
         {
-            //TODO
+            _items.push_back(std::make_shared<SetInventoryItem>(std::move(item)));
         }
 
-        void
-        SetInventoryAssembly::appendSetItem
-        (SetInventoryItem item)
+        void SetInventoryAssembly::appendSetAssembly(const SetInventoryAssembly& assembly)
         {
-            //TODO
+            _items.push_back(std::make_shared<SetInventoryAssembly>(assembly));
         }
 
-        void
-        SetInventoryAssembly::appendSetAssembly
-        (SetInventoryAssembly assembly)
+        void SetInventoryAssembly::appendSetAssembly(SetInventoryAssembly&& assembly)
         {
-            //TODO
+            _items.push_back(std::make_shared<SetInventoryAssembly>(std::move(assembly)));
         }
 
-        std::vector<std::pair<std::shared_ptr<SetInventoryCore>, ItemType>> SetInventoryAssembly::getSetList()
+        std::vector<std::shared_ptr<SetInventoryCore>> SetInventoryAssembly::getSetList()
         {
-            return std::vector<std::pair<std::shared_ptr<SetInventoryCore>, ItemType>>();
+            return _items;
         }
 
         SetInventoryAssembly::operator rw::oso::ObjectStoreAssembly()
         {
-            //TODO
-            return rw::oso::ObjectStoreAssembly();
+            rw::oso::ObjectStoreAssembly result;
+            result.setName("$Struct$SetInventoryAssembly$");
+            rw::oso::ObjectStoreItem attributeName;
+            attributeName.setName("$Field$Name$");
+            attributeName.setValueFromString(name);
+            result.addItem(std::move(attributeName));
+
+            for (auto & item:_items)
+            {
+                if (item->getObjectType() == ItemType::Item)
+                {
+                    auto itemPtr = std::dynamic_pointer_cast<SetInventoryItem>(item);
+                    result.addItem(itemPtr->operator rw::oso::ObjectStoreAssembly());
+                }
+                else if (item->getObjectType() == ItemType::Assembly)
+                {
+                    auto assemblyPtr = std::dynamic_pointer_cast<SetInventoryAssembly>(item);
+                    result.addItem(assemblyPtr->operator rw::oso::ObjectStoreAssembly());
+                }
+            }
+            return result;
         }
 
 
@@ -91,23 +128,20 @@ namespace rw {
             }
             
         }
-        std::vector<std::pair<std::shared_ptr<SetInventoryCore>, ItemType>>
-        SetInventory::getSetList()
+
+        std::vector<std::shared_ptr<SetInventoryCore>> SetInventory::getSetList()
         {
             return _items;
         }
-        void
-        SetInventory::appendSetItem
-        (SetInventoryItem item)
+
+        void SetInventory::appendSetItem(const SetInventoryItem& item)
         {
-            _items.emplace_back(std::make_shared<SetInventoryItem>(item), ItemType::Item);
+            _items.push_back(std::make_shared<SetInventoryItem>(item));
         }
 
-        void
-        SetInventory::appendSetAssembly
-        (SetInventoryAssembly assembly)
+        void SetInventory::appendSetAssembly(const SetInventoryAssembly& assembly)
         {
-            _items.emplace_back(std::make_shared<SetInventoryAssembly>(assembly), ItemType::Assembly);
+            _items.push_back(std::make_shared<SetInventoryAssembly>(assembly));
         }
 
         SetInventory::operator
@@ -115,44 +149,57 @@ namespace rw {
         {
             rw::oso::ObjectStoreAssembly result;
             result.setName("SetInventory");
-
-            rw::oso::ObjectStoreItem attributeName;
-            attributeName.setName("Name");
-            attributeName.setValueFromString(name);
-            result.addItem(std::move(attributeName));
-
-            rw::oso::ObjectStoreItem attributeGuid;
-            attributeGuid.setName("Guid");
-            attributeGuid.setValueFromString(guid);
-            result.addItem(std::move(attributeGuid));
-
-            for (const auto & [fst, snd]:_items)
+            rw::oso::ObjectStoreItem nameItem;
+            nameItem.setName("Name");
+            nameItem.setValueFromString(name);
+            result.addItem(std::move(nameItem));
+            rw::oso::ObjectStoreItem guidItem;
+            guidItem.setName("Guid");
+            guidItem.setValueFromString(guid);
+            result.addItem(std::move(guidItem));
+            for (const auto& item : _items)
             {
-                if (snd == ItemType::Item)
+                if (item->getObjectType() == ItemType::Item)
                 {
-                    auto itemPtr = std::dynamic_pointer_cast<SetInventoryItem>(fst);
+                    auto itemPtr = std::dynamic_pointer_cast<SetInventoryItem>(item);
                     result.addItem(itemPtr->operator rw::oso::ObjectStoreAssembly());
                 }
-                else if (snd == ItemType::Assembly)
+                else if (item->getObjectType() == ItemType::Assembly)
                 {
-                    auto assemblyPtr = std::dynamic_pointer_cast<SetInventoryAssembly>(fst);
+                    auto assemblyPtr = std::dynamic_pointer_cast<SetInventoryAssembly>(item);
                     result.addItem(assemblyPtr->operator rw::oso::ObjectStoreAssembly());
                 }
-                
             }
-
             return result;
-
         }
 
         SetInventoryItem::SetInventoryItem(rw::oso::ObjectStoreAssembly assembly)
         {
-
+            if (assembly.getName() != "$Struct$SetInventoryItem$")
+            {
+                throw std::runtime_error("Invalid assembly type");
+            }
+            if (assembly.getItems().size()!=2)
+            {
+                throw std::runtime_error("Invalid assembly size");
+            }
+            for (const auto& item : assembly.getItems())
+            {
+                if (item->getName() == "$Field$Name$")
+                {
+                    auto itemPtr = std::dynamic_pointer_cast<rw::oso::ObjectStoreItem>(item);
+                    name = itemPtr->getValueAsString();
+                }
+                else
+                {
+                    _item = *std::dynamic_pointer_cast<rw::oso::ObjectStoreItem>(item);
+                }
+            }
         }
 
         SetInventoryItem::SetInventoryItem()
         {
-
+            _item.setValueFromString("Undefined");
         }
 
         VariantItem SetInventoryItem::getValue()
@@ -161,17 +208,18 @@ namespace rw {
             switch (itemType)
             {
             case rw::oso::ObjectDataItemStoreType::item_string:
-                return VariantItem(_item.getValueAsString());
+                return { _item.getValueAsString() };
             case rw::oso::ObjectDataItemStoreType::item_int:
-                return VariantItem(_item.getValueAsInt());
+                return { _item.getValueAsInt() };
             case rw::oso::ObjectDataItemStoreType::item_long:
-                return VariantItem(_item.getValueAsLong());
+                return { _item.getValueAsLong() };
             case rw::oso::ObjectDataItemStoreType::item_float:
-                return VariantItem(_item.getValueAsFloat());
+                return { _item.getValueAsFloat() };
             case rw::oso::ObjectDataItemStoreType::item_double:
-                return VariantItem(_item.getValueAsDouble());
+                return {_item.getValueAsDouble()
+            };
             case rw::oso::ObjectDataItemStoreType::item_bool:
-                return VariantItem(_item.getValueAsBool());
+                return { _item.getValueAsBool() };
             default:
                 throw std::runtime_error("Invalid item type");
             }
@@ -198,22 +246,34 @@ namespace rw {
             }
         }
 
-        SetInventoryItem::operator rw::oso::ObjectStoreAssembly()
+        SetInventoryItem::operator rw::oso::ObjectStoreAssembly() const
         {
             rw::oso::ObjectStoreAssembly result;
-            result.setName("SetInventoryItem");
+            result.setName("$Struct$SetInventoryItem$");
 
             rw::oso::ObjectStoreItem item;
-            item.setName("Name");
+            item.setName("$Field$Name$");
             item.setValueFromString(this->name);
             result.addItem(std::move(item));
+            result.addItem(_item);
 
             return result;
            
         }
 
+        VariantItem SetInventoryAssembly::getValue()
+        {
+            return {"Undefined"};
+        }
+
+        ItemStoreType SetInventoryAssembly::getValueType()
+        {
+            return ItemStoreType::Item_String;
+        }
+
         SetInventoryCore::~SetInventoryCore()
         {
+
         }
 
 } // namespace sim

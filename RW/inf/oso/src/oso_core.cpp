@@ -231,10 +231,26 @@ namespace rw
             _items.back()->parent = this;
         }
 
+        void ObjectStoreAssembly::addItem(const ObjectStoreAssembly& item)
+        {
+            auto newItem = item;
+            newItem.addLevel();
+            _items.push_back(std::make_shared<ObjectStoreAssembly>(item));
+            _items.back()->parent = this;
+        }
+
         void ObjectStoreAssembly::addItem(ObjectStoreItem&& item)
         {
             item.addLevel();
             _items.push_back(std::make_shared<ObjectStoreItem>(std::move(item)));
+            _items.back()->parent = this;
+        }
+
+        void ObjectStoreAssembly::addItem(const ObjectStoreItem& item)
+        {
+            auto newItem = item;
+            newItem.addLevel();
+            _items.push_back(std::make_shared<ObjectStoreItem>(item));
             _items.back()->parent = this;
         }
 

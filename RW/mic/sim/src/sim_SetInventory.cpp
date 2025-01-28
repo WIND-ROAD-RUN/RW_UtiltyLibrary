@@ -201,12 +201,12 @@ namespace rw {
         SetInventoryItem::operator rw::oso::ObjectStoreAssembly()
         {
             rw::oso::ObjectStoreAssembly result;
-            /*result.setName("SetInventoryItem");
+            result.setName("SetInventoryItem");
 
             rw::oso::ObjectStoreItem item;
             item.setName("Name");
             item.setValueFromString(this->name);
-            result.addItem(std::move(item));*/
+            result.addItem(std::move(item));
 
             return result;
            

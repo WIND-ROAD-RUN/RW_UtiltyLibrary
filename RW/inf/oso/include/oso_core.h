@@ -288,11 +288,15 @@ namespace rw {
             //addItem: Add an assembly to the object store
             void addItem(ObjectStoreAssembly&& assembly);
 
+            void addItem(const ObjectStoreAssembly& item);
+
             //Parameters:
             //      item: The item you are going to add
             //
             //addItem: Add an item to the object store
             void addItem(ObjectStoreItem&& item);
+
+            void addItem(const ObjectStoreItem& item);
 
             //Parameters:
             //      name: The name of the item you are going to remove

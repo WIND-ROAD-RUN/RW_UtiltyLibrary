@@ -23,6 +23,68 @@ namespace sim_SetInventory
         inventory.guid = "Test2";
         EXPECT_EQ(inventory.guid, "Test2");
     }
+
+    TEST(SetInventory_Struct, ConstructorDefault)
+    {
+        SetInventory testObj;
+        EXPECT_EQ(testObj.name, "Undefined");
+        EXPECT_EQ(testObj.guid, "Undefined");
+        EXPECT_EQ(testObj.getSetList().size(), 0);
+    }
+
+    TEST(SetInventory_Struct, ConstructorByAssembly)
+    {
+        rw::oso::ObjectStoreAssembly assembly;
+        assembly.setName("$Struct$SetInventory$");
+        rw::oso::ObjectStoreItem nameItem;
+        nameItem.setName("$Field$Name$");
+        nameItem.setValueFromString("Test");
+        assembly.addItem(nameItem);
+        rw::oso::ObjectStoreItem guidItem;
+        guidItem.setName("$Field$Guid$");
+        guidItem.setValueFromString("Test2");
+        assembly.addItem(guidItem);
+        try
+        {
+            SetInventory testObj(assembly);
+            EXPECT_EQ(testObj.name, "Test");
+            EXPECT_EQ(testObj.guid, "Test2");
+            EXPECT_EQ(testObj.getSetList().size(), 0);
+        }
+        catch (const std::runtime_error& e)
+        {
+            FAIL() << e.what();
+        }
+    }
+
+    TEST(SetInventory_Struct, ApiSetAppendItem)
+    {
+        SetInventory testObj;
+        SetInventoryItem item;
+        item.name = "Test";
+        item.setValue<std::string, ItemStoreType::Item_String>("test");
+        testObj.appendSetItem(item);
+        EXPECT_EQ(testObj.getSetList().size(), 1);
+        auto item2 = testObj.getSetList()[0];
+        EXPECT_EQ(item2->name, "Test");
+        EXPECT_EQ(item2->getValueType(), ItemStoreType::Item_String);
+        auto value = std::get<std::string>(item2->getValue());
+        EXPECT_EQ(value, "test");
+    }
+
+    TEST(SetInventory_Struct, ApiSetAppendAssembly)
+    {
+        SetInventory testObj;
+        SetInventoryAssembly item;
+        item.name = "Test";
+        testObj.appendSetAssembly(item);
+        EXPECT_EQ(testObj.getSetList().size(), 1);
+        auto item2 = testObj.getSetList()[0];
+        EXPECT_EQ(item2->name, "Test");
+        EXPECT_EQ(item2->getObjectType(), ItemType::Assembly);
+    }
+
+
 }
 
 namespace sim_SetInventory
@@ -177,4 +239,55 @@ namespace sim_SetInventory
         auto item3 = std::dynamic_pointer_cast<rw::oso::ObjectStoreItem>(item2->getItems()[1]);
         EXPECT_EQ(item3->getValueAsString(), "test");
     }
+}
+
+
+namespace sim_SetInventory
+{
+   TEST(SetInventoryUse,MutiConfigs)
+   {
+       SetInventory inventory;
+       inventory.name = "ConfigTableTest";
+       inventory.guid = "ConfigTableTestGuid";
+
+       SetInventoryItem price;
+       price.name = "Price";
+       price.setValue<float, ItemStoreType::Item_Float>(10.5);
+       inventory.appendSetItem(price);
+
+       SetInventoryAssembly baseConfigs;
+       baseConfigs.name = "BaseConfigs";
+       SetInventoryItem size;
+       size.name = "Size";
+       size.setValue<int, ItemStoreType::Item_Int>(10);
+       baseConfigs.appendSetItem(size);
+       SetInventoryItem weight;
+       weight.name = "Weight";
+       weight.setValue<float, ItemStoreType::Item_Float>(10.5);
+       baseConfigs.appendSetItem(weight);
+       inventory.appendSetAssembly(baseConfigs);
+
+       SetInventoryAssembly advancedConfigs;
+       advancedConfigs.name = "AdvancedConfigs";
+       SetInventoryItem size2;
+       size2.name = "Size";
+       size2.setValue<int, ItemStoreType::Item_Int>(20);
+       advancedConfigs.appendSetItem(size2);
+       SetInventoryItem weight2;
+       weight2.name = "Weight";
+       weight2.setValue<float, ItemStoreType::Item_Float>(20.5);
+       advancedConfigs.appendSetItem(weight2);
+       inventory.appendSetAssembly(advancedConfigs);
+
+       rw::oso::ObjectStoreAssembly assembly = inventory;
+       SetInventory inventory2(assembly);
+       EXPECT_EQ(inventory2.name, "ConfigTableTest");
+       EXPECT_EQ(inventory2.guid, "ConfigTableTestGuid");
+       EXPECT_EQ(inventory2.getSetList().size(), 3);
+
+       rw::oso::ObjectStoreAssembly assembly2 = inventory2;
+       EXPECT_EQ(assembly, assembly2);
+   }
+
+
 }

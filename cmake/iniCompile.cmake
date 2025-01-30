@@ -4,7 +4,7 @@ if (CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
     add_compile_options(/utf-8 /MP)
 
     if (CMAKE_BUILD_TYPE STREQUAL "Debug")
-        add_compile_options(/Zi /ZI /RTC1)
+        add_compile_options(/ZI /RTC1)
         add_link_options(/INCREMENTAL)
     else(CMAKE_BUILD_TYPE STREQUAL "Release")
         add_compile_options(/O2) # 优化代码

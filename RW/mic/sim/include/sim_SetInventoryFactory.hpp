@@ -8,14 +8,16 @@ namespace rw
 {
     namespace sim
     {
-        class SetInventoryFactory
+        struct SetInventoryFactory
         {
             static SetInventory createSetInventory(const oso::ObjectStoreAssembly& assembly);
+            static SetInventory createSetInventory(oso::ObjectStoreAssembly&& assembly);
 
             static SetInventoryItem createSetInventoryItem(const oso::ObjectStoreAssembly& assembly);
+            static SetInventoryItem createSetInventoryItem(oso::ObjectStoreAssembly&& assembly);
 
             static SetInventoryAssembly createSetInventoryAssembly(const oso::ObjectStoreAssembly& assembly);
-
+            static SetInventoryAssembly createSetInventoryAssembly(oso::ObjectStoreAssembly&& assembly);
 
         };
 

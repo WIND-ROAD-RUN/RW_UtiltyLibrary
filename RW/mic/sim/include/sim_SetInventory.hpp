@@ -7,6 +7,7 @@
 
 namespace rw {
     namespace sim {
+        struct SetInventoryFactory;
         enum class ItemType
         {
             Item,
@@ -26,6 +27,7 @@ namespace rw {
 
         struct SetInventoryCore
         {
+            friend struct SetInventoryFactory;
         public:
             std::string name{"Undefined"};
         public:
@@ -49,6 +51,7 @@ namespace rw {
         struct SetInventoryItem final
             :public SetInventoryCore
         {
+            friend struct SetInventoryFactory;
         private:
             rw::oso::ObjectStoreItem _item;
         public:
@@ -79,6 +82,7 @@ namespace rw {
         struct SetInventoryAssembly final
             :public SetInventoryCore
         {
+            friend struct SetInventoryFactory;
         public:
             VariantItem getValue() override;
             ItemStoreType getValueType() override;
@@ -114,6 +118,7 @@ namespace rw {
 
         struct SetInventory
         {
+            friend struct SetInventoryFactory;
         private:
             std::vector<std::shared_ptr<SetInventoryCore>> _items;
         public:

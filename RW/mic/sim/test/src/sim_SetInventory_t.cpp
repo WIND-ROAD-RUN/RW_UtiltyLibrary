@@ -78,6 +78,47 @@ namespace sim_SetInventory
         EXPECT_EQ(value, "test");
     }
 
+    TEST(SetInventory_Struct, ConstructorByMove)
+    {
+        SetInventory testObj;
+        testObj.name = "Test";
+        testObj.guid = "Test2";
+        SetInventoryItem item;
+        item.name = "TestItem";
+        item.setValue<std::string, ItemStoreType::Item_String>("test");
+        testObj.appendSetItem(item);
+        SetInventory testObj2(std::move(testObj));
+        EXPECT_EQ(testObj2.name, "Test");
+        EXPECT_EQ(testObj2.guid, "Test2");
+        EXPECT_EQ(testObj2.getSetList().size(), 1);
+        auto item2 = testObj2.getSetList()[0];
+        EXPECT_EQ(item2->name, "TestItem");
+        EXPECT_EQ(item2->getValueType(), ItemStoreType::Item_String);
+        auto value = std::get<std::string>(item2->getValue());
+        EXPECT_EQ(value, "test");
+    }
+
+    TEST(SetInventory_Struct, OperatorMove)
+    {
+        SetInventory testObj;
+        testObj.name = "Test";
+        testObj.guid = "Test2";
+        SetInventoryItem item;
+        item.name = "TestItem";
+        item.setValue<std::string, ItemStoreType::Item_String>("test");
+        testObj.appendSetItem(item);
+        SetInventory testObj2;
+        testObj2 = std::move(testObj);
+        EXPECT_EQ(testObj2.name, "Test");
+        EXPECT_EQ(testObj2.guid, "Test2");
+        EXPECT_EQ(testObj2.getSetList().size(), 1);
+        auto item2 = testObj2.getSetList()[0];
+        EXPECT_EQ(item2->name, "TestItem");
+        EXPECT_EQ(item2->getValueType(), ItemStoreType::Item_String);
+        auto value = std::get<std::string>(item2->getValue());
+        EXPECT_EQ(value, "test");
+    }
+
     TEST(SetInventory_Struct, OperatorAssign)
     {
         SetInventory testObj;
@@ -239,6 +280,34 @@ namespace sim_SetInventory
         EXPECT_EQ(value, "test");
     }
 
+
+    TEST(SetInventoryItem_Struct, ConstructorByMove)
+    {
+        SetInventoryItem testObj;
+        testObj.name = "Test";
+        testObj.setValue<std::string, ItemStoreType::Item_String>("test");
+        SetInventoryItem testObj2(std::move(testObj));
+        EXPECT_EQ(testObj2.name, "Test");
+        EXPECT_EQ(testObj2.getObjectType(), ItemType::Item);
+        EXPECT_EQ(testObj2.getValueType(), ItemStoreType::Item_String);
+        auto value = std::get<std::string>(testObj2.getValue());
+        EXPECT_EQ(value, "test");
+    }
+
+    TEST(SetInventoryItem_Struct, OperatorMove)
+    {
+        SetInventoryItem testObj;
+        testObj.name = "Test";
+        testObj.setValue<std::string, ItemStoreType::Item_String>("test");
+        SetInventoryItem testObj2;
+        testObj2 = std::move(testObj);
+        EXPECT_EQ(testObj2.name, "Test");
+        EXPECT_EQ(testObj2.getObjectType(), ItemType::Item);
+        EXPECT_EQ(testObj2.getValueType(), ItemStoreType::Item_String);
+        auto value = std::get<std::string>(testObj2.getValue());
+        EXPECT_EQ(value, "test");
+    }
+
     TEST(SetInventoryItem_Struct, OperatorAssign)
     {
         SetInventoryItem testObj;
@@ -356,6 +425,45 @@ namespace sim_SetInventory
         item.setValue<std::string, ItemStoreType::Item_String>("test");
         testObj.appendSetItem(item);
         SetInventoryAssembly testObj2(testObj);
+        EXPECT_EQ(testObj2.name, "Test");
+        EXPECT_EQ(testObj2.getObjectType(), ItemType::Assembly);
+        EXPECT_EQ(testObj2.getSetList().size(), 1);
+        auto item2 = testObj2.getSetList()[0];
+        EXPECT_EQ(item2->name, "TestItem");
+        EXPECT_EQ(item2->getValueType(), ItemStoreType::Item_String);
+        auto value = std::get<std::string>(item2->getValue());
+        EXPECT_EQ(value, "test");
+    }
+
+    TEST(SetInventoryAssembly_Struct, ConstructorByMove)
+    {
+        SetInventoryAssembly testObj;
+        testObj.name = "Test";
+        SetInventoryItem item;
+        item.name = "TestItem";
+        item.setValue<std::string, ItemStoreType::Item_String>("test");
+        testObj.appendSetItem(item);
+        SetInventoryAssembly testObj2(std::move(testObj));
+        EXPECT_EQ(testObj2.name, "Test");
+        EXPECT_EQ(testObj2.getObjectType(), ItemType::Assembly);
+        EXPECT_EQ(testObj2.getSetList().size(), 1);
+        auto item2 = testObj2.getSetList()[0];
+        EXPECT_EQ(item2->name, "TestItem");
+        EXPECT_EQ(item2->getValueType(), ItemStoreType::Item_String);
+        auto value = std::get<std::string>(item2->getValue());
+        EXPECT_EQ(value, "test");
+    }
+
+    TEST(SetInventoryAssembly_Struct, OperatorMove)
+    {
+        SetInventoryAssembly testObj;
+        testObj.name = "Test";
+        SetInventoryItem item;
+        item.name = "TestItem";
+        item.setValue<std::string, ItemStoreType::Item_String>("test");
+        testObj.appendSetItem(item);
+        SetInventoryAssembly testObj2;
+        testObj2 = std::move(testObj);
         EXPECT_EQ(testObj2.name, "Test");
         EXPECT_EQ(testObj2.getObjectType(), ItemType::Assembly);
         EXPECT_EQ(testObj2.getSetList().size(), 1);

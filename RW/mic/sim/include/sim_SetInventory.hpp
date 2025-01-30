@@ -36,8 +36,10 @@ namespace rw {
         public:
             bool operator==(const SetInventoryCore& other) const;
             bool operator!=(const SetInventoryCore& other) const;
-
+        public:
             SetInventoryCore& operator=(const SetInventoryCore& other);
+            SetInventoryCore& operator=(SetInventoryCore&& other) noexcept;
+
         public:
             virtual ItemType getObjectType() = 0;
             virtual VariantItem getValue() =0;
@@ -52,9 +54,13 @@ namespace rw {
         public:
             explicit SetInventoryItem(const rw::oso::ObjectStoreAssembly& assembly);
             SetInventoryItem(const  SetInventoryItem& item);
+            SetInventoryItem(SetInventoryItem&& item) noexcept;
             SetInventoryItem();
+            ~SetInventoryItem() override = default;
         public:
             SetInventoryItem& operator=(const SetInventoryItem& other);
+            SetInventoryItem& operator=(SetInventoryItem&& other) noexcept;
+
         public:
             bool operator==(const SetInventoryItem& other) const;
             bool operator!=(const SetInventoryItem& other) const;
@@ -80,9 +86,12 @@ namespace rw {
         public:
             explicit SetInventoryAssembly(const rw::oso::ObjectStoreAssembly& assembly);
             SetInventoryAssembly(const SetInventoryAssembly& assembly);
+            SetInventoryAssembly(SetInventoryAssembly&& assembly) noexcept;
             SetInventoryAssembly();
+            ~SetInventoryAssembly() override = default;
         public:
             SetInventoryAssembly& operator=(const SetInventoryAssembly& other);
+            SetInventoryAssembly& operator=(SetInventoryAssembly&& other) noexcept;
         public:
             bool operator==(const SetInventoryAssembly& other) const;
             bool operator!=(const SetInventoryAssembly& other) const;
@@ -108,9 +117,12 @@ namespace rw {
         public:
             explicit SetInventory(const rw::oso::ObjectStoreAssembly& assembly);
             SetInventory(const SetInventory & inventory);
+            SetInventory(SetInventory&& inventory) noexcept;
             SetInventory() = default;
+            ~SetInventory() = default;
         public:
             SetInventory& operator=(const SetInventory& other);
+            SetInventory& operator=(SetInventory&& other) noexcept;
         public:
             bool operator==(const SetInventory& other) const;
             bool operator!=(const SetInventory& other) const;

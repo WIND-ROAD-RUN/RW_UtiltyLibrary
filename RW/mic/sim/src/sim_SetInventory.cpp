@@ -55,6 +55,12 @@ namespace rw {
             }
         }
 
+        SetInventoryAssembly::SetInventoryAssembly(SetInventoryAssembly&& assembly) noexcept
+        {
+            name = std::move(assembly.name);
+            _items = std::move(assembly._items);
+        }
+
         SetInventoryAssembly::SetInventoryAssembly()
         {
             name = "Undefined";
@@ -77,6 +83,13 @@ namespace rw {
                     _items.push_back(std::make_shared<SetInventoryAssembly>(*assemblyPtr));
                 }
             }
+            return *this;
+        }
+
+        SetInventoryAssembly& SetInventoryAssembly::operator=(SetInventoryAssembly&& other) noexcept
+        {
+            name = std::move(other.name);
+            _items = std::move(other._items);
             return *this;
         }
 
@@ -211,6 +224,13 @@ namespace rw {
             }
         }
 
+        SetInventory::SetInventory(SetInventory&& inventory) noexcept
+        {
+            name = std::move(inventory.name);
+            guid = std::move(inventory.guid);
+            _items = std::move(inventory._items);
+        }
+
         SetInventory& SetInventory::operator=(const SetInventory& other)
         {
             name = other.name;
@@ -229,6 +249,14 @@ namespace rw {
                     _items.push_back(std::make_shared<SetInventoryAssembly>(*assemblyPtr));
                 }
             }
+            return *this;
+        }
+
+        SetInventory& SetInventory::operator=(SetInventory&& other) noexcept
+        {
+            name = std::move(other.name);
+            guid = std::move(other.guid);
+            _items = std::move(other._items);
             return *this;
         }
 
@@ -327,6 +355,12 @@ namespace rw {
             _item = item._item;
         }
 
+        SetInventoryItem::SetInventoryItem(SetInventoryItem&& item) noexcept
+        {
+            name = std::move(item.name);
+            _item = std::move(item._item);
+        }
+
         SetInventoryItem::SetInventoryItem()
         {
             _item.setValueFromString("Undefined");
@@ -336,6 +370,13 @@ namespace rw {
         {
             name = other.name;
             _item = other._item;
+            return *this;
+        }
+
+        SetInventoryItem& SetInventoryItem::operator=(SetInventoryItem&& other) noexcept
+        {
+            name = std::move(other.name);
+            _item = std::move(other._item);
             return *this;
         }
 
@@ -441,6 +482,12 @@ namespace rw {
         SetInventoryCore& SetInventoryCore::operator=(const SetInventoryCore& other)
         {
             name = other.name;
+            return *this;
+        }
+
+        SetInventoryCore& SetInventoryCore::operator=(SetInventoryCore&& other) noexcept
+        {
+            name = std::move(other.name);
             return *this;
         }
     } // namespace sim

@@ -4,7 +4,7 @@
 namespace rw {
     namespace sim {
         SetInventoryAssembly::SetInventoryAssembly
-        (rw::oso::ObjectStoreAssembly assembly)
+        (const rw::oso::ObjectStoreAssembly& assembly)
         {
             if (assembly.getName() != "$Struct$SetInventoryAssembly$")
             {
@@ -37,9 +37,68 @@ namespace rw {
             }
         }
 
+        SetInventoryAssembly::SetInventoryAssembly(const SetInventoryAssembly& assembly)
+         : SetInventoryCore(assembly)
+     {
+            for (const auto& item : assembly._items)
+            {
+                if (item->getObjectType() == ItemType::Item)
+                {
+                    auto itemPtr = std::dynamic_pointer_cast<SetInventoryItem>(item);
+                    _items.push_back(std::make_shared<SetInventoryItem>(*itemPtr));
+                }
+                else if (item->getObjectType() == ItemType::Assembly)
+                {
+                    auto assemblyPtr = std::dynamic_pointer_cast<SetInventoryAssembly>(item);
+                    _items.push_back(std::make_shared<SetInventoryAssembly>(*assemblyPtr));
+                }
+            }
+        }
+
         SetInventoryAssembly::SetInventoryAssembly()
         {
             name = "Undefined";
+        }
+
+        SetInventoryAssembly& SetInventoryAssembly::operator=(const SetInventoryAssembly& other)
+        {
+            name = other.name;
+            _items.clear();
+            for (const auto& item : other._items)
+            {
+                if (item->getObjectType() == ItemType::Item)
+                {
+                    auto itemPtr = std::dynamic_pointer_cast<SetInventoryItem>(item);
+                    _items.push_back(std::make_shared<SetInventoryItem>(*itemPtr));
+                }
+                else if (item->getObjectType() == ItemType::Assembly)
+                {
+                    auto assemblyPtr = std::dynamic_pointer_cast<SetInventoryAssembly>(item);
+                    _items.push_back(std::make_shared<SetInventoryAssembly>(*assemblyPtr));
+                }
+            }
+            return *this;
+        }
+
+        bool SetInventoryAssembly::operator==(const SetInventoryAssembly& other) const
+        {
+            if (name != other.name || _items.size() != other._items.size())
+            {
+                return false;
+            }
+            for (size_t i = 0; i < _items.size(); i++)
+            {
+                if (*_items[i] != *other._items[i])
+                {
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        bool SetInventoryAssembly::operator!=(const SetInventoryAssembly& other) const
+        {
+            return !(*this == other);
         }
 
         void SetInventoryAssembly::appendSetItem(const SetInventoryItem& item)
@@ -67,7 +126,7 @@ namespace rw {
             return _items;
         }
 
-        SetInventoryAssembly::operator rw::oso::ObjectStoreAssembly()
+        SetInventoryAssembly::operator rw::oso::ObjectStoreAssembly() const
         {
             rw::oso::ObjectStoreAssembly result;
             result.setName("$Struct$SetInventoryAssembly$");
@@ -94,7 +153,7 @@ namespace rw {
 
 
         SetInventory::SetInventory
-        (rw::oso::ObjectStoreAssembly assembly)
+        (const rw::oso::ObjectStoreAssembly& assembly)
         {
             if (assembly.getName() != "$Struct$SetInventory$")
             {
@@ -131,6 +190,67 @@ namespace rw {
                 }
             }
             
+        }
+
+        SetInventory::SetInventory(const SetInventory& inventory)
+        {
+            name = inventory.name;
+            guid = inventory.guid;
+            for (const auto& item : inventory._items)
+            {
+                if (item->getObjectType() == ItemType::Item)
+                {
+                    auto itemPtr = std::dynamic_pointer_cast<SetInventoryItem>(item);
+                    _items.push_back(std::make_shared<SetInventoryItem>(*itemPtr));
+                }
+                else if (item->getObjectType() == ItemType::Assembly)
+                {
+                    auto assemblyPtr = std::dynamic_pointer_cast<SetInventoryAssembly>(item);
+                    _items.push_back(std::make_shared<SetInventoryAssembly>(*assemblyPtr));
+                }
+            }
+        }
+
+        SetInventory& SetInventory::operator=(const SetInventory& other)
+        {
+            name = other.name;
+            guid = other.guid;
+            _items.clear();
+            for (const auto& item : other._items)
+            {
+                if (item->getObjectType() == ItemType::Item)
+                {
+                    auto itemPtr = std::dynamic_pointer_cast<SetInventoryItem>(item);
+                    _items.push_back(std::make_shared<SetInventoryItem>(*itemPtr));
+                }
+                else if (item->getObjectType() == ItemType::Assembly)
+                {
+                    auto assemblyPtr = std::dynamic_pointer_cast<SetInventoryAssembly>(item);
+                    _items.push_back(std::make_shared<SetInventoryAssembly>(*assemblyPtr));
+                }
+            }
+            return *this;
+        }
+
+        bool SetInventory::operator==(const SetInventory& other) const
+        {
+            if (name != other.name || guid != other.guid || _items.size() != other._items.size())
+            {
+                return false;
+            }
+            for (size_t i = 0; i < _items.size(); i++)
+            {
+                if (*_items[i] != *other._items[i])
+                {
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        bool SetInventory::operator!=(const SetInventory& other) const
+        {
+            return !(*this == other);
         }
 
         std::vector<std::shared_ptr<SetInventoryCore>> SetInventory::getSetList()
@@ -177,7 +297,7 @@ namespace rw {
             return result;
         }
 
-        SetInventoryItem::SetInventoryItem(rw::oso::ObjectStoreAssembly assembly)
+        SetInventoryItem::SetInventoryItem(const rw::oso::ObjectStoreAssembly& assembly)
         {
             if (assembly.getName() != "$Struct$SetInventoryItem$")
             {
@@ -201,9 +321,32 @@ namespace rw {
             }
         }
 
+        SetInventoryItem::SetInventoryItem(const SetInventoryItem& item)
+         : SetInventoryCore(item)
+        {
+            _item = item._item;
+        }
+
         SetInventoryItem::SetInventoryItem()
         {
             _item.setValueFromString("Undefined");
+        }
+
+        SetInventoryItem& SetInventoryItem::operator=(const SetInventoryItem& other)
+        {
+            name = other.name;
+            _item = other._item;
+            return *this;
+        }
+
+        bool SetInventoryItem::operator==(const SetInventoryItem& other) const
+        {
+            return name == other.name && _item == other._item;
+        }
+
+        bool SetInventoryItem::operator!=(const SetInventoryItem& other) const
+        {
+            return name != other.name || _item != other._item;
         }
 
         VariantItem SetInventoryItem::getValue()
@@ -275,12 +418,32 @@ namespace rw {
             return ItemStoreType::Item_String;
         }
 
-        SetInventoryCore::~SetInventoryCore()
+        SetInventoryCore::SetInventoryCore(const SetInventoryCore& core)
         {
-
+            name = core.name;
         }
 
-} // namespace sim
+        SetInventoryCore::SetInventoryCore(const SetInventoryCore&& core) noexcept
+        {
+            name = core.name;
+        }
+
+        bool SetInventoryCore::operator==(const SetInventoryCore& other) const
+        {
+            return name == other.name;
+        }
+
+        bool SetInventoryCore::operator!=(const SetInventoryCore& other) const
+        {
+            return name != other.name;
+        }
+
+        SetInventoryCore& SetInventoryCore::operator=(const SetInventoryCore& other)
+        {
+            name = other.name;
+            return *this;
+        }
+    } // namespace sim
 
 } // namespace rw
 

@@ -57,6 +57,101 @@ namespace sim_SetInventory
         }
     }
 
+    TEST(SetInventory_Struct, ConstructorByCopy)
+    {
+        SetInventory testObj;
+        testObj.name = "Test";
+        testObj.guid = "Test2";
+        SetInventoryItem item;
+        item.name = "TestItem";
+        item.setValue<std::string, ItemStoreType::Item_String>("test");
+        testObj.appendSetItem(item);
+
+        SetInventory testObj2(testObj);
+        EXPECT_EQ(testObj2.name, "Test");
+        EXPECT_EQ(testObj2.guid, "Test2");
+        EXPECT_EQ(testObj2.getSetList().size(), 1);
+        auto item2 = testObj2.getSetList()[0];
+        EXPECT_EQ(item2->name, "TestItem");
+        EXPECT_EQ(item2->getValueType(), ItemStoreType::Item_String);
+        auto value = std::get<std::string>(item2->getValue());
+        EXPECT_EQ(value, "test");
+    }
+
+    TEST(SetInventory_Struct, OperatorAssign)
+    {
+        SetInventory testObj;
+        testObj.name = "Test";
+        SetInventoryItem item;
+        item.name = "TestItem";
+        item.setValue<std::string, ItemStoreType::Item_String>("test");
+        testObj.appendSetItem(item);
+
+        SetInventory testObj2;
+        testObj2 = testObj;
+        EXPECT_EQ(testObj2.name, "Test");
+        EXPECT_EQ(testObj2.getSetList().size(), 1);
+        auto item2 = testObj2.getSetList()[0];
+        EXPECT_EQ(item2->name, "TestItem");
+        EXPECT_EQ(item2->getValueType(), ItemStoreType::Item_String);
+        auto value = std::get<std::string>(item2->getValue());
+        EXPECT_EQ(value, "test");
+    }
+
+    TEST(SetInventory_Struct, OperatorEqual)
+    {
+        SetInventory testObj;
+        testObj.name = "Test";
+        SetInventoryItem item;
+        item.name = "TestItem";
+        item.setValue<std::string, ItemStoreType::Item_String>("test");
+        testObj.appendSetItem(item);
+
+        SetInventory testObj2;
+        testObj2.name = "Test";
+        SetInventoryItem item2;
+        item2.name = "TestItem";
+        item2.setValue<std::string, ItemStoreType::Item_String>("test");
+        testObj2.appendSetItem(item2);
+
+        EXPECT_TRUE(testObj == testObj2);
+    }
+
+    TEST(SetInventory_Struct, OperatorNotEqual)
+    {
+        SetInventory testObj;
+        testObj.name = "Test";
+        SetInventoryItem item;
+        item.name = "TestItem";
+        item.setValue<std::string, ItemStoreType::Item_String>("test");
+        testObj.appendSetItem(item);
+
+        SetInventory testObj2;
+        testObj2.name = "Test";
+        SetInventoryItem item2;
+        item2.name = "TestItem1";
+        item2.setValue<std::string, ItemStoreType::Item_String>("test2");
+        testObj2.appendSetItem(item2);
+        EXPECT_TRUE(testObj != testObj2);
+
+        SetInventory testObj3;
+        testObj3.name = "Test2";
+        SetInventoryItem item3;
+        item3.name = "TestItem";
+        item3.setValue<std::string, ItemStoreType::Item_String>("test");
+        testObj3.appendSetItem(item3);
+        EXPECT_TRUE(testObj != testObj3);
+
+        SetInventory testObj4;
+        testObj4.name = "Test";
+        SetInventoryItem item4;
+        item4.name = "TestItem";
+        item4.setValue<std::string, ItemStoreType::Item_String>("test");
+        testObj4.appendSetItem(item4);
+        EXPECT_FALSE(testObj != testObj4);
+        
+    }
+
     TEST(SetInventory_Struct, ApiSetAppendItem)
     {
         SetInventory testObj;
@@ -83,7 +178,6 @@ namespace sim_SetInventory
         EXPECT_EQ(item2->name, "Test");
         EXPECT_EQ(item2->getObjectType(), ItemType::Assembly);
     }
-
 
 }
 
@@ -132,6 +226,66 @@ namespace sim_SetInventory
 
     }
 
+    TEST(SetInventoryItem_Struct, ConstructorByCopy)
+    {
+        SetInventoryItem testObj;
+        testObj.name = "Test";
+        testObj.setValue<std::string, ItemStoreType::Item_String>("test");
+        SetInventoryItem testObj2(testObj);
+        EXPECT_EQ(testObj2.name, "Test");
+        EXPECT_EQ(testObj2.getObjectType(), ItemType::Item);
+        EXPECT_EQ(testObj2.getValueType(), ItemStoreType::Item_String);
+        auto value = std::get<std::string>(testObj2.getValue());
+        EXPECT_EQ(value, "test");
+    }
+
+    TEST(SetInventoryItem_Struct, OperatorAssign)
+    {
+        SetInventoryItem testObj;
+        testObj.name = "Test";
+        testObj.setValue<std::string, ItemStoreType::Item_String>("test");
+        SetInventoryItem testObj2;
+        testObj2 = testObj;
+        EXPECT_EQ(testObj2.name, "Test");
+        EXPECT_EQ(testObj2.getObjectType(), ItemType::Item);
+        EXPECT_EQ(testObj2.getValueType(), ItemStoreType::Item_String);
+        auto value = std::get<std::string>(testObj2.getValue());
+        EXPECT_EQ(value, "test");
+    }
+
+    TEST(SetInventoryItem_Struct, OperatorEqual)
+    {
+        SetInventoryItem testObj;
+        testObj.name = "Test";
+        testObj.setValue<std::string, ItemStoreType::Item_String>("test");
+        SetInventoryItem testObj2;
+        testObj2.name = "Test";
+        testObj2.setValue<std::string, ItemStoreType::Item_String>("test");
+        EXPECT_TRUE(testObj == testObj2);
+    }
+
+    TEST(SetInventoryItem_Struct, OperatorNotEqual)
+    {
+        SetInventoryItem testObj;
+        testObj.name = "Test";
+        testObj.setValue<std::string, ItemStoreType::Item_String>("test");
+        SetInventoryItem testObj2;
+        testObj2.name = "Test";
+        testObj2.setValue<std::string, ItemStoreType::Item_String>("test2");
+        EXPECT_TRUE(testObj != testObj2);
+
+        SetInventoryItem testObj3;
+        testObj3.name = "Test2";
+        testObj3.setValue<std::string, ItemStoreType::Item_String>("test");
+        EXPECT_TRUE(testObj != testObj3);
+
+        SetInventoryItem testObj4;
+        testObj4.name = "Test";
+        testObj4.setValue<std::string, ItemStoreType::Item_String>("test");
+        EXPECT_FALSE(testObj != testObj4);
+
+    }
+
     TEST(SetInventoryItem_Struct, ApiSetGetValue)
     {
         SetInventoryItem testObj;
@@ -158,6 +312,7 @@ namespace sim_SetInventory
         auto item = std::dynamic_pointer_cast<rw::oso::ObjectStoreItem>(assembly.getItems()[1]);
         EXPECT_EQ(item->getValueAsString(), "test");
     }
+
 }
 
 namespace sim_SetInventory
@@ -169,6 +324,7 @@ namespace sim_SetInventory
         EXPECT_EQ(testObj.getObjectType(), ItemType::Assembly);
         EXPECT_EQ(testObj.getSetList().size(), 0);
     }
+
     TEST(SetInventoryAssembly_Struct, ConstructorByAssembly)
     {
         rw::oso::ObjectStoreAssembly assembly;
@@ -190,6 +346,97 @@ namespace sim_SetInventory
             FAIL() << e.what();
         }
     }
+
+    TEST(SetInventoryAssembly_Struct, ConstructorByCopy)
+    {
+        SetInventoryAssembly testObj;
+        testObj.name = "Test";
+        SetInventoryItem item;
+        item.name = "TestItem";
+        item.setValue<std::string, ItemStoreType::Item_String>("test");
+        testObj.appendSetItem(item);
+        SetInventoryAssembly testObj2(testObj);
+        EXPECT_EQ(testObj2.name, "Test");
+        EXPECT_EQ(testObj2.getObjectType(), ItemType::Assembly);
+        EXPECT_EQ(testObj2.getSetList().size(), 1);
+        auto item2 = testObj2.getSetList()[0];
+        EXPECT_EQ(item2->name, "TestItem");
+        EXPECT_EQ(item2->getValueType(), ItemStoreType::Item_String);
+        auto value = std::get<std::string>(item2->getValue());
+        EXPECT_EQ(value, "test");
+    }
+
+    TEST(SetInventoryAssembly_Struct, OperatorAssign)
+    {
+        SetInventoryAssembly testObj;
+        testObj.name = "Test";
+        SetInventoryItem item;
+        item.name = "TestItem";
+        item.setValue<std::string, ItemStoreType::Item_String>("test");
+        testObj.appendSetItem(item);
+        SetInventoryAssembly testObj2;
+        testObj2 = testObj;
+        EXPECT_EQ(testObj2.name, "Test");
+        EXPECT_EQ(testObj2.getObjectType(), ItemType::Assembly);
+        EXPECT_EQ(testObj2.getSetList().size(), 1);
+        auto item2 = testObj2.getSetList()[0];
+        EXPECT_EQ(item2->name, "TestItem");
+        EXPECT_EQ(item2->getValueType(), ItemStoreType::Item_String);
+        auto value = std::get<std::string>(item2->getValue());
+        EXPECT_EQ(value, "test");
+    }
+
+    TEST(SetInventoryAssembly_Struct, OperatorEqual)
+    {
+        SetInventoryAssembly testObj;
+        testObj.name = "Test";
+        SetInventoryItem item;
+        item.name = "TestItem";
+        item.setValue<std::string, ItemStoreType::Item_String>("test");
+        testObj.appendSetItem(item);
+        SetInventoryAssembly testObj2;
+        testObj2.name = "Test";
+        SetInventoryItem item2;
+        item2.name = "TestItem";
+        item2.setValue<std::string, ItemStoreType::Item_String>("test");
+        testObj2.appendSetItem(item2);
+        EXPECT_TRUE(testObj == testObj2);
+    }
+
+    TEST(SetInventoryAssembly_Struct, OperatorNotEqual)
+    {
+        SetInventoryAssembly testObj;
+        testObj.name = "Test";
+        SetInventoryItem item;
+        item.name = "TestItem";
+        item.setValue<std::string, ItemStoreType::Item_String>("test");
+        testObj.appendSetItem(item);
+
+        SetInventoryAssembly testObj2;
+        testObj2.name = "Test";
+        SetInventoryItem item2;
+        item2.name = "TestItem1";
+        item2.setValue<std::string, ItemStoreType::Item_String>("test2");
+        testObj2.appendSetItem(item2);
+        EXPECT_TRUE(testObj != testObj2);
+
+        SetInventoryAssembly testObj3;
+        testObj3.name = "Test2";
+        SetInventoryItem item3;
+        item3.name = "TestItem";
+        item3.setValue<std::string, ItemStoreType::Item_String>("test");
+        testObj3.appendSetItem(item3);
+        EXPECT_TRUE(testObj != testObj3);
+
+        SetInventoryAssembly testObj4;
+        testObj4.name = "Test";
+        SetInventoryItem item4;
+        item4.name = "TestItem";
+        item4.setValue<std::string, ItemStoreType::Item_String>("test");
+        testObj4.appendSetItem(item4);
+        EXPECT_FALSE(testObj != testObj4);
+    }
+
     TEST(SetInventoryAssembly_Struct, ApiSetAppendItem)
     {
         SetInventoryAssembly testObj;
@@ -204,6 +451,7 @@ namespace sim_SetInventory
         auto value = std::get<std::string>(item2->getValue());
         EXPECT_EQ(value, "test");
     }
+
     TEST(SetInventoryAssembly_Struct, ApiSetAppendAssembly)
     {
         SetInventoryAssembly testObj;
@@ -215,6 +463,7 @@ namespace sim_SetInventory
         EXPECT_EQ(item2->name, "Test");
         EXPECT_EQ(item2->getObjectType(), ItemType::Assembly);
     }
+
     TEST(SetInventoryAssembly_Struct, operatorToAssembly)
     {
         SetInventoryAssembly testObj;
@@ -239,6 +488,7 @@ namespace sim_SetInventory
         auto item3 = std::dynamic_pointer_cast<rw::oso::ObjectStoreItem>(item2->getItems()[1]);
         EXPECT_EQ(item3->getValueAsString(), "test");
     }
+
 }
 
 
@@ -288,6 +538,4 @@ namespace sim_SetInventory
        rw::oso::ObjectStoreAssembly assembly2 = inventory2;
        EXPECT_EQ(assembly, assembly2);
    }
-
-
 }

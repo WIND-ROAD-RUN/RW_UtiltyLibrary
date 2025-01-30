@@ -29,7 +29,16 @@ namespace rw {
         public:
             std::string name{"Undefined"};
         public:
-            virtual ~SetInventoryCore();
+            SetInventoryCore() = default;
+            virtual ~SetInventoryCore() = default;
+            SetInventoryCore(const SetInventoryCore& core);
+            SetInventoryCore(const SetInventoryCore && core) noexcept;
+        public:
+            bool operator==(const SetInventoryCore& other) const;
+            bool operator!=(const SetInventoryCore& other) const;
+
+            SetInventoryCore& operator=(const SetInventoryCore& other);
+        public:
             virtual ItemType getObjectType() = 0;
             virtual VariantItem getValue() =0;
             virtual ItemStoreType getValueType() =0;
@@ -41,8 +50,14 @@ namespace rw {
         private:
             rw::oso::ObjectStoreItem _item;
         public:
-            explicit SetInventoryItem(rw::oso::ObjectStoreAssembly assembly);
+            explicit SetInventoryItem(const rw::oso::ObjectStoreAssembly& assembly);
+            SetInventoryItem(const  SetInventoryItem& item);
             SetInventoryItem();
+        public:
+            SetInventoryItem& operator=(const SetInventoryItem& other);
+        public:
+            bool operator==(const SetInventoryItem& other) const;
+            bool operator!=(const SetInventoryItem& other) const;
         public:
             ItemType getObjectType() override { return ItemType::Item; }
             VariantItem getValue() override ;
@@ -57,14 +72,20 @@ namespace rw {
         struct SetInventoryAssembly final
             :public SetInventoryCore
         {
-        private:
+        public:
             VariantItem getValue() override;
             ItemStoreType getValueType() override;
         private:
             std::vector<std::shared_ptr<SetInventoryCore>> _items;
         public:
-            explicit SetInventoryAssembly(rw::oso::ObjectStoreAssembly assembly);
+            explicit SetInventoryAssembly(const rw::oso::ObjectStoreAssembly& assembly);
+            SetInventoryAssembly(const SetInventoryAssembly& assembly);
             SetInventoryAssembly();
+        public:
+            SetInventoryAssembly& operator=(const SetInventoryAssembly& other);
+        public:
+            bool operator==(const SetInventoryAssembly& other) const;
+            bool operator!=(const SetInventoryAssembly& other) const;
         public:
             ItemType getObjectType() override { return ItemType::Assembly; }
         public:
@@ -77,7 +98,7 @@ namespace rw {
         public:
             std::vector<std::shared_ptr<SetInventoryCore>> getSetList();
         public:
-            operator rw::oso::ObjectStoreAssembly();
+            operator rw::oso::ObjectStoreAssembly() const;
         };
 
         struct SetInventory
@@ -85,8 +106,14 @@ namespace rw {
         private:
             std::vector<std::shared_ptr<SetInventoryCore>> _items;
         public:
-            explicit SetInventory(rw::oso::ObjectStoreAssembly assembly);
+            explicit SetInventory(const rw::oso::ObjectStoreAssembly& assembly);
+            SetInventory(const SetInventory & inventory);
             SetInventory() = default;
+        public:
+            SetInventory& operator=(const SetInventory& other);
+        public:
+            bool operator==(const SetInventory& other) const;
+            bool operator!=(const SetInventory& other) const;
         public:
             std::string name{"Undefined"};
             std::string guid{"Undefined"};

@@ -9,7 +9,7 @@
 namespace rw {
     namespace oso {
         class ObjectStoreCore {
-        private:
+        protected:
             /**
              * @brief The name of the object store
              *
@@ -118,7 +118,12 @@ namespace rw {
 
             ObjectStoreCore(const ObjectStoreCore & core);
 
+            ObjectStoreCore(ObjectStoreCore && core) noexcept;
+
             ObjectStoreCore(std::vector<char> binary);
+
+        public:
+            ObjectStoreCore& operator=(ObjectStoreCore&& other) noexcept;
 
             virtual ~ObjectStoreCore() = default;
 
@@ -171,11 +176,15 @@ namespace rw {
 
             ObjectStoreItem(const ObjectStoreItem & item);
 
+            ObjectStoreItem(ObjectStoreItem&& item) noexcept;
+
             ObjectStoreItem(std::vector<char> binary);
 
             ~ObjectStoreItem() override = default ;
         public:
             ObjectStoreItem& operator=(const ObjectStoreItem& other);
+
+            ObjectStoreItem& operator=(ObjectStoreItem&& other) noexcept;
 
         public:
             //Parameters:
@@ -268,12 +277,17 @@ namespace rw {
 
             ObjectStoreAssembly(const ObjectStoreAssembly & assembly);
 
+            ObjectStoreAssembly(ObjectStoreAssembly&& assembly) noexcept;
+
+
             ObjectStoreAssembly(std::vector<char> binary);
 
             virtual ~ObjectStoreAssembly() = default;
 
         public:
             ObjectStoreAssembly& operator=(const ObjectStoreAssembly & other);
+
+            ObjectStoreAssembly& operator=(ObjectStoreAssembly&& other) noexcept;
 
         public:
             //Parameters:
@@ -356,6 +370,7 @@ namespace rw {
         public:
             //std::vector<char> getBinary() override;
         };
+
 
         inline std::shared_ptr<ObjectStoreAssembly>
             makeObjectStoreAssemblySharedPtr

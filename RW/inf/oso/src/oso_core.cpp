@@ -14,10 +14,25 @@ namespace rw
             _type = item._type;
         }
 
+        ObjectStoreItem::ObjectStoreItem(ObjectStoreItem&& item) noexcept
+        {
+            m_name = std::move(item.m_name);
+            _value = std::move(item._value);
+            _type = item._type;
+        }
+
         ObjectStoreItem& ObjectStoreItem::operator=(const ObjectStoreItem& other)
         {
             this->setName(other.getName());
             _value = other._value;
+            _type = other._type;
+            return *this;
+        }
+
+        ObjectStoreItem& ObjectStoreItem::operator=(ObjectStoreItem&& other) noexcept
+        {
+            this->setName(other.getName());
+            _value = std::move(other._value);
             _type = other._type;
             return *this;
         }
@@ -198,6 +213,22 @@ namespace rw
             }
         }
 
+        ObjectStoreAssembly::ObjectStoreAssembly(ObjectStoreAssembly&& assembly) noexcept
+        {
+            m_name = std::move(assembly.m_name);
+            for (auto& item : assembly._items)
+            {
+                if (auto p = std::dynamic_pointer_cast<ObjectStoreItem>(item))
+                {
+                    _items.push_back(std::make_shared<ObjectStoreItem>(std::move(*p)));
+                }
+                else if (auto p = std::dynamic_pointer_cast<ObjectStoreAssembly>(item))
+                {
+                    _items.push_back(std::make_shared<ObjectStoreAssembly>(std::move(*p)));
+                }
+            }
+        }
+
         ObjectStoreAssembly& ObjectStoreAssembly::operator=(const ObjectStoreAssembly& other)
         {
             this->setName(other.getName());
@@ -211,6 +242,24 @@ namespace rw
                 else if (auto p = std::dynamic_pointer_cast<ObjectStoreAssembly>(item))
                 {
                     _items.push_back(std::make_shared<ObjectStoreAssembly>(*p));
+                }
+            }
+            return *this;
+        }
+
+        ObjectStoreAssembly& ObjectStoreAssembly::operator=(ObjectStoreAssembly&& other) noexcept
+        {
+            this->setName(other.getName());
+            _items.clear();
+            for (auto& item : other._items)
+            {
+                if (auto p = std::dynamic_pointer_cast<ObjectStoreItem>(item))
+                {
+                    _items.push_back(std::make_shared<ObjectStoreItem>(std::move(*p)));
+                }
+                else if (auto p = std::dynamic_pointer_cast<ObjectStoreAssembly>(item))
+                {
+                    _items.push_back(std::make_shared<ObjectStoreAssembly>(std::move(*p)));
                 }
             }
             return *this;
@@ -376,6 +425,17 @@ namespace rw
         ObjectStoreCore::ObjectStoreCore(const ObjectStoreCore& core)
         {
             m_name = core.m_name;
+        }
+
+        ObjectStoreCore::ObjectStoreCore(ObjectStoreCore&& core) noexcept
+        {
+            m_name = std::move(core.m_name);
+        }
+
+        ObjectStoreCore& ObjectStoreCore::operator=(ObjectStoreCore&& other) noexcept
+        {
+            m_name = std::move(other.m_name);
+            return *this;
         }
 
         void ObjectStoreCore::print(std::ostream& os)

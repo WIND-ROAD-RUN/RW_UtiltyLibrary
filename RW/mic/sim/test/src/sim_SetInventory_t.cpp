@@ -473,6 +473,7 @@ namespace sim_SetInventory
         item.setValue<std::string, ItemStoreType::Item_String>("test");
         testObj.appendSetItem(item);
         rw::oso::ObjectStoreAssembly assembly = testObj;
+
         EXPECT_EQ(assembly.getName(), "$Struct$SetInventoryAssembly$");
         EXPECT_EQ(assembly.getItems().size(), 2);
         auto itemName = std::dynamic_pointer_cast<rw::oso::ObjectStoreItem>(assembly.getItems()[0]);

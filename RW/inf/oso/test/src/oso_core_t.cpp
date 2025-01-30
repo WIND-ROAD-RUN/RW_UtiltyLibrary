@@ -58,11 +58,28 @@ namespace oso_core{
         EXPECT_NE(testObj.getStoreType(), errorStoreType);
     }
 
-    TEST(ObjectStoreCore_Class,CopyConstructor)
+    TEST(ObjectStoreCore_Class,ConstructorCopy)
     {
         ObjectStoreCore testObj;
         testObj.setName("testName");
         ObjectStoreCore testObj1(testObj);
+        EXPECT_EQ(testObj1.getName(), "testName");
+    }
+
+    TEST(ObjectStoreCore_Class, ConstructorMove)
+    {
+        ObjectStoreCore testObj;
+        testObj.setName("testName");
+        ObjectStoreCore testObj1(std::move(testObj));
+        EXPECT_EQ(testObj1.getName(), "testName");
+    }
+
+    TEST(ObjectStoreCore_Class, operatorAssignMove)
+    {
+        ObjectStoreCore testObj;
+        testObj.setName("testName");
+        ObjectStoreCore testObj1;
+        testObj1 = std::move(testObj);
         EXPECT_EQ(testObj1.getName(), "testName");
     }
 
@@ -127,6 +144,29 @@ namespace oso_core
         EXPECT_EQ(item1.getValueAsDouble(), 3.14);
     }
 
+    TEST(ObjectStoreItem_Class, ConstructorMove)
+    {
+        ObjectStoreItem item;
+        item.setName("testName");
+        item.setValueFromDouble(3.14);
+        ObjectStoreItem item1(std::move(item));
+        EXPECT_EQ(item1.getName(), "testName");
+        EXPECT_EQ(item1.getType(), ObjectDataItemStoreType::item_double);
+        EXPECT_EQ(item1.getValueAsDouble(), 3.14);
+    }
+
+    TEST(ObjectStoreItem_Class, operatorAssignMove)
+    {
+        ObjectStoreItem item;
+        item.setName("testName");
+        item.setValueFromDouble(3.14);
+        ObjectStoreItem item1;
+        item1 = std::move(item);
+        EXPECT_EQ(item1.getName(), "testName");
+        EXPECT_EQ(item1.getType(), ObjectDataItemStoreType::item_double);
+        EXPECT_EQ(item1.getValueAsDouble(), 3.14);
+    }
+
     TEST(ObjectStoreItem_Class, AssignmentOperator)
     {
         ObjectStoreItem item;
@@ -138,7 +178,6 @@ namespace oso_core
         EXPECT_EQ(item1.getType(), ObjectDataItemStoreType::item_double);
         EXPECT_EQ(item1.getValueAsDouble(), 3.14);
     }
-
 
     TEST(ObjectStoreItem_Class, attribute_storeType) {
         ObjectStoreItem testObj;
@@ -377,6 +416,43 @@ namespace oso_core
         testItem->setName("error");
         EXPECT_EQ(item->getName(), "testItem");
 
+    }
+
+    TEST(ObjectStoreAssembly_Class, ConstructorMove)
+    {
+        ObjectStoreAssembly testAssembly;
+        testAssembly.setName("testName");
+        auto testItem = std::make_shared<ObjectStoreItem>();
+        testItem->setName("testItem");
+        testItem->setValueFromBool(false);
+        testAssembly.addItem(testItem);
+        ObjectStoreAssembly testAssembly1(std::move(testAssembly));
+        EXPECT_EQ(testAssembly1.getName(), "testName");
+        auto sourcePtr = testAssembly1.getItem("testItem");
+        auto item = std::dynamic_pointer_cast<ObjectStoreItem>(sourcePtr);
+        EXPECT_EQ(item->getName(), "testItem");
+        EXPECT_EQ(item->getValueAsBool(), false);
+        testItem->setName("error");
+        EXPECT_EQ(item->getName(), "testItem");
+    }
+
+    TEST(ObjectStoreAssembly_Class, operatorAssignMove)
+    {
+        ObjectStoreAssembly testAssembly;
+        testAssembly.setName("testName");
+        auto testItem = std::make_shared<ObjectStoreItem>();
+        testItem->setName("testItem");
+        testItem->setValueFromBool(false);
+        testAssembly.addItem(testItem);
+        ObjectStoreAssembly testAssembly1;
+        testAssembly1 = std::move(testAssembly);
+        EXPECT_EQ(testAssembly1.getName(), "testName");
+        auto sourcePtr = testAssembly1.getItem("testItem");
+        auto item = std::dynamic_pointer_cast<ObjectStoreItem>(sourcePtr);
+        EXPECT_EQ(item->getName(), "testItem");
+        EXPECT_EQ(item->getValueAsBool(), false);
+        testItem->setName("error");
+        EXPECT_EQ(item->getName(), "testItem");
     }
 
     TEST(ObjectStoreAssembly_Class, AssignmentOperator)

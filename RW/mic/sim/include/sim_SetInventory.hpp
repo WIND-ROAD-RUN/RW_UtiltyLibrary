@@ -53,6 +53,7 @@ namespace rw {
             rw::oso::ObjectStoreItem _item;
         public:
             explicit SetInventoryItem(const rw::oso::ObjectStoreAssembly& assembly);
+            explicit SetInventoryItem(rw::oso::ObjectStoreAssembly&& assembly);
             SetInventoryItem(const  SetInventoryItem& item);
             SetInventoryItem(SetInventoryItem&& item) noexcept;
             SetInventoryItem();
@@ -85,6 +86,7 @@ namespace rw {
             std::vector<std::shared_ptr<SetInventoryCore>> _items;
         public:
             explicit SetInventoryAssembly(const rw::oso::ObjectStoreAssembly& assembly);
+            explicit SetInventoryAssembly(rw::oso::ObjectStoreAssembly&& assembly);
             SetInventoryAssembly(const SetInventoryAssembly& assembly);
             SetInventoryAssembly(SetInventoryAssembly&& assembly) noexcept;
             SetInventoryAssembly();
@@ -116,6 +118,7 @@ namespace rw {
             std::vector<std::shared_ptr<SetInventoryCore>> _items;
         public:
             explicit SetInventory(const rw::oso::ObjectStoreAssembly& assembly);
+            explicit SetInventory(rw::oso::ObjectStoreAssembly&& assembly);
             SetInventory(const SetInventory & inventory);
             SetInventory(SetInventory&& inventory) noexcept;
             SetInventory() = default;

@@ -57,6 +57,24 @@ namespace sim_SetInventory
         }
     }
 
+    TEST(SetInventory_Struct, ConstructorByAssemblyMove)
+    {
+        rw::oso::ObjectStoreAssembly assembly;
+        assembly.setName("$Struct$SetInventory$");
+        rw::oso::ObjectStoreItem nameItem;
+        nameItem.setName("$Field$Name$");
+        nameItem.setValueFromString("Test");
+        assembly.addItem(nameItem);
+        rw::oso::ObjectStoreItem guidItem;
+        guidItem.setName("$Field$Guid$");
+        guidItem.setValueFromString("Test2");
+        assembly.addItem(guidItem);
+        SetInventory testObj(std::move(assembly));
+        EXPECT_EQ(testObj.name, "Test");
+        EXPECT_EQ(testObj.guid, "Test2");
+        EXPECT_EQ(testObj.getSetList().size(), 0);
+    }
+
     TEST(SetInventory_Struct, ConstructorByCopy)
     {
         SetInventory testObj;
@@ -267,6 +285,26 @@ namespace sim_SetInventory
 
     }
 
+    TEST(SetInventoryItem_Struct, ConstructorByAssemblyMove)
+    {
+        rw::oso::ObjectStoreAssembly assembly;
+        assembly.setName("$Struct$SetInventoryItem$");
+        rw::oso::ObjectStoreItem item;
+        item.setName("$Field$Name$");
+        item.setValueFromString("Test");
+        assembly.addItem(item);
+        rw::oso::ObjectStoreItem item2;
+        item2.setName("name");
+        item2.setValueFromString("Test2");
+        assembly.addItem(item2);
+        SetInventoryItem testObj(std::move(assembly));
+        EXPECT_EQ(testObj.name, "Test");
+        EXPECT_EQ(testObj.getObjectType(), ItemType::Item);
+        EXPECT_EQ(testObj.getValueType(), ItemStoreType::Item_String);
+        auto value = std::get<std::string>(testObj.getValue());
+        EXPECT_EQ(value, "Test2");
+    }
+
     TEST(SetInventoryItem_Struct, ConstructorByCopy)
     {
         SetInventoryItem testObj;
@@ -415,6 +453,21 @@ namespace sim_SetInventory
             FAIL() << e.what();
         }
     }
+
+    TEST(SetInventoryAssembly_Struct, ConstructorByAssemblyMove)
+    {
+        rw::oso::ObjectStoreAssembly assembly;
+        assembly.setName("$Struct$SetInventoryAssembly$");
+        rw::oso::ObjectStoreItem item;
+        item.setName("$Field$Name$");
+        item.setValueFromString("Test");
+        assembly.addItem(item);
+        SetInventoryAssembly testObj(std::move(assembly));
+        EXPECT_EQ(testObj.name, "Test");
+        EXPECT_EQ(testObj.getObjectType(), ItemType::Assembly);
+        EXPECT_EQ(testObj.getSetList().size(), 0);
+    }
+
 
     TEST(SetInventoryAssembly_Struct, ConstructorByCopy)
     {

@@ -37,6 +37,39 @@ namespace rw {
             }
         }
 
+        SetInventoryAssembly::SetInventoryAssembly(rw::oso::ObjectStoreAssembly&& assembly)
+        {
+            if (assembly.getName() != "$Struct$SetInventoryAssembly$")
+            {
+                throw std::runtime_error("Invalid assembly type");
+            }
+            for (const auto& item : assembly.getItems())
+            {
+                if (item->getName() == "$Field$Name$")
+                {
+                    auto itemPtr = std::dynamic_pointer_cast<rw::oso::ObjectStoreItem>(item);
+                    name = itemPtr->getValueAsString();
+                }
+                else
+                {
+                    if (item->getName() == "$Struct$SetInventoryItem$")
+                    {
+                        auto itemPtr = std::dynamic_pointer_cast<rw::oso::ObjectStoreAssembly>(item);
+                        appendSetItem(SetInventoryItem(*itemPtr));
+                    }
+                    else if (item->getName() == "$Struct$SetInventoryAssembly$")
+                    {
+                        auto itemPtr = std::dynamic_pointer_cast<rw::oso::ObjectStoreAssembly>(item);
+                        appendSetAssembly(SetInventoryAssembly(*itemPtr));
+                    }
+                    else
+                    {
+                        throw std::runtime_error("Invalid assembly type");
+                    }
+                }
+            }
+        }
+
         SetInventoryAssembly::SetInventoryAssembly(const SetInventoryAssembly& assembly)
          : SetInventoryCore(assembly)
      {
@@ -205,6 +238,44 @@ namespace rw {
             
         }
 
+        SetInventory::SetInventory(rw::oso::ObjectStoreAssembly&& assembly)
+        {
+            if (assembly.getName() != "$Struct$SetInventory$")
+            {
+                throw std::runtime_error("Invalid assembly type");
+            }
+            for (const auto& item : assembly.getItems())
+            {
+                if (item->getName() == "$Field$Name$")
+                {
+                    auto itemPtr = std::dynamic_pointer_cast<rw::oso::ObjectStoreItem>(item);
+                    name = itemPtr->getValueAsString();
+                }
+                else if (item->getName() == "$Field$Guid$")
+                {
+                    auto itemPtr = std::dynamic_pointer_cast<rw::oso::ObjectStoreItem>(item);
+                    guid = itemPtr->getValueAsString();
+                }
+                else
+                {
+                    if (item->getName() == "$Struct$SetInventoryItem$")
+                    {
+                        auto itemPtr = std::dynamic_pointer_cast<rw::oso::ObjectStoreAssembly>(item);
+                        appendSetItem(SetInventoryItem(*itemPtr));
+                    }
+                    else if (item->getName() == "$Struct$SetInventoryAssembly$")
+                    {
+                        auto itemPtr = std::dynamic_pointer_cast<rw::oso::ObjectStoreAssembly>(item);
+                        appendSetAssembly(SetInventoryAssembly(*itemPtr));
+                    }
+                    else
+                    {
+                        throw std::runtime_error("Invalid assembly type");
+                    }
+                }
+            }
+        }
+
         SetInventory::SetInventory(const SetInventory& inventory)
         {
             name = inventory.name;
@@ -332,6 +403,30 @@ namespace rw {
                 throw std::runtime_error("Invalid assembly type");
             }
             if (assembly.getItems().size()!=2)
+            {
+                throw std::runtime_error("Invalid assembly size");
+            }
+            for (const auto& item : assembly.getItems())
+            {
+                if (item->getName() == "$Field$Name$")
+                {
+                    auto itemPtr = std::dynamic_pointer_cast<rw::oso::ObjectStoreItem>(item);
+                    name = itemPtr->getValueAsString();
+                }
+                else
+                {
+                    _item = *std::dynamic_pointer_cast<rw::oso::ObjectStoreItem>(item);
+                }
+            }
+        }
+
+        SetInventoryItem::SetInventoryItem(rw::oso::ObjectStoreAssembly&& assembly)
+        {
+            if (assembly.getName() != "$Struct$SetInventoryItem$")
+            {
+                throw std::runtime_error("Invalid assembly type");
+            }
+            if (assembly.getItems().size() != 2)
             {
                 throw std::runtime_error("Invalid assembly size");
             }

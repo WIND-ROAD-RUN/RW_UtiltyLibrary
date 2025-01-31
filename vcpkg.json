@@ -4,6 +4,8 @@
     "pugixml",
     "jsoncpp",
     "opencv4",
-    "openvino"
+    "pybind11",
+    "mysql-connector-cpp",
+    "sqlite3"
   ]
-}
+}    

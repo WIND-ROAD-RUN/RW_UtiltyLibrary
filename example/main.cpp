@@ -1,82 +1,42 @@
-
-#include <stack>
-#include <unordered_set>
-#include <stdexcept>
-
-template <typename T>
-class ObjectPool {
-public:
-    T* GetObject() {
-        if (!_availableObjects.empty()) {
-            T* obj = _availableObjects.top();
-            _availableObjects.pop();
-            _inUseObjects.insert(obj);
-            return obj;
-        }
-        else {
-            T* newObj = new T();
-            _inUseObjects.insert(newObj);
-            return newObj;
-        }
-    }
-
-    void ReleaseObject(T* obj) {
-        auto it = _inUseObjects.find(obj);
-        if (it != _inUseObjects.end()) {
-            _inUseObjects.erase(it);
-            _availableObjects.push(obj);
-        }
-        else {
-            throw std::invalid_argument("The object being released was not acquired from this pool.");
-        }
-    }
-
-    ~ObjectPool() {
-        while (!_availableObjects.empty()) {
-            delete _availableObjects.top();
-            _availableObjects.pop();
-        }
-        for (auto obj : _inUseObjects) {
-            delete obj;
-        }
-    }
-
-private:
-    std::stack<T*> _availableObjects;
-    std::unordered_set<T*> _inUseObjects;
-};
-
-class MyClass {
-public:
-    MyClass() {
-        // Constructor logic
-    }
-
-    void Reset() {
-        // Reset object state
-    }
-};
-
 #include <iostream>
+#include <variant>
+#include <string>
 
+using VariantType = std::variant<int, long, float, double, std::string>;
+
+class ObjectStoreItem {
+private:
+    VariantType value;
+
+public:
+    void setValue(const VariantType& newValue) {
+        value = newValue;
+    }
+
+    VariantType getValue() const {
+        return value;
+    }
+
+    void printValue() const {
+        std::visit([](auto&& arg) {
+            std::cout << arg << std::endl;
+            }, value);
+    }
+};
 
 int main() {
-    ObjectPool<MyClass> pool;
+    ObjectStoreItem item;
+    item.setValue(42);
+    item.printValue();
 
-    // 获取对象
-    MyClass* obj1 = pool.GetObject();
-    MyClass* obj2 = pool.GetObject();
+    item.setValue(3.14f);
+    item.printValue();
 
-    // 使用对象
-    // ...
+    item.setValue(123456789L);
+    item.printValue();
 
-    // 重置对象状态
-    obj1->Reset();
-    obj2->Reset();
-
-    // 释放对象
-    pool.ReleaseObject(obj1);
-    pool.ReleaseObject(obj2);
+    item.setValue("Hello, World!");
+    item.printValue();
 
     return 0;
 }

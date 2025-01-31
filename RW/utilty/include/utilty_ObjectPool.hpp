@@ -8,8 +8,8 @@
 #include<iostream>
 
 namespace rw {
-    const bool ThreadSafe = true;
-    const bool NotThreadSafe = false;
+    constexpr bool gThreadSafe = true;
+    constexpr bool gNotThreadSafe = false;
 
 
 
@@ -24,11 +24,11 @@ namespace rw {
      * @details:
      *
      */
-    template<typename T, typename Allocator = std::allocator<T>, bool isThreadSafe = NotThreadSafe>
+    template<typename T, typename Allocator = std::allocator<T>, bool IsThreadSafe = gNotThreadSafe>
     class ObjectPool;
 
     template<typename T,typename Allocator>
-    class ObjectPool<T, Allocator, NotThreadSafe> final {
+    class ObjectPool<T, Allocator, gNotThreadSafe> final {
     public:
         ObjectPool() = default;
         explicit ObjectPool(const Allocator& allocator);
@@ -144,7 +144,7 @@ namespace rw {
     };
 
     template<typename T, typename Allocator>
-    class ObjectPool<T, Allocator, ThreadSafe> final {
+    class ObjectPool<T, Allocator, gThreadSafe> final {
     public:
         ObjectPool() = default;
         explicit ObjectPool(const Allocator& allocator);
@@ -177,14 +177,14 @@ namespace rw {
 
 
     template<typename T,typename Allocator>
-    ObjectPool<T, Allocator, NotThreadSafe>::ObjectPool(const Allocator & allocator)
+    ObjectPool<T, Allocator, gNotThreadSafe>::ObjectPool(const Allocator & allocator)
         :m_allocator{ allocator }
     {
         
     }
 
     template<typename T, typename Allocator>
-    void ObjectPool<T, Allocator, NotThreadSafe>::addChunk()
+    void ObjectPool<T, Allocator, gNotThreadSafe>::addChunk()
     {
         std::cout << "Allocating new chunk...";
         // Allocate a new chunk of uninitialized memory big enough to hold
@@ -213,7 +213,7 @@ namespace rw {
 
     template<typename T, typename Allocator>
     template<typename... Args>
-    std::shared_ptr<T> ObjectPool<T, Allocator, NotThreadSafe>::acquireObject(Args && ... args)
+    std::shared_ptr<T> ObjectPool<T, Allocator, gNotThreadSafe>::acquireObject(Args && ... args)
     {
         // If there are no free objects, allocate a new chunk.
         if (m_freeObjects.empty()) {
@@ -245,7 +245,7 @@ namespace rw {
     }
 
     template<typename T, typename Allocator>
-    ObjectPool<T, Allocator, NotThreadSafe>::~ObjectPool()
+    ObjectPool<T, Allocator, gNotThreadSafe>::~ObjectPool()
     {
         // Note: this implementation assumes that all objects handed out by this
         //      pool have been returned to the pool before the pool is destroyed.
@@ -263,7 +263,7 @@ namespace rw {
     }
 
     template<typename T, typename Allocator>
-    std::size_t ObjectPool<T, Allocator, NotThreadSafe>::getTotalAllocatedMemory() const
+    std::size_t ObjectPool<T, Allocator, gNotThreadSafe>::getTotalAllocatedMemory() const
     {
         std::size_t totalMemory = 0;
         std::size_t chunkSize = ms_initialChunkSize;
@@ -280,13 +280,13 @@ namespace rw {
      *-----------------------------------------------------------------------------------*/
 
     template<typename T, typename Allocator>
-    ObjectPool<T, Allocator, ThreadSafe>::ObjectPool(const Allocator& allocator)
+    ObjectPool<T, Allocator, gThreadSafe>::ObjectPool(const Allocator& allocator)
         : m_allocator{ allocator }
     {
     }
 
     template<typename T, typename Allocator>
-    void ObjectPool<T, Allocator, ThreadSafe>::addChunk()
+    void ObjectPool<T, Allocator, gThreadSafe>::addChunk()
     {
         std::cout << "Allocating new chunk...";
         m_pool.push_back(nullptr);
@@ -308,7 +308,7 @@ namespace rw {
 
     template<typename T, typename Allocator>
     template<typename... Args>
-    std::shared_ptr<T> ObjectPool<T, Allocator, ThreadSafe>::acquireObject(Args&& ... args)
+    std::shared_ptr<T> ObjectPool<T, Allocator, gThreadSafe>::acquireObject(Args&& ... args)
     {
         std::lock_guard<std::mutex> lock(m_mutex); // 加锁
         if (m_freeObjects.empty()) {
@@ -329,7 +329,7 @@ namespace rw {
     }
 
     template<typename T, typename Allocator>
-    ObjectPool<T, Allocator, ThreadSafe>::~ObjectPool()
+    ObjectPool<T, Allocator, gThreadSafe>::~ObjectPool()
     {
         std::lock_guard<std::mutex> lock(m_mutex); // 加锁
         assert(m_freeObjects.size() == ms_initialChunkSize * (std::pow(2, m_pool.size()) - 1));
@@ -342,7 +342,7 @@ namespace rw {
     }
 
     template<typename T, typename Allocator>
-    std::size_t ObjectPool<T, Allocator, ThreadSafe>::getTotalAllocatedMemory() const
+    std::size_t ObjectPool<T, Allocator, gThreadSafe>::getTotalAllocatedMemory() const
     {
         std::lock_guard<std::mutex> lock(m_mutex); // 加锁
         std::size_t totalMemory = 0;

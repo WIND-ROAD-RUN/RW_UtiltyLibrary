@@ -6,7 +6,7 @@ namespace hoec_Camera_MVS {
 	TEST(Camera_MVS_Test, INIADNDEC_SDC) {
 		EXPECT_EQ(Camera_MVS::initSDK(), true);
 		EXPECT_EQ(Camera_MVS::_isIniSDK, true);
-		EXPECT_EQ(Camera_MVS::uninitSDK(), true);
+		EXPECT_EQ(Camera_MVS::unInitSDK(), true);
 		EXPECT_EQ(Camera_MVS::_isIniSDK, false);
 	}
 
@@ -55,7 +55,7 @@ namespace hoec_Camera_MVS {
 			EXPECT_EQ(item->connectCamera(), true);
 		}
 		cameraList.clear();
-		Camera_MVS::uninitSDK();
+		Camera_MVS::unInitSDK();
 	}
 
 	/**
@@ -116,7 +116,7 @@ namespace hoec_Camera_MVS {
 			item->stopMonitor();
 		}
 		cameraList.clear();
-		Camera_MVS::uninitSDK();
+		Camera_MVS::unInitSDK();
 	}
 
 	TEST(Camera_MVS_Test, setGain_isSetSuccessfully) {
@@ -162,7 +162,7 @@ namespace hoec_Camera_MVS {
 			item->stopMonitor();
 		}
 		cameraList.clear();
-		Camera_MVS::uninitSDK();
+		Camera_MVS::unInitSDK();
 	}
 
 	TEST(Camera_MVS_Test, getExposureTime) {
@@ -187,7 +187,7 @@ namespace hoec_Camera_MVS {
 			EXPECT_EQ(item->getExposureTime(), 2000);
 		}
 		cameraList.clear();
-		Camera_MVS::uninitSDK();
+		Camera_MVS::unInitSDK();
 	}
 
 	TEST(Camera_MVS_Test, getGain) {
@@ -212,7 +212,7 @@ namespace hoec_Camera_MVS {
 			EXPECT_EQ(item->getGain(), 200);
 		}
 		cameraList.clear();
-		Camera_MVS::uninitSDK();
+		Camera_MVS::unInitSDK();
 	}
 
 	TEST(Camera_MVS_Test, setSoftwareTriggerMode) {
@@ -236,7 +236,7 @@ namespace hoec_Camera_MVS {
 			EXPECT_EQ(item->setTriggerMode(CameraTrrigerMode::SoftwareTriggered), true);
 		}
 		cameraList.clear();
-		Camera_MVS::uninitSDK();
+		Camera_MVS::unInitSDK();
 	}
 
 	TEST(Camera_MVS_Test, setHardwareTriggerMode) {
@@ -260,7 +260,7 @@ namespace hoec_Camera_MVS {
 			EXPECT_EQ(item->setTriggerMode(CameraTrrigerMode::HardwareTriggered), true);
 		}
 		cameraList.clear();
-		Camera_MVS::uninitSDK();
+		Camera_MVS::unInitSDK();
 	}
 
 	TEST(Camera_MVS_Test, setSoftwareTriggerMode_isSuccessfully) {
@@ -288,7 +288,7 @@ namespace hoec_Camera_MVS {
 			EXPECT_EQ(item->connectCamera(), true);
 			EXPECT_EQ(item->setTriggerMode(CameraTrrigerMode::SoftwareTriggered), true);
 			//注册回调函数
-			auto registerResult = item->RegisterCallBack();
+			auto registerResult = item->RegisterCallBackFunc();
 			EXPECT_EQ(registerResult, true);
 			//开始监控
 			EXPECT_EQ(item->startMonitor(), true);
@@ -305,7 +305,7 @@ namespace hoec_Camera_MVS {
 			EXPECT_EQ(item->stopMonitor(), true);
 		}
 		cameraList.clear();
-		Camera_MVS::uninitSDK();
+		Camera_MVS::unInitSDK();
 	}
 
 	TEST(Camera_MVS_Test,my_SetHardwareTriggerMode)
@@ -343,7 +343,7 @@ namespace hoec_Camera_MVS {
 		for (auto& item : cameraList) {
 			EXPECT_EQ(item->connectCamera(), true);
 			EXPECT_EQ(item->setTriggerMode(CameraTrrigerMode::HardwareTriggered), true);
-			auto registerResult = item->RegisterCallBack();
+			auto registerResult = item->RegisterCallBackFunc();
 			EXPECT_EQ(registerResult, true);
 			EXPECT_EQ(item->startMonitor(), true);
 
@@ -358,7 +358,7 @@ namespace hoec_Camera_MVS {
 		}
 
 		cameraList.clear();
-		Camera_MVS::uninitSDK();
+		Camera_MVS::unInitSDK();
 	}
 
 	TEST(Camera_MVS_Test, setHardwareTriggerMode_isSuccessfully)
@@ -387,7 +387,7 @@ namespace hoec_Camera_MVS {
 			EXPECT_EQ(item->connectCamera(), true);
 			EXPECT_EQ(item->setTriggerMode(CameraTrrigerMode::HardwareTriggered), true);
 			//注册回调函数
-			auto registerResult = item->RegisterCallBack();
+			auto registerResult = item->RegisterCallBackFunc();
 			EXPECT_EQ(registerResult, true);
 			//开始监控
 			EXPECT_EQ(item->startMonitor(), true);
@@ -404,7 +404,7 @@ namespace hoec_Camera_MVS {
 			EXPECT_EQ(item->stopMonitor(), true);
 		}
 		cameraList.clear();
-		Camera_MVS::uninitSDK();
+		Camera_MVS::unInitSDK();
 	}
 
 	TEST(Camera_MVS_Test, getSoftwareTriggerMode) {
@@ -429,7 +429,7 @@ namespace hoec_Camera_MVS {
 			EXPECT_EQ(item->getMonitorMode(), CameraTrrigerMode::SoftwareTriggered);
 		}
 		cameraList.clear();
-		Camera_MVS::uninitSDK();
+		Camera_MVS::unInitSDK();
 	}
 
 	TEST(Camera_MVS_Test, getHardwareTriggerMode)
@@ -454,7 +454,7 @@ namespace hoec_Camera_MVS {
 			EXPECT_EQ(item->getMonitorMode(), CameraTrrigerMode::HardwareTriggered);
 		}
 		cameraList.clear();
-		Camera_MVS::uninitSDK();
+		Camera_MVS::unInitSDK();
 	}
 
 	TEST(Camera_MVS_Test, setTriggerLine) {
@@ -479,7 +479,7 @@ namespace hoec_Camera_MVS {
 			EXPECT_EQ(item->setTriggerLine(0), true);
 		}
 		cameraList.clear();
-		Camera_MVS::uninitSDK();
+		Camera_MVS::unInitSDK();
 	}
 
 	TEST(Camera_MVS_Test, getTriggerLine)
@@ -506,7 +506,7 @@ namespace hoec_Camera_MVS {
 			EXPECT_EQ(item->getTriggerLine(), 0);
 		}
 		cameraList.clear();
-		Camera_MVS::uninitSDK();
+		Camera_MVS::unInitSDK();
 	}
 
 	TEST(Camera_MVS_Active_Test, CAMERA_CONNECT) {
@@ -532,7 +532,7 @@ namespace hoec_Camera_MVS {
 			EXPECT_EQ(item->connectCamera(), true);
 		}
 		cameraList.clear();
-		Camera_MVS_Active::uninitSDK();
+		Camera_MVS_Active::unInitSDK();
 	}
 
 	TEST(Camera_MVS_Active_Test, monitor) {
@@ -565,7 +565,7 @@ namespace hoec_Camera_MVS {
 			EXPECT_EQ(item->stopMonitor(), true);
 		}
 		cameraList.clear();
-		Camera_MVS_Active::uninitSDK();
+		Camera_MVS_Active::unInitSDK();
 
 	}
 
@@ -595,7 +595,7 @@ namespace hoec_Camera_MVS {
 			EXPECT_EQ(item->connectCamera(), true);
 			EXPECT_EQ(item->setTriggerMode(CameraTrrigerMode::SoftwareTriggered), true);
 			//注册回调函数
-			auto registerResult = item->RegisterCallBack();
+			auto registerResult = item->RegisterCallBackFunc();
 			EXPECT_EQ(registerResult, true);
 			//开始监控
 			EXPECT_EQ(item->startMonitor(), true);
@@ -614,6 +614,6 @@ namespace hoec_Camera_MVS {
 		//...其他操作
 		//使用相机后释放SDK
 		cameraList.clear();
-		Camera_MVS_Passive::uninitSDK();
+		Camera_MVS_Passive::unInitSDK();
 	}
 }

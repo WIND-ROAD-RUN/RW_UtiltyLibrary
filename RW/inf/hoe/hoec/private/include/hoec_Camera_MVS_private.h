@@ -14,40 +14,34 @@ typedef struct _MV_FRAME_OUT_INFO_EX_ MV_FRAME_OUT_INFO_EX;
 
 namespace rw {
     namespace hoec {
-        class Camera_MVS {
+        class Camera_MVS:
+            public ICamera {
         public:
             Camera_MVS();
-            virtual ~Camera_MVS();
+            ~Camera_MVS() override;
         public:
             static bool _isIniSDK;
             static std::vector<std::string> getCameraIpList();
             static std::vector<CameraInfo> getCameraInfoList();
             static bool initSDK();
-            static bool uninitSDK();
+            static bool unInitSDK();
         public:
-            void setIP(const std::string& ip);
-            std::string getIP() const;
+            bool connectCamera() override;
         public:
-            bool connectCamera();
+            bool startMonitor() override;
+            bool stopMonitor() override;
         public:
-            bool startMonitor();
-            bool stopMonitor();
+            bool setExposureTime(size_t value) override;
+            bool setGain(size_t value) override;
+            bool setIOTime(size_t value) override;
+            bool setTriggerMode(CameraTrrigerMode mode) override;
+            bool setTriggerLine(size_t lineIndex) override;
         public:
-            CameraInfo getCameraInfo() const;
-            void setCameraInfo(const CameraInfo& cameraInfo);
-        public:
-            bool setExposureTime(size_t value);
-            bool setGain(size_t value);
-            bool setIOTime(size_t value);
-            bool setTriggerMode(CameraTrrigerMode mode);
-            bool setTriggerLine(size_t lineIndex);
-        public:
-            size_t getExposureTime();
-            size_t getGain();
-            size_t getIOTime();
-            CameraTrrigerMode getMonitorMode();
-            size_t getTriggerLine();
-            void* getCameraHandle() const;
+            size_t getExposureTime() override;
+            size_t getGain() override;
+            size_t getIOTime() override;
+            CameraTrrigerMode getMonitorMode() override;
+            size_t getTriggerLine() override;
         private:
             std::string m_ip;
             CameraInfo m_cameraInfo;
@@ -58,18 +52,18 @@ namespace rw {
             CameraTrrigerMode triggerMode;
         };
 
-        class Camera_MVS_Active 
-            :public Camera_MVS {
+        class Camera_MVS_Active
+            :public Camera_MVS,public ICameraActive {
         public:
             Camera_MVS_Active();
-            ~Camera_MVS_Active();
+            ~Camera_MVS_Active() override;
         public:
-            cv::Mat getImage(bool& isget);
-       
+            cv::Mat getImage(bool& isGet) override;
+            cv::Mat getImage() override;
         };
 
         class Camera_MVS_Passive
-            :public Camera_MVS {
+            :public Camera_MVS,public ICameraPassive{
         public:
             using UserToCallBack = std::function<void(cv::Mat)>;
         private:
@@ -79,9 +73,9 @@ namespace rw {
                 std::cout << "No callback function" << std::endl;
                 return;
                 });
-            ~Camera_MVS_Passive();
+            ~Camera_MVS_Passive() override;
         public:
-            bool RegisterCallBack();
+            bool RegisterCallBackFunc() override;
         public:
 
             static void __stdcall ImageCallBackFunc(unsigned char* pData, MV_FRAME_OUT_INFO_EX* pFrameInfo, void* pUser);

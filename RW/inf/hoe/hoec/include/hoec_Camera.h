@@ -76,6 +76,9 @@ namespace rw
          */
         class ICamera
         {
+        private:
+            CameraInfo _cameraInfo;
+            std::string _ip;
         public:
 
             /**
@@ -116,7 +119,7 @@ namespace rw
              *@Throws:
              *
              */
-            virtual void setIP(const std::string &ip) = 0;
+            void setIP(const std::string &ip);
 
             /**
              *@Parameters:
@@ -128,7 +131,7 @@ namespace rw
              *@Throws:
              *
              */
-            virtual std::string getIP() const = 0;
+            [[nodiscard]] std::string getIP() const;
 
         public:
 
@@ -175,6 +178,10 @@ namespace rw
             virtual bool stopMonitor() = 0;
 
         public:
+            CameraInfo getCameraInfo();
+
+            void setCameraInfo(const CameraInfo& cameraInfo);
+        public:
 
             /**
              *@Parameters:
@@ -208,20 +215,6 @@ namespace rw
              */
             virtual bool setGain(size_t value) = 0;
 
-
-            /**
-             *@Parameters:
-             *  - mode: The mode of the camera monitor you want to set.
-             *      type: CameraMonitorMode
-             *@Methods:
-             *  Set the monitor mode of the camera.
-             *@Returns: bool
-             *  If set the monitor mode successfully, return true,otherwise return false.
-             *@Throws:
-             *
-             */
-            virtual bool setTrrigerMode(CameraTrrigerMode mode) = 0;
-
             /**
              *@Parameters:
              *  - value: The value of the IO time you want to set.
@@ -234,6 +227,18 @@ namespace rw
              */
             virtual bool setIOTime(size_t value) = 0;
 
+            /**
+             *@Parameters:
+             *  - mode: The mode of the camera monitor you want to set.
+             *      type: CameraMonitorMode
+             *@Methods:
+             *  Set the monitor mode of the camera.
+             *@Returns: bool
+             *  If set the monitor mode successfully, return true,otherwise return false.
+             *@Throws:
+             *
+             */
+            virtual bool setTriggerMode(CameraTrrigerMode mode) = 0;
 
             /**
              *@Parameters:
@@ -247,6 +252,7 @@ namespace rw
              */
             virtual bool setTriggerLine(size_t lineIndex) = 0;
 
+        public:
 
             /**
              *@Parameters:
@@ -311,8 +317,9 @@ namespace rw
         };
 
         class ICameraActive
-            : public ICamera
         {
+        public:
+            virtual ~ICameraActive() = default;
         public:
 
             /**
@@ -325,7 +332,7 @@ namespace rw
              *@Throws:
              *
              */
-            virtual cv::Mat getImage(bool& isget)=0;
+            virtual cv::Mat getImage(bool& isGet)=0;
 
             /**
              *@Parameters:
@@ -341,8 +348,10 @@ namespace rw
         };
 
         class ICameraPassive
-            : public ICamera
         {
+        public:
+            virtual ~ICameraPassive() = default;
+
         public:
 
             /**

@@ -93,7 +93,7 @@ namespace rw {
             }
         }
 
-        bool Camera_MVS::uninitSDK()
+        bool Camera_MVS::unInitSDK()
         {
             _isIniSDK = false;
             auto result = MV_CC_Finalize();
@@ -104,16 +104,6 @@ namespace rw {
                 std::cerr << "Failed to uninitialize SDK" << std::endl;
                 return false;
             }
-        }
-
-        void Camera_MVS::setIP(const std::string& ip)
-        {
-            this->m_ip = ip;
-        }
-
-        std::string Camera_MVS::getIP() const
-        {
-            return m_ip;
         }
 
         bool Camera_MVS::connectCamera()
@@ -201,10 +191,6 @@ namespace rw {
             }
             _isMonitor = false;
             return true;
-        }
-
-        void* Camera_MVS::getCameraHandle()const {
-            return m_cameraHandle;
         }
 
         bool Camera_MVS::setExposureTime(size_t value)
@@ -364,23 +350,23 @@ namespace rw {
         {
         }
 
-        cv::Mat Camera_MVS_Active::getImage(bool& isget)
+        cv::Mat Camera_MVS_Active::getImage(bool& isGet)
         {
             MV_FRAME_OUT frameInfo;
             auto getResult = MV_CC_GetImageBuffer(m_cameraHandle, &frameInfo, 1000);
             if (getResult != MV_OK) {
                 std::cerr << "Failed to get image buffer with:" << getResult << std::endl;
-                isget = false;
+                isGet = false;
                 return cv::Mat();
             }
             cv::Mat image = ImageFrameConvert::MVS_ConvertFrameToMat(frameInfo);
             if (image.empty())
             {
                 std::cerr << "Failed to convert frame to mat" << std::endl;
-                isget = false;
+                isGet = false;
                 return cv::Mat();
             }
-            isget = true;
+            isGet = true;
             auto freeResult = MV_CC_FreeImageBuffer(m_cameraHandle, &frameInfo);
             if (freeResult != MV_OK) {
                 std::cerr << "Failed to free image buffer with:" << freeResult << std::endl;
@@ -389,14 +375,9 @@ namespace rw {
             return image;
         }
 
-        CameraInfo Camera_MVS::getCameraInfo() const
+        cv::Mat Camera_MVS_Active::getImage()
         {
-            return m_cameraInfo;
-        }
-
-        void Camera_MVS::setCameraInfo(const CameraInfo& cameraInfo)
-        {
-            m_cameraInfo = cameraInfo;
+            return this->getImage();
         }
 
         Camera_MVS_Passive::Camera_MVS_Passive(UserToCallBack userToCallback)
@@ -410,7 +391,7 @@ namespace rw {
 
         }
 
-        bool Camera_MVS_Passive::RegisterCallBack()
+        bool Camera_MVS_Passive::RegisterCallBackFunc()
         {
             auto result = MV_CC_RegisterImageCallBackEx(m_cameraHandle, Camera_MVS_Passive::ImageCallBackFunc, this);
             if (result != MV_OK) {

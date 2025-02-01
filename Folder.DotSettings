@@ -212,5 +212,6 @@
  *@Throws:&#xD;
  *  $throws$&#xD;
  */</s:String>
+	<s:Boolean x:Key="/Default/UserDictionary/Words/=hoec/@EntryIndexedValue">True</s:Boolean>
 	<s:Boolean x:Key="/Default/UserDictionary/Words/=LMFU/@EntryIndexedValue">True</s:Boolean>
 	<s:Boolean x:Key="/Default/UserDictionary/Words/=LMRU/@EntryIndexedValue">True</s:Boolean></wpf:ResourceDictionary>

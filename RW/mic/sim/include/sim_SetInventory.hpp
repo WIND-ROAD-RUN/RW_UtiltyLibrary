@@ -13,6 +13,7 @@ namespace rw {
             Item,
             Assembly
         };
+
         struct SetInventoryItem;
         enum class ItemStoreType
         {
@@ -29,12 +30,12 @@ namespace rw {
         {
             friend struct SetInventoryFactory;
         public:
-            std::string name{"Undefined"};
+            std::string name{ "Undefined" };
         public:
             SetInventoryCore() = default;
             virtual ~SetInventoryCore() = default;
             SetInventoryCore(const SetInventoryCore& core);
-            SetInventoryCore(const SetInventoryCore && core) noexcept;
+            SetInventoryCore(const SetInventoryCore&& core) noexcept;
         public:
             bool operator==(const SetInventoryCore& other) const;
             bool operator!=(const SetInventoryCore& other) const;
@@ -44,8 +45,8 @@ namespace rw {
 
         public:
             virtual ItemType getObjectType() = 0;
-            virtual VariantItem getValue() =0;
-            virtual ItemStoreType getValueType() =0;
+            virtual VariantItem getValue() = 0;
+            virtual ItemStoreType getValueType() = 0;
         };
 
         struct SetInventoryItem final
@@ -70,7 +71,7 @@ namespace rw {
             bool operator!=(const SetInventoryItem& other) const;
         public:
             ItemType getObjectType() override { return ItemType::Item; }
-            VariantItem getValue() override ;
+            VariantItem getValue() override;
             ItemStoreType getValueType() override;
         public:
             template<typename Value, ItemStoreType Type>
@@ -104,10 +105,10 @@ namespace rw {
         public:
             ItemType getObjectType() override { return ItemType::Assembly; }
         public:
-            void appendSetItem(const SetInventoryItem & item);
+            void appendSetItem(const SetInventoryItem& item);
             void appendSetItem(SetInventoryItem&& item);
 
-            void appendSetAssembly(const SetInventoryAssembly & assembly);
+            void appendSetAssembly(const SetInventoryAssembly& assembly);
             void appendSetAssembly(SetInventoryAssembly&& assembly);
 
         public:
@@ -124,7 +125,7 @@ namespace rw {
         public:
             explicit SetInventory(const rw::oso::ObjectStoreAssembly& assembly);
             explicit SetInventory(rw::oso::ObjectStoreAssembly&& assembly);
-            SetInventory(const SetInventory & inventory);
+            SetInventory(const SetInventory& inventory);
             SetInventory(SetInventory&& inventory) noexcept;
             SetInventory() = default;
             ~SetInventory() = default;
@@ -135,13 +136,13 @@ namespace rw {
             bool operator==(const SetInventory& other) const;
             bool operator!=(const SetInventory& other) const;
         public:
-            std::string name{"Undefined"};
-            std::string guid{"Undefined"};
+            std::string name{ "Undefined" };
+            std::string guid{ "Undefined" };
         public:
             std::vector<std::shared_ptr<SetInventoryCore>> getSetList();
         public:
-            void appendSetItem(const SetInventoryItem & item);
-            void appendSetAssembly(const SetInventoryAssembly & assembly);
+            void appendSetItem(const SetInventoryItem& item);
+            void appendSetAssembly(const SetInventoryAssembly& assembly);
         public:
             operator rw::oso::ObjectStoreAssembly() const;
         };

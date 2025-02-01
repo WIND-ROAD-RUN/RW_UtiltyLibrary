@@ -18,7 +18,7 @@ namespace rw
 
             static SetInventoryAssembly createSetInventoryAssembly(const oso::ObjectStoreAssembly& assembly);
             static SetInventoryAssembly createSetInventoryAssembly(oso::ObjectStoreAssembly&& assembly);
-
+            
         };
 
     } // namespace sim

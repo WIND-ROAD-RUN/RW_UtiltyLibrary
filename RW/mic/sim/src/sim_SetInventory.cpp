@@ -546,7 +546,7 @@ namespace rw {
 
         VariantItem SetInventoryAssembly::getValue()
         {
-            return {"Undefined"};
+            return {"SetInventoryAssembly"};
         }
 
         ItemStoreType SetInventoryAssembly::getValueType()

@@ -3,6 +3,9 @@
     "gtest",
     "pugixml",
     "jsoncpp",
-    "opencv4"
+    "opencv4",
+    "pybind11",
+    "mysql-connector-cpp",
+    "sqlite3"
   ]
-}
+}    

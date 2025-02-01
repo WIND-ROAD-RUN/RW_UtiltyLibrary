@@ -1,1 +1,14 @@
-add_executable(example main.cpp)
+cmake_minimum_required(VERSION 3.10)
+project(MyCppLibrary VERSION 1.0 LANGUAGES CXX)
+
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED True)
+
+add_library(MyCppLibrary SHARED main.cpp)
+
+# 设置输出目录
+set_target_properties(MyCppLibrary PROPERTIES
+    RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin
+    LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib
+    ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib
+)

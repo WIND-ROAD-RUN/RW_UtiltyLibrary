@@ -38,13 +38,16 @@ namespace rw {
         public:
             bool setExposureTime(size_t value);
             bool setGain(size_t value);
-            bool setMonitorMode(CameraMonitorMode mode);
             bool setIOTime(size_t value);
+            bool setTriggerMode(CameraTrrigerMode mode);
+            bool setTriggerLine(size_t lineIndex);
         public:
             size_t getExposureTime();
             size_t getGain();
             size_t getIOTime();
-            CameraMonitorMode getMonitorMode();
+            CameraTrrigerMode getMonitorMode();
+            size_t getTriggerLine();
+            void* getCameraHandle() const;
         private:
             std::string m_ip;
             CameraInfo m_cameraInfo;
@@ -52,7 +55,7 @@ namespace rw {
             void* m_cameraHandle{ nullptr };
         private:
             bool _isMonitor{ false };
-
+            CameraTrrigerMode triggerMode;
         };
 
         class Camera_MVS_Active 
@@ -83,9 +86,6 @@ namespace rw {
 
             static void __stdcall ImageCallBackFunc(unsigned char* pData, MV_FRAME_OUT_INFO_EX* pFrameInfo, void* pUser);
         };
-
-
-
 
     } // namespace hoec
 

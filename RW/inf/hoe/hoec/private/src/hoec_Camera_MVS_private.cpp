@@ -10,6 +10,7 @@ namespace rw {
         bool Camera_MVS::_isIniSDK = false;
 
         Camera_MVS::Camera_MVS()
+	        :triggerMode(CameraTrrigerMode::SoftwareTriggered)
         {
 
         }
@@ -202,6 +203,10 @@ namespace rw {
             return true;
         }
 
+        void* Camera_MVS::getCameraHandle()const {
+            return m_cameraHandle;
+        }
+
         bool Camera_MVS::setExposureTime(size_t value)
         {
             //TODO::设置曝光时间
@@ -219,11 +224,11 @@ namespace rw {
         {
             //TODO::设置增益
             float gain = static_cast<float>(value);
-            auto result = MV_CC_SetExposureTime(m_cameraHandle, gain);
+            auto result = MV_CC_SetGain(m_cameraHandle, gain);
             if (result == MV_OK)
                 return true;
             else {
-                std::cerr << "Failed to set exposuretime with:" << result << std::endl;
+                std::cerr << "Failed to set gain with:" << result << std::endl;
                 return false;
             }
         }
@@ -283,6 +288,72 @@ namespace rw {
                 std::cerr << "Failed to get ioTime with:" << result << std::endl;
                 return 0;
             }
+
+        }
+
+        CameraTrrigerMode Camera_MVS::getMonitorMode() {
+            return triggerMode;
+        }
+
+        bool Camera_MVS::setTriggerMode(CameraTrrigerMode mode)
+        {
+            triggerMode = mode;
+            unsigned int modeValue;
+            if (mode == CameraTrrigerMode::SoftwareTriggered)
+            {
+                modeValue = 0;
+            }
+            else if (mode == CameraTrrigerMode::HardwareTriggered)
+            {
+                modeValue = 1;
+            }
+            else
+            {
+                std::cerr << "无效的触发模式" << std::endl;
+                return false;
+            }
+            if (MV_CC_SetTriggerMode(m_cameraHandle,modeValue)==MV_OK)
+            {
+                std::cout << "相机已经设置为" << (mode == CameraTrrigerMode::SoftwareTriggered ? "软件" : "硬件") <<
+                    "触发模式\n";
+                return true;
+            }
+            else
+            {
+                std::cerr << "设置触发模式失败" << std::endl;
+                return false;
+            }
+        }
+
+        bool Camera_MVS::setTriggerLine(size_t lineIndex)
+        {
+            unsigned int lineValue = static_cast <unsigned int> (lineIndex);
+            if (MV_CC_SetTriggerSource(m_cameraHandle,lineValue)==MV_OK)
+            {
+                std::cout << "触发线设置为索引：" << lineIndex << std::endl;
+                return true;
+            }
+            else
+            {
+                std::cerr << "设置触发线失败" << std::endl;
+                return false;
+            }
+        }
+
+        size_t Camera_MVS::getTriggerLine()
+        {
+            // 获取触发线索引的实现
+            MVCC_ENUMVALUE stTriggerSource;
+            if (MV_CC_GetTriggerSource(m_cameraHandle, &stTriggerSource) == MV_OK)
+            {
+                std::cout << "获取触发线索引成功: " << stTriggerSource.nCurValue << std::endl;
+                return static_cast<size_t>(stTriggerSource.nCurValue);
+            }
+            else
+            {
+                std::cerr << "获取触发线索引失败" << std::endl;
+                return 0; // 或者返回一个适当的错误值
+            }
         }
 
         Camera_MVS_Active::Camera_MVS_Active()
@@ -316,6 +387,16 @@ namespace rw {
                 return cv::Mat();
             }
             return image;
+        }
+
+        CameraInfo Camera_MVS::getCameraInfo() const
+        {
+            return m_cameraInfo;
+        }
+
+        void Camera_MVS::setCameraInfo(const CameraInfo& cameraInfo)
+        {
+            m_cameraInfo = cameraInfo;
         }
 
         Camera_MVS_Passive::Camera_MVS_Passive(UserToCallBack userToCallback)

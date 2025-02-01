@@ -44,7 +44,7 @@ namespace rw
          *
          * This enum class is used to specify the mode of monitoring the camera. The mode is mutually exclusive
          */
-        enum class CameraMonitorMode
+        enum class CameraTrrigerMode
         {
             // Monitor the camera in the software triggered mode.
             // When use this mode, the camera will be monitored by the software trigger.
@@ -220,7 +220,7 @@ namespace rw
              *@Throws:
              *
              */
-            virtual bool setMonitorMode(CameraMonitorMode mode) = 0;
+            virtual bool setTrrigerMode(CameraTrrigerMode mode) = 0;
 
             /**
              *@Parameters:
@@ -294,7 +294,7 @@ namespace rw
              *@Throws:
              *
              */
-            virtual CameraMonitorMode getMonitorMode()=0;
+            virtual CameraTrrigerMode getMonitorMode()=0;
 
             /**
              *@Parameters:

@@ -1,4 +1,4 @@
-#include "hoec_Camera_core_private.h"
+#include "hoec_Camera_core_private.hpp"
 #include "opencv2/opencv.hpp"
 #include "MvCameraControl.h"
 #include "CameraParams.h"

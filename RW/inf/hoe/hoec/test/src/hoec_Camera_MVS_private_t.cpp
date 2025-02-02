@@ -97,7 +97,7 @@ namespace hoec_Camera_MVS {
 		for (auto& item : cameraList) {
 			//连接相机
 			EXPECT_EQ(item->connectCamera(), true);
-			EXPECT_EQ(item->setTriggerMode(::CameraTrrigerMode::SoftwareTriggered), true);
+			EXPECT_EQ(item->setTriggerMode(::CameraTriggerMode::SoftwareTriggered), true);
 			if (isfirst) {
 				EXPECT_EQ(item->setExposureTime(20000), true);
 				isfirst = false;
@@ -141,7 +141,7 @@ namespace hoec_Camera_MVS {
 		for (auto& item : cameraList) {
 			//连接相机
 			EXPECT_EQ(item->connectCamera(), true);
-			EXPECT_EQ(item->setTriggerMode(CameraTrrigerMode::SoftwareTriggered), true);
+			EXPECT_EQ(item->setTriggerMode(CameraTriggerMode::SoftwareTriggered), true);
 			if (isfirst) {
 				EXPECT_EQ(item->setExposureTime(20000), true);
 				EXPECT_EQ(item->setGain(15), true);
@@ -233,7 +233,7 @@ namespace hoec_Camera_MVS {
 		}
 		for (auto& item : cameraList) {
 			EXPECT_EQ(item->connectCamera(), true);
-			EXPECT_EQ(item->setTriggerMode(CameraTrrigerMode::SoftwareTriggered), true);
+			EXPECT_EQ(item->setTriggerMode(CameraTriggerMode::SoftwareTriggered), true);
 		}
 		cameraList.clear();
 		Camera_MVS::unInitSDK();
@@ -257,7 +257,7 @@ namespace hoec_Camera_MVS {
 		}
 		for (auto& item : cameraList) {
 			EXPECT_EQ(item->connectCamera(), true);
-			EXPECT_EQ(item->setTriggerMode(CameraTrrigerMode::HardwareTriggered), true);
+			EXPECT_EQ(item->setTriggerMode(CameraTriggerMode::HardwareTriggered), true);
 		}
 		cameraList.clear();
 		Camera_MVS::unInitSDK();
@@ -286,7 +286,7 @@ namespace hoec_Camera_MVS {
 		for (auto& item : cameraList) {
 			//连接相机
 			EXPECT_EQ(item->connectCamera(), true);
-			EXPECT_EQ(item->setTriggerMode(CameraTrrigerMode::SoftwareTriggered), true);
+			EXPECT_EQ(item->setTriggerMode(CameraTriggerMode::SoftwareTriggered), true);
 			//注册回调函数
 			auto registerResult = item->RegisterCallBackFunc();
 			EXPECT_EQ(registerResult, true);
@@ -342,7 +342,7 @@ namespace hoec_Camera_MVS {
 
 		for (auto& item : cameraList) {
 			EXPECT_EQ(item->connectCamera(), true);
-			EXPECT_EQ(item->setTriggerMode(CameraTrrigerMode::HardwareTriggered), true);
+			EXPECT_EQ(item->setTriggerMode(CameraTriggerMode::HardwareTriggered), true);
 			auto registerResult = item->RegisterCallBackFunc();
 			EXPECT_EQ(registerResult, true);
 			EXPECT_EQ(item->startMonitor(), true);
@@ -385,7 +385,7 @@ namespace hoec_Camera_MVS {
 		for (auto& item : cameraList) {
 			//连接相机
 			EXPECT_EQ(item->connectCamera(), true);
-			EXPECT_EQ(item->setTriggerMode(CameraTrrigerMode::HardwareTriggered), true);
+			EXPECT_EQ(item->setTriggerMode(CameraTriggerMode::HardwareTriggered), true);
 			//注册回调函数
 			auto registerResult = item->RegisterCallBackFunc();
 			EXPECT_EQ(registerResult, true);
@@ -425,8 +425,8 @@ namespace hoec_Camera_MVS {
 		}
 		for (auto& item : cameraList) {
 			EXPECT_EQ(item->connectCamera(), true);
-			EXPECT_EQ(item->setTriggerMode(CameraTrrigerMode::SoftwareTriggered), true);
-			EXPECT_EQ(item->getMonitorMode(), CameraTrrigerMode::SoftwareTriggered);
+			EXPECT_EQ(item->setTriggerMode(CameraTriggerMode::SoftwareTriggered), true);
+			EXPECT_EQ(item->getMonitorMode(), CameraTriggerMode::SoftwareTriggered);
 		}
 		cameraList.clear();
 		Camera_MVS::unInitSDK();
@@ -450,8 +450,8 @@ namespace hoec_Camera_MVS {
 		}
 		for (auto& item : cameraList) {
 			EXPECT_EQ(item->connectCamera(), true);
-			EXPECT_EQ(item->setTriggerMode(CameraTrrigerMode::HardwareTriggered), true);
-			EXPECT_EQ(item->getMonitorMode(), CameraTrrigerMode::HardwareTriggered);
+			EXPECT_EQ(item->setTriggerMode(CameraTriggerMode::HardwareTriggered), true);
+			EXPECT_EQ(item->getMonitorMode(), CameraTriggerMode::HardwareTriggered);
 		}
 		cameraList.clear();
 		Camera_MVS::unInitSDK();
@@ -593,7 +593,7 @@ namespace hoec_Camera_MVS {
 		for (auto& item : cameraList) {
 			//连接相机
 			EXPECT_EQ(item->connectCamera(), true);
-			EXPECT_EQ(item->setTriggerMode(CameraTrrigerMode::SoftwareTriggered), true);
+			EXPECT_EQ(item->setTriggerMode(CameraTriggerMode::SoftwareTriggered), true);
 			//注册回调函数
 			auto registerResult = item->RegisterCallBackFunc();
 			EXPECT_EQ(registerResult, true);

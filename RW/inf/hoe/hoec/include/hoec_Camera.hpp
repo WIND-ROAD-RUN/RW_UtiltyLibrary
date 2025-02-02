@@ -11,14 +11,14 @@ namespace rw
 {
     namespace hoec
     {
+        class CameraFactory;
+
         struct CameraInfo
         {
             std::string ip;
             std::string name;
             std::string mac;
         };
-
-        
 
         /**
          * @brief This enum class is used to specify the mode of taking a picture.
@@ -44,7 +44,7 @@ namespace rw
          *
          * This enum class is used to specify the mode of monitoring the camera. The mode is mutually exclusive
          */
-        enum class CameraTrrigerMode
+        enum class CameraTriggerMode
         {
             // Monitor the camera in the software triggered mode.
             // When use this mode, the camera will be monitored by the software trigger.
@@ -76,7 +76,7 @@ namespace rw
          */
         class ICamera
         {
-        private:
+        protected:
             CameraInfo _cameraInfo;
             std::string _ip;
         public:
@@ -108,6 +108,7 @@ namespace rw
             ICamera& operator=(ICamera&&) = delete;
             ICamera(const ICamera&) = delete;
             ICamera& operator=(const ICamera&) = delete;
+
         public:
             /**
              *@Parameters:
@@ -238,7 +239,7 @@ namespace rw
              *@Throws:
              *
              */
-            virtual bool setTriggerMode(CameraTrrigerMode mode) = 0;
+            virtual bool setTriggerMode(CameraTriggerMode mode) = 0;
 
             /**
              *@Parameters:
@@ -300,7 +301,7 @@ namespace rw
              *@Throws:
              *
              */
-            virtual CameraTrrigerMode getMonitorMode()=0;
+            virtual CameraTriggerMode getMonitorMode()=0;
 
             /**
              *@Parameters:
@@ -350,6 +351,8 @@ namespace rw
         class ICameraPassive
         {
         public:
+            using UserToCallBack = std::function<void(cv::Mat)>;
+        public:
             virtual ~ICameraPassive() = default;
 
         public:
@@ -376,11 +379,78 @@ namespace rw
 
         };
 
-        class Camera
-            : public ICamera
+        class CameraActive
+            :public ICameraActive, public ICamera
         {
-            
+            friend class CameraFactory;
+        public:
+            bool connectCamera() override;
+            bool startMonitor() override;
+            bool stopMonitor() override;
+            bool setExposureTime(size_t value) override;
+            bool setGain(size_t value) override;
+            bool setIOTime(size_t value) override;
+            bool setTriggerMode(CameraTriggerMode mode) override;
+            bool setTriggerLine(size_t lineIndex) override;
+            size_t getExposureTime() override;
+            size_t getGain() override;
+            size_t getIOTime() override;
+            CameraTriggerMode getMonitorMode() override;
+            size_t getTriggerLine() override;
+        public:
+            cv::Mat getImage(bool& isGet) override;
+            cv::Mat getImage() override;
+        private:
+            CameraProvider _provider;
+        public:
+            void setCameraProvider(CameraProvider provider);
+            CameraProvider getCameraProvider() const;
+        private:
+            ICamera* _camera{nullptr};
+            ICameraActive* _cameraActive{nullptr};
+        public:
+            CameraActive(ICamera * camera, ICameraActive * cameraActive);
+        public:
+            ~CameraActive() override;
+
         };
+
+        class CameraPassive
+            :public ICameraPassive, public ICamera
+        {
+            friend class CameraFactory;
+        public:
+            UserToCallBack _userToCallBack;
+        public:
+            bool connectCamera() override;
+            bool startMonitor() override;
+            bool stopMonitor() override;
+            bool setExposureTime(size_t value) override;
+            bool setGain(size_t value) override;
+            bool setIOTime(size_t value) override;
+            bool setTriggerMode(CameraTriggerMode mode) override;
+            bool setTriggerLine(size_t lineIndex) override;
+            size_t getExposureTime() override;
+            size_t getGain() override;
+            size_t getIOTime() override;
+            CameraTriggerMode getMonitorMode() override;
+        public:
+            size_t getTriggerLine() override;
+            bool RegisterCallBackFunc() override;
+        private:
+            CameraProvider _provider;
+        public:
+            void setCameraProvider(CameraProvider provider);
+            CameraProvider getCameraProvider() const;
+        private:
+            ICamera* _camera{ nullptr };
+            ICameraPassive* _cameraPassive{ nullptr };
+        public:
+            CameraPassive(ICamera* camera, ICameraPassive* cameraPassive, UserToCallBack userToCallBack);
+        public:
+            ~CameraPassive() override;
+        };
+
     }
 }
 

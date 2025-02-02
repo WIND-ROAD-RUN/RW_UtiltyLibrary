@@ -2,10 +2,10 @@
 #define HOEC_CAMERA_MVS_PRIVATE_T_H_
 
 #include"pch.h"
-#include"hoec_Camera.h"
-#include"hoec_Camera_MVS_private.h"
-#include"hoec_Camera_core_private.h"
-#include"hoec_Camera_private.h"
+#include"hoec_Camera.hpp"
+#include"hoec_Camera_MVS_private.hpp"
+#include"hoec_Camera_core_private.hpp"
+#include"hoec_Camera_private.hpp"
 #include"MvCameraControl.h"
 #include"CameraParams.h"
 

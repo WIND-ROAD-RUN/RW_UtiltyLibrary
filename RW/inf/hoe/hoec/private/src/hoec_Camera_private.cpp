@@ -1,6 +1,6 @@
-#include"hoec_Camera_private.h"
+#include"hoec_Camera_private.hpp"
 
-#include"hoec_Camera_core_private.h"
+#include"hoec_Camera_core_private.hpp"
 
 #include"MvCameraControl.h"
 #include"CameraParams.h"

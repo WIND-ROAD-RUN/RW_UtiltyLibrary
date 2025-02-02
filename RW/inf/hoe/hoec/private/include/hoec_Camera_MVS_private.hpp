@@ -3,7 +3,7 @@
 
 #include"opencv2/opencv.hpp"
 
-#include"hoec_Camera.h"
+#include"hoec_Camera.hpp"
 
 #include<vector>
 #include<string>
@@ -16,11 +16,13 @@ namespace rw {
     namespace hoec {
         class Camera_MVS:
             public ICamera {
+        private:
+            static size_t _cameraNum;
         public:
             Camera_MVS();
             ~Camera_MVS() override;
         public:
-            static bool _isIniSDK;
+            static bool _isIniSDK;   
             static std::vector<std::string> getCameraIpList();
             static std::vector<CameraInfo> getCameraInfoList();
             static bool initSDK();
@@ -34,26 +36,23 @@ namespace rw {
             bool setExposureTime(size_t value) override;
             bool setGain(size_t value) override;
             bool setIOTime(size_t value) override;
-            bool setTriggerMode(CameraTrrigerMode mode) override;
+            bool setTriggerMode(CameraTriggerMode mode) override;
             bool setTriggerLine(size_t lineIndex) override;
         public:
             size_t getExposureTime() override;
             size_t getGain() override;
             size_t getIOTime() override;
-            CameraTrrigerMode getMonitorMode() override;
+            CameraTriggerMode getMonitorMode() override;
             size_t getTriggerLine() override;
-        private:
-            std::string m_ip;
-            CameraInfo m_cameraInfo;
         protected:
             void* m_cameraHandle{ nullptr };
         private:
             bool _isMonitor{ false };
-            CameraTrrigerMode triggerMode;
+            CameraTriggerMode triggerMode;
         };
 
         class Camera_MVS_Active
-            :public Camera_MVS,public ICameraActive {
+            :public Camera_MVS, public ICameraActive {
         public:
             Camera_MVS_Active();
             ~Camera_MVS_Active() override;
@@ -63,9 +62,7 @@ namespace rw {
         };
 
         class Camera_MVS_Passive
-            :public Camera_MVS,public ICameraPassive{
-        public:
-            using UserToCallBack = std::function<void(cv::Mat)>;
+            :public Camera_MVS, public ICameraPassive{
         private:
             UserToCallBack _userToCallBack;
         public:

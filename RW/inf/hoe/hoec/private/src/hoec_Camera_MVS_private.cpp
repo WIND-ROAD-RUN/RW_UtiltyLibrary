@@ -1,6 +1,6 @@
-#include"hoec_Camera_MVS_private.h"
+#include"hoec_Camera_MVS_private.hpp"
 
-#include"hoec_Camera_core_private.h"
+#include"hoec_Camera_core_private.hpp"
 
 #include"MvCameraControl.h"
 #include"CameraParams.h"
@@ -8,23 +8,36 @@
 namespace rw {
     namespace hoec {
         bool Camera_MVS::_isIniSDK = false;
+        size_t Camera_MVS::_cameraNum = 0;
 
         Camera_MVS::Camera_MVS()
-	        :triggerMode(CameraTrrigerMode::SoftwareTriggered)
+	        :triggerMode(CameraTriggerMode::SoftwareTriggered)
         {
+            if (_cameraNum==0)
+            {
 
+                initSDK();
+            }
+            _cameraNum++;
         }
         Camera_MVS::~Camera_MVS()
         {
             //先停止采集
             if (_isMonitor) {
-                stopMonitor();
+                Camera_MVS::stopMonitor();
             }
             //关闭相机
             if (m_cameraHandle) {
                 MV_CC_CloseDevice(m_cameraHandle);
                 MV_CC_DestroyHandle(m_cameraHandle);
             }
+            _cameraNum--;
+            if (_cameraNum == 0)
+            {
+
+                unInitSDK();
+            }
+
         }
         std::vector<std::string> Camera_MVS::getCameraIpList()
         {
@@ -126,7 +139,7 @@ namespace rw {
                         std::to_string((ip >> 16) & 0xFF) + "." +
                         std::to_string((ip >> 8) & 0xFF) + "." +
                         std::to_string(ip & 0xFF);
-                    if (ipStr == m_ip) {
+                    if (ipStr == _ip) {
                         targetDevice = pDeviceInfo;
                         break;
                     }
@@ -277,19 +290,19 @@ namespace rw {
 
         }
 
-        CameraTrrigerMode Camera_MVS::getMonitorMode() {
+        CameraTriggerMode Camera_MVS::getMonitorMode() {
             return triggerMode;
         }
 
-        bool Camera_MVS::setTriggerMode(CameraTrrigerMode mode)
+        bool Camera_MVS::setTriggerMode(CameraTriggerMode mode)
         {
             triggerMode = mode;
             unsigned int modeValue;
-            if (mode == CameraTrrigerMode::SoftwareTriggered)
+            if (mode == CameraTriggerMode::SoftwareTriggered)
             {
                 modeValue = 0;
             }
-            else if (mode == CameraTrrigerMode::HardwareTriggered)
+            else if (mode == CameraTriggerMode::HardwareTriggered)
             {
                 modeValue = 1;
             }
@@ -300,7 +313,7 @@ namespace rw {
             }
             if (MV_CC_SetTriggerMode(m_cameraHandle,modeValue)==MV_OK)
             {
-                std::cout << "相机已经设置为" << (mode == CameraTrrigerMode::SoftwareTriggered ? "软件" : "硬件") <<
+                std::cout << "相机已经设置为" << (mode == CameraTriggerMode::SoftwareTriggered ? "软件" : "硬件") <<
                     "触发模式\n";
                 return true;
             }

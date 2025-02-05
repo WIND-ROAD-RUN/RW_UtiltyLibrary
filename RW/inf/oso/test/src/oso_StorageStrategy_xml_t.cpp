@@ -10,7 +10,6 @@ namespace oso_StorageStraegy_xml
         EXPECT_EQ(str, standardString);
     }
 
-
     TEST_F(StorageStrategy_xmlTest, getStoreAssemblyFromString) {
         auto target = rw::oso::StorageStrategy_Xml::getStoreAssemblyFromString(_assemblyStandardString);
 
@@ -47,5 +46,48 @@ namespace oso_StorageStraegy_xml
 
         auto result = (*target) == ObjectStoreItem(_OsoOrganizeStructureDataXmlStoreFormatItemSampleData);
         EXPECT_EQ(result, true);
+    }
+
+    TEST_F(StorageStrategy_xmlTest, apiSave) {
+        try
+        {
+            testObj.save(_OsoOrganizeStructureDataXmlStoreFormatAssemblySampleData, "./apiSave.xml");
+        }
+        catch (...)
+        {
+            FAIL();
+        }
+        SUCCEED();
+    }
+
+    TEST_F(StorageStrategy_xmlTest, apiLoad) {
+        try
+        {
+            testObj.save(_OsoOrganizeStructureDataXmlStoreFormatAssemblySampleData, "./apiSave.xml");
+            auto result = testObj.load("./apiSave.xml");
+            auto isEqual = (*result) == _OsoOrganizeStructureDataXmlStoreFormatAssemblySampleData;
+            EXPECT_EQ(isEqual, true);
+        }
+        catch (...)
+        {
+            FAIL();
+        }
+        SUCCEED();
+    }
+
+    TEST_F(StorageStrategy_xmlTest, apiGetFormatString) {
+        try
+        {
+            auto str = testObj.getFormatString(_OsoOrganizeStructureDataXmlStoreFormatAssemblySampleData);
+            auto standardString = _assemblyStandardString;
+            standardString = removeNewlinesAndTabs(standardString);
+            str = removeNewlinesAndTabs(str);
+            EXPECT_EQ(str, standardString);
+        }
+        catch (...)
+        {
+            FAIL();
+        }
+        SUCCEED();
     }
 }

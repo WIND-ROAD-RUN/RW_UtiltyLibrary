@@ -3,6 +3,9 @@
 #include"oso_core.h"
 #include"oso_StorageStrategy.hpp"
 
+#include<string>
+#include<filesystem>
+
 namespace rw
 {
     namespace oso
@@ -34,10 +37,15 @@ namespace rw
         class StorageContext
         {
         public:
-            StorageContext(StorageType type, const std::string& path);
-            void save(const ObjectStoreCore& object);
-            std::shared_ptr<ObjectStoreCore> load(const std::filesystem::path& fileName);
-            std::string getFormatString(const ObjectStoreCore& object);
+            StorageContext(StorageType type);
+        public:
+            void save(const ObjectStoreAssembly& assembly, const std::filesystem::path& fileName) const;
+            void save(const ObjectStoreAssembly& assembly, const std::string & fileName) const;
+
+            std::shared_ptr<ObjectStoreAssembly> load(const std::filesystem::path& fileName) const;
+            std::shared_ptr<ObjectStoreAssembly> load(const std::string& fileName) const;
+
+            std::string getFormatString(const ObjectStoreAssembly& assembly) const;
         private:
             std::shared_ptr<IStorageStrategy> _strategy;
         };

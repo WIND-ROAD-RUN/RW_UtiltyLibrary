@@ -4,11 +4,8 @@ project(MyCppLibrary VERSION 1.0 LANGUAGES CXX)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 
-add_library(MyCppLibrary SHARED main.cpp)
+find_package(unofficial-sqlite3 CONFIG REQUIRED)
 
-# 设置输出目录
-set_target_properties(MyCppLibrary PROPERTIES
-    RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin
-    LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib
-    ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib
-)
+add_executable(main main.cpp)
+
+target_link_libraries(main PRIVATE unofficial::sqlite3::sqlite3)

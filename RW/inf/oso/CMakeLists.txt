@@ -7,6 +7,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 find_package(pugixml CONFIG REQUIRED)
 find_package(jsoncpp CONFIG REQUIRED)
+find_package(unofficial-sqlite3 CONFIG REQUIRED)
 
 set(OSO_PRIVATE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/private)
 
@@ -32,7 +33,9 @@ add_library(${PROJECT_NAME}  STATIC ${SRC_LIST})
 target_link_libraries(${PROJECT_NAME}  
 	PRIVATE pugixml::pugixml
 	PRIVATE JsonCpp::JsonCpp
+	PRIVATE unofficial::sqlite3::sqlite3
 )
+
 target_include_directories(${PROJECT_NAME} 
 	PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include
 	PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/private/include

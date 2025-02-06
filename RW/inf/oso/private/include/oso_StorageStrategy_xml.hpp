@@ -1,7 +1,7 @@
 #pragma once
 
 #include"oso_core.h"
-#include"oso_StorageStrategy.hpp"
+#include"oso_IStorageStrategy.hpp"
 
 #include<vector>
 

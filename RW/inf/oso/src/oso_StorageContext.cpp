@@ -1,6 +1,6 @@
 #include"oso_StorageContext.hpp"
 
-#include"oso_StorageStrategy_xml.hpp"
+#include"oso_StorageStrategy_Xml.hpp"
 
 namespace rw
 {

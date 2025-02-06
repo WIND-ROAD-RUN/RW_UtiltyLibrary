@@ -5,7 +5,6 @@
 #include <vector>
 #include <memory>
 
-#include"oso_OrganizeStructure.h"
 
 namespace rw
 {

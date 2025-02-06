@@ -1,7 +1,6 @@
 #include"oso_StorageStrategy_xml.hpp"
 
 #include"pugixml.hpp"
-#include"oso_OrganizeStructure.h"
 
 #include<sstream>
 

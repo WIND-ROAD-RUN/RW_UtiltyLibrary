@@ -2,7 +2,7 @@
 
 #include"pch.h"
 
-#include"oso_StorageStrategy_xml.hpp"
+#include"oso_StorageStrategy_Xml.hpp"
 
 using namespace rw::oso;
 

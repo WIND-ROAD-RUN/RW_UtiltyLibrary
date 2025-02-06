@@ -1,15 +1,12 @@
-#pragma once
+#include"oso_StorageStrategy_Text_t.hpp"
 
-#include"pch.h"
+namespace oso_StorageStrategy_Text
+{
+  /*  TEST(a,a)
+    {
+        StorageStrategy_Text s;
+        ObjectStoreAssembly _sampleAssembly;
 
-#include"oso_StorageContext.hpp"
-
-using namespace rw::oso;
-
-class StorageContextTest
-    :public ::testing::TestWithParam<std::tuple<StorageType>> {
-
-    void SetUp() override {
         _sampleAssembly.setName("OcrDataXmlStoreFormatSampleData");
 
         ObjectStoreItem boolItem;
@@ -49,47 +46,30 @@ class StorageContextTest
         _sampleAssembly.addItem(std::make_shared<ObjectStoreAssembly>(childAssembly));
         _sampleAssembly.addItem(std::make_shared<ObjectStoreItem>(boolItem));
         _sampleAssembly.addItem(std::make_shared<ObjectStoreAssembly>(childAssembly));
-        _sampleAssembly.addItem(std::make_shared<ObjectStoreAssembly>(_sampleAssembly));
+
+        s.save(_sampleAssembly, R"(C:\Users\34615\Desktop\1\1.txt)");
+
+        auto str = s.getFormatString(_sampleAssembly);
+        std::cout << _sampleAssembly.getItems().size()<<std::endl;
+        std::cout << str.size();
     }
 
-    void TearDown() override {
-        if (std::filesystem::exists(_testFileName)) {
-            std::filesystem::remove(_testFileName);
-        }
+    TEST(a,b)
+    {
+        StorageStrategy_Text s;
+        s.load(R"(C:\Users\34615\Desktop\1\1.txt)");
+
+
+
     }
 
-protected:
-    std::shared_ptr<StorageContext>  _testObj;
-    std::filesystem::path _testFileName;
-    ObjectStoreAssembly _sampleAssembly;
-public:
-    void initestObj(StorageType type) {
-        _testObj = std::make_shared<StorageContext>(type);
+    TEST(a,c)
+    {
+        StorageStrategy_Text s;
+       auto a= s.load(R"(C:\Users\34615\Desktop\1\1.txt)");
+       auto str=s.getFormatString(*a.get());
+       std::cout << str.size();
 
-        switch (type)
-        {
-        case StorageType::Xml:
-            _testFileName = std::filesystem::current_path() / "test.xml";
-            break;
-        case StorageType::Json:
-            _testFileName = std::filesystem::current_path() / "test.json";
-            break;
-        case StorageType::Text:
-            _testFileName = std::filesystem::current_path() / "test.txt";
-            break;
-        default:
-            throw std::runtime_error("Unknown type");
-        }
-    }
+    }*/
 
-};
-
-INSTANTIATE_TEST_SUITE_P(
-    StorageContextTests,
-    StorageContextTest,
-    ::testing::Values(
-        std::make_tuple(StorageType::Xml),
-        std::make_tuple(StorageType::Json),
-        std::make_tuple(StorageType::Text)
-    )
-);
+}

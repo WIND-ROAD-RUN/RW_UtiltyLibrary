@@ -1,6 +1,7 @@
 #include"oso_StorageContext.hpp"
 
 #include"oso_StorageStrategy_Xml.hpp"
+#include"oso_StorageStrategy_Json.hpp"
 
 namespace rw
 {
@@ -12,6 +13,9 @@ namespace rw
             {
             case StorageType::Xml:
                 _strategy = std::make_shared<StorageStrategy_Xml>();
+                break;
+            case StorageType::Json:
+                _strategy = std::make_shared<StorageStrategy_Json>();
                 break;
             default:
                 break;

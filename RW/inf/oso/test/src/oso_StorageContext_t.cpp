@@ -52,6 +52,8 @@ namespace oso_StorageContext
             ASSERT_TRUE(loadedAssembly != nullptr);
             ASSERT_EQ(loadedAssembly->getName(), _sampleAssembly.getName());
             ASSERT_EQ(loadedAssembly->getItems().size(), _sampleAssembly.getItems().size());
+            ASSERT_EQ((*loadedAssembly.get()), _sampleAssembly);
+
         }
         catch (...)
         {
@@ -78,6 +80,7 @@ namespace oso_StorageContext
             ASSERT_TRUE(loadedAssembly != nullptr);
             ASSERT_EQ(loadedAssembly->getName(), _sampleAssembly.getName());
             ASSERT_EQ(loadedAssembly->getItems().size(), _sampleAssembly.getItems().size());
+            ASSERT_EQ((*loadedAssembly.get()), _sampleAssembly);
         }
         catch (...)
         {

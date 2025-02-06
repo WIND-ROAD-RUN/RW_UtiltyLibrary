@@ -2,6 +2,7 @@
 
 #include"oso_StorageStrategy_Xml.hpp"
 #include"oso_StorageStrategy_Json.hpp"
+#include "oso_StorageStrategy_Sqlite.hpp"
 #include"oso_StorageStrategy_Text.hpp"
 
 namespace rw
@@ -20,6 +21,9 @@ namespace rw
                 break;
             case StorageType::Text:
                 _strategy = std::make_shared<StorageStrategy_Text>();
+                break;
+            case StorageType::Sqlite:
+                _strategy = std::make_shared<StorageStrategy_Sqlite>();
                 break;
             default:
                 break;

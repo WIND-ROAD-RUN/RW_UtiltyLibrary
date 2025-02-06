@@ -77,6 +77,9 @@ public:
         case StorageType::Text:
             _testFileName = std::filesystem::current_path() / "test.txt";
             break;
+        case StorageType::Sqlite:
+            _testFileName = std::filesystem::current_path() / "test.db";
+            break;
         default:
             throw std::runtime_error("Unknown type");
         }

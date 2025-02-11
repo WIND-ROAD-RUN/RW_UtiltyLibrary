@@ -1,5 +1,6 @@
 #include"sim_SetInventory.hpp"
 
+#include"oso_core.h"
 
 namespace rw {
     namespace sim {

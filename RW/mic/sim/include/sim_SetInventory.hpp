@@ -4,8 +4,17 @@
 
 #include<string>
 #include <variant>
+#include <memory>
+#include <vector>
 
 namespace rw {
+    namespace oso
+    {
+        class ObjectStoreCore;
+        class ObjectStoreItem;
+        class ObjectStoreAssembly;
+    }
+
     namespace sim {
         struct SetInventoryFactory;
         enum class ItemType

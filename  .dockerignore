@@ -1,0 +1,12 @@
+# 忽略 build 目录
+build/
+
+#忽略out目录
+out/
+
+# 忽略 .git 目录
+.git/
+
+.vs/
+
+.vscode/

@@ -5,7 +5,7 @@ project(RW_UtiltyLibrary VERSION 0.1 LANGUAGES CXX)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)# 生成编译命令
 
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
-#include(iniEnvironmet) # 初始化环境变量
+include(iniEnvironmet) # 初始化环境变量
 include(iniSubModule)  # 初始化子模块
 include(iniCompile)    # 初始化编译选项
 include(rw_utiltyFunction)

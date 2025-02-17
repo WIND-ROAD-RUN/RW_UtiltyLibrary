@@ -16,3 +16,4 @@ find_package(Qt6 REQUIRED COMPONENTS Core Widgets)
 add_executable(RWQtWidget main.cpp)
 
 target_link_libraries(RWQtWidget PRIVATE Qt6::Widgets)
+

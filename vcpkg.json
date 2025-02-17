@@ -6,7 +6,6 @@
     "opencv4",
     "pybind11",
     "mysql-connector-cpp",
-    "sqlite3",
-    "qtbase"
+    "sqlite3"
   ]
 }    

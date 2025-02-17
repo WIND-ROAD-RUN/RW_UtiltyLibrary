@@ -390,7 +390,8 @@ namespace rw {
 
         cv::Mat Camera_MVS_Active::getImage()
         {
-            return this->getImage();
+            bool isGet;
+            return this->getImage(isGet);
         }
 
         Camera_MVS_Passive::Camera_MVS_Passive(UserToCallBack userToCallback)

@@ -35,7 +35,7 @@ target_include_directories(${PROJECT_NAME}
     PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/private/include
 )
 
-target_link_libraries(${PROJECT_NAME} PRIVATE ${OpenCV_LIBS})
+target_link_libraries(${PROJECT_NAME} PUBLIC ${OpenCV_LIBS})
 
 # 检查是否为Windows操作系统
 if(WIN32)

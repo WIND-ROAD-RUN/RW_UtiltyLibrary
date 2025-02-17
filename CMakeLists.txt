@@ -23,5 +23,6 @@ enable_testing()
 add_subdirectory(RW)
 add_subdirectory(ThirdLibrary)
 add_subdirectory(example)
+add_subdirectory(RWScanner)
 
 

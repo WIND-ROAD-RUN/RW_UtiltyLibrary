@@ -30,8 +30,8 @@ namespace rw {
                 auto camera = new Camera_MVS_Active();
                 result = std::make_unique<CameraActive>(camera,camera);
                 result->setIP(cameraIP.ip);
-                result->setTriggerMode(triggerMode);
                 result->connectCamera();
+                result->setTriggerMode(triggerMode);
             }
             else
             {
@@ -53,8 +53,8 @@ namespace rw {
                 auto camera = new Camera_MVS_Passive();
                 result = std::make_unique<CameraPassive>(camera, camera,userToCallBack);
                 result->setIP(cameraIP.ip);
-                result->setTriggerMode(triggerMode);
                 result->connectCamera();
+                result->setTriggerMode(triggerMode);
             }
             else
             {

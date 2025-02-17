@@ -26,6 +26,7 @@ namespace rw {
 
         bool CameraActive::connectCamera()
         {
+            _camera->setIP(_ip);
             return _camera->connectCamera();
         }
 
@@ -127,6 +128,7 @@ namespace rw {
 
         bool CameraPassive::connectCamera()
         {
+            _camera->setIP(_ip);
             return _camera->connectCamera();
         }
 

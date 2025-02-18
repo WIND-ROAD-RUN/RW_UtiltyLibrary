@@ -147,7 +147,7 @@ namespace rw
              *@Throws:
              *
              */
-            virtual bool connectCamera() = 0;
+            virtual void connectCamera() = 0;
 
         public:
 
@@ -164,7 +164,7 @@ namespace rw
              * If you want stop the camera monitor,you can call the stopMonitor() function 
              *or destruct the camera object which will stop the camera monitor automatically.
              */
-            virtual bool startMonitor() = 0;
+            virtual void startMonitor() = 0;
 
             /**
              *@Parameters:
@@ -176,7 +176,7 @@ namespace rw
              *@Throws:
              *
              */
-            virtual bool stopMonitor() = 0;
+            virtual void stopMonitor() = 0;
 
         public:
             CameraInfo getCameraInfo();
@@ -198,7 +198,7 @@ namespace rw
              *For this function,we guarantee that when you set the exposure,whatever the value is,if 
              *the value will be agreed,it will return true,otherwise return false.
              */
-            virtual bool setExposureTime(size_t value) = 0;
+            virtual void setExposureTime(size_t value) = 0;
 
             /**
              *@Parameters:
@@ -214,7 +214,7 @@ namespace rw
              *For this function,we guarantee that when you set the gain,whatever the value is,if
              *the value will be agreed,it will return true,otherwise return false.
              */
-            virtual bool setGain(size_t value) = 0;
+            virtual void setGain(size_t value) = 0;
 
             /**
              *@Parameters:
@@ -226,7 +226,7 @@ namespace rw
              *@Throws:
              *
              */
-            virtual bool setIOTime(size_t value) = 0;
+            virtual void setIOTime(size_t value) = 0;
 
             /**
              *@Parameters:
@@ -239,7 +239,7 @@ namespace rw
              *@Throws:
              *
              */
-            virtual bool setTriggerMode(CameraTriggerMode mode) = 0;
+            virtual void setTriggerMode(CameraTriggerMode mode) = 0;
 
             /**
              *@Parameters:
@@ -251,7 +251,7 @@ namespace rw
              *@Throws:
              *
              */
-            virtual bool setTriggerLine(size_t lineIndex) = 0;
+            virtual void setTriggerLine(size_t lineIndex) = 0;
 
         public:
 
@@ -375,7 +375,7 @@ namespace rw
              *@Throws:
              *
              */
-            virtual bool RegisterCallBackFunc()=0;
+            virtual void RegisterCallBackFunc()=0;
 
         };
 
@@ -383,15 +383,16 @@ namespace rw
             :public ICameraActive, public ICamera
         {
             friend class CameraFactory;
+        protected:
+            void connectCamera() override;
         public:
-            bool connectCamera() override;
-            bool startMonitor() override;
-            bool stopMonitor() override;
-            bool setExposureTime(size_t value) override;
-            bool setGain(size_t value) override;
-            bool setIOTime(size_t value) override;
-            bool setTriggerMode(CameraTriggerMode mode) override;
-            bool setTriggerLine(size_t lineIndex) override;
+            void startMonitor() override;
+            void stopMonitor() override;
+            void setExposureTime(size_t value) override;
+            void setGain(size_t value) override;
+            void setIOTime(size_t value) override;
+            void setTriggerMode(CameraTriggerMode mode) override;
+            void setTriggerLine(size_t lineIndex) override;
             size_t getExposureTime() override;
             size_t getGain() override;
             size_t getIOTime() override;
@@ -421,22 +422,23 @@ namespace rw
             friend class CameraFactory;
         public:
             UserToCallBack _userToCallBack;
+        protected:
+            void connectCamera() override;
         public:
-            bool connectCamera() override;
-            bool startMonitor() override;
-            bool stopMonitor() override;
-            bool setExposureTime(size_t value) override;
-            bool setGain(size_t value) override;
-            bool setIOTime(size_t value) override;
-            bool setTriggerMode(CameraTriggerMode mode) override;
-            bool setTriggerLine(size_t lineIndex) override;
+            void startMonitor() override;
+            void stopMonitor() override;
+            void setExposureTime(size_t value) override;
+            void setGain(size_t value) override;
+            void setIOTime(size_t value) override;
+            void setTriggerMode(CameraTriggerMode mode) override;
+            void setTriggerLine(size_t lineIndex) override;
             size_t getExposureTime() override;
             size_t getGain() override;
             size_t getIOTime() override;
             CameraTriggerMode getMonitorMode() override;
         public:
             size_t getTriggerLine() override;
-            bool RegisterCallBackFunc() override;
+            void RegisterCallBackFunc() override;
         private:
             CameraProvider _provider;
         public:

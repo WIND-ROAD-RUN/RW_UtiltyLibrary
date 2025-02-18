@@ -35,7 +35,7 @@ namespace rw {
             }
             else
             {
-                throw std::runtime_error("The camera provider is not supported.");
+                throw CameraCreateError("The camera provider is not supported.");
 
             }
 
@@ -58,8 +58,7 @@ namespace rw {
             }
             else
             {
-                throw std::runtime_error("The camera provider is not supported.");
-
+                throw CameraCreateError("The camera provider is not supported.");
             }
 
 

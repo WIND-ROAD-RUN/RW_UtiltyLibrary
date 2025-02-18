@@ -6,6 +6,8 @@
 #include <vector>
 #include <memory>
 
+#include"hoec_CameraException.hpp"
+
 namespace rw
 {
     namespace hoec

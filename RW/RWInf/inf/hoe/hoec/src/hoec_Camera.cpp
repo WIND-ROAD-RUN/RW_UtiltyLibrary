@@ -24,45 +24,45 @@ namespace rw {
             _cameraInfo = cameraInfo;
         }
 
-        bool CameraActive::connectCamera()
+        void CameraActive::connectCamera()
         {
             _camera->setIP(_ip);
-            return _camera->connectCamera();
+             _camera->connectCamera();
         }
 
-        bool CameraActive::startMonitor()
+        void CameraActive::startMonitor()
         {
-            return _camera->startMonitor();
+             _camera->startMonitor();
         }
 
-        bool CameraActive::stopMonitor()
+        void CameraActive::stopMonitor()
         {
-            return _camera->stopMonitor();
+             _camera->stopMonitor();
         }
 
-        bool CameraActive::setExposureTime(size_t value)
+        void CameraActive::setExposureTime(size_t value)
         {
-            return _camera->setExposureTime(value);
+             _camera->setExposureTime(value);
         }
 
-        bool CameraActive::setGain(size_t value)
+        void CameraActive::setGain(size_t value)
         {
-            return _camera->setGain(value);
+             _camera->setGain(value);
         }
 
-        bool CameraActive::setIOTime(size_t value)
+        void CameraActive::setIOTime(size_t value)
         {
-            return _camera->setIOTime(value);
+             _camera->setIOTime(value);
         }
 
-        bool CameraActive::setTriggerMode(CameraTriggerMode mode)
+        void CameraActive::setTriggerMode(CameraTriggerMode mode)
         {
-            return _camera->setTriggerMode(mode);
+             _camera->setTriggerMode(mode);
         }
 
-        bool CameraActive::setTriggerLine(size_t lineIndex)
+        void CameraActive::setTriggerLine(size_t lineIndex)
         {
-            return _camera->setTriggerLine(lineIndex);
+             _camera->setTriggerLine(lineIndex);
         }
 
         size_t CameraActive::getExposureTime()
@@ -126,45 +126,45 @@ namespace rw {
             _cameraActive = nullptr;
         }
 
-        bool CameraPassive::connectCamera()
+        void CameraPassive::connectCamera()
         {
             _camera->setIP(_ip);
-            return _camera->connectCamera();
+             _camera->connectCamera();
         }
 
-        bool CameraPassive::startMonitor()
+        void CameraPassive::startMonitor()
         {
-            return _camera->startMonitor();
+             _camera->startMonitor();
         }
 
-        bool CameraPassive::stopMonitor()
+        void CameraPassive::stopMonitor()
         {
-            return _camera->startMonitor();
+             _camera->stopMonitor();
         }
 
-        bool CameraPassive::setExposureTime(size_t value)
+        void CameraPassive::setExposureTime(size_t value)
         {
-            return _camera->setExposureTime(value);
+             _camera->setExposureTime(value);
         }
 
-        bool CameraPassive::setGain(size_t value)
+        void CameraPassive::setGain(size_t value)
         {
-            return _camera->setGain(value);
+             _camera->setGain(value);
         }
 
-        bool CameraPassive::setIOTime(size_t value)
+        void CameraPassive::setIOTime(size_t value)
         {
-            return _camera->setIOTime(value);
+             _camera->setIOTime(value);
         }
 
-        bool CameraPassive::setTriggerMode(CameraTriggerMode mode)
+        void CameraPassive::setTriggerMode(CameraTriggerMode mode)
         {
-            return _camera->setTriggerMode(mode);
+             _camera->setTriggerMode(mode);
         }
 
-        bool CameraPassive::setTriggerLine(size_t lineIndex)
+        void CameraPassive::setTriggerLine(size_t lineIndex)
         {
-            return _camera->setTriggerLine(lineIndex);
+             _camera->setTriggerLine(lineIndex);
         }
 
         size_t CameraPassive::getExposureTime()
@@ -192,9 +192,9 @@ namespace rw {
             return _camera->getTriggerLine();
         }
 
-        bool CameraPassive::RegisterCallBackFunc()
+        void CameraPassive::RegisterCallBackFunc()
         {
-            return _cameraPassive->RegisterCallBackFunc();
+             _cameraPassive->RegisterCallBackFunc();
         }
 
         void CameraPassive::setCameraProvider(CameraProvider provider)

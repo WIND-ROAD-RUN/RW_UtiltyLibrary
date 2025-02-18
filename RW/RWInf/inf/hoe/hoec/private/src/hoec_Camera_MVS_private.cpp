@@ -1,6 +1,7 @@
 #include"hoec_Camera_MVS_private.hpp"
 
 #include"hoec_Camera_core_private.hpp"
+#include"hoec_CameraException.hpp"
 
 #include"MvCameraControl.h"
 #include"CameraParams.h"
@@ -11,9 +12,9 @@ namespace rw {
         size_t Camera_MVS::_cameraNum = 0;
 
         Camera_MVS::Camera_MVS()
-	        :triggerMode(CameraTriggerMode::SoftwareTriggered)
+            :triggerMode(CameraTriggerMode::SoftwareTriggered)
         {
-            if (_cameraNum==0)
+            if (_cameraNum == 0)
             {
 
                 initSDK();
@@ -93,40 +94,34 @@ namespace rw {
             return cameraInfoList;
         }
 
-        bool Camera_MVS::initSDK()
+        void Camera_MVS::initSDK()
         {
             _isIniSDK = true;
             auto result = MV_CC_Initialize();
             if (result == MV_OK) {
-                return true;
+                return ;
             }
-            else {
-                std::cerr << "Failed to initialize SDK" << std::endl;
-                return false;
-            }
+            throw CameraInitError("Failed to initialize SDK");
+
         }
 
-        bool Camera_MVS::unInitSDK()
+        void Camera_MVS::unInitSDK()
         {
             _isIniSDK = false;
             auto result = MV_CC_Finalize();
             if (result == MV_OK) {
-                return true;
+                return ;
             }
-            else {
-                std::cerr << "Failed to uninitialize SDK" << std::endl;
-                return false;
-            }
+            throw CameraInitError("Failed to uninitialize SDK");
         }
 
-        bool Camera_MVS::connectCamera()
+        void Camera_MVS::connectCamera()
         {
             MV_CC_DEVICE_INFO_LIST deviceList;
             memset(&deviceList, 0, sizeof(MV_CC_DEVICE_INFO_LIST));
 
             if (MV_CC_EnumDevices(MV_GIGE_DEVICE, &deviceList) != MV_OK) {
-                std::cerr << "Failed to enumerate devices" << std::endl;
-                return false;
+                throw CameraConnectionError("Failed to enumerate devices");
             }
 
             MV_CC_DEVICE_INFO* targetDevice = nullptr;
@@ -146,117 +141,104 @@ namespace rw {
                 }
             }
             if (!targetDevice) {
-                std::cerr << "Failed to find target device" << std::endl;
-                return false;
+                throw CameraConnectionError("Failed to find target device");
             }
 
 
             //是否可以独占访问
             auto canAccessible = MV_CC_IsDeviceAccessible(targetDevice, MV_ACCESS_Exclusive);
             if (canAccessible != true) {
-                std::cerr << "Failed to access device" << std::endl;
-                return false;
+                throw CameraConnectionError("Failed to access device");
             }
 
             //创建句柄
             auto creatHandleResult = MV_CC_CreateHandle(&m_cameraHandle, targetDevice);
             if (creatHandleResult != MV_OK) {
-                std::cerr << "Failed to create handle with:" << creatHandleResult << std::endl;
-                return false;
+                throw CameraConnectionError("Failed to create handle");
             }
 
             //独占打开设备
             auto openDeviceResult = MV_CC_OpenDevice(m_cameraHandle, MV_ACCESS_Exclusive);
             if (openDeviceResult != MV_OK) {
-                std::cerr << "Failed to open device with:" << openDeviceResult << std::endl;
-                return false;
+                throw CameraConnectionError("Failed to open device");
             }
 
-            return true;
+            return ;
         }
 
-        bool Camera_MVS::startMonitor()
+        void Camera_MVS::startMonitor()
         {
             if (_isMonitor) {
-                std::cerr << "Monitor has already started" << std::endl;
-                return false;
+                throw CameraMonitorError("Monitor has already started");
             }
 
             auto result = MV_CC_StartGrabbing(m_cameraHandle);
             if (result != MV_OK) {
-                std::cerr << "Failed to stop grabbing with:" << result << std::endl;
-                return false;
+                throw CameraMonitorError("Failed to start grabbing");
             }
             _isMonitor = true;
-            return true;
+            return ;
         }
 
-        bool Camera_MVS::stopMonitor()
+        void Camera_MVS::stopMonitor()
         {
             if (!_isMonitor) {
-                std::cerr << "Monitor has already stopped" << std::endl;
-                return false;
+                throw CameraMonitorError("Monitor has already stopped");
             }
             auto result = MV_CC_StopGrabbing(m_cameraHandle);
             if (result != MV_OK) {
-                std::cerr << "Failed to stop grabbing with:" << result << std::endl;
-                return false;
+                throw CameraMonitorError("Failed to stop grabbing");
             }
             _isMonitor = false;
-            return true;
+            return ;
         }
 
-        bool Camera_MVS::setExposureTime(size_t value)
+        void Camera_MVS::setExposureTime(size_t value)
         {
             //TODO::设置曝光时间
             float exposureTime = static_cast<float>(value);
             auto result = MV_CC_SetExposureTime(m_cameraHandle, exposureTime);
             if (result == MV_OK)
-                return true;
-            else {
-                std::cerr << "Failed to set exposuretime with:" << result << std::endl;
-                return false;
-            }
+                return ;
+
+            throw CameraSettingError("Failed to set exposuretime");
+
         }
 
-        bool Camera_MVS::setGain(size_t value)
+        void Camera_MVS::setGain(size_t value)
         {
             //TODO::设置增益
             float gain = static_cast<float>(value);
             auto result = MV_CC_SetGain(m_cameraHandle, gain);
             if (result == MV_OK)
-                return true;
-            else {
-                std::cerr << "Failed to set gain with:" << result << std::endl;
-                return false;
-            }
+                return ;
+            throw CameraSettingError("Failed to set gain");
+
         }
 
-        bool Camera_MVS::setIOTime(size_t value)
+        void Camera_MVS::setIOTime(size_t value)
         {
             //TODO::设置IO时间
             auto result = MV_CC_SetIntValue(m_cameraHandle, "LineDebouncerTime ", value);
             if (result == MV_OK)
-                return true;
-            else {
-                std::cerr << "Failed to set I/OTime with:" << result << std::endl;
-                return false;
+            {
+                return ;
             }
+            throw CameraSettingError("Failed to set I/OTime");
         }
 
         size_t Camera_MVS::getExposureTime()
         {
             //TODO::获取曝光时间
             MVCC_FLOATVALUE exposureTime;
-            memset(&exposureTime,0, sizeof(MVCC_FLOATVALUE));
+            memset(&exposureTime, 0, sizeof(MVCC_FLOATVALUE));
             auto result = MV_CC_GetExposureTime(m_cameraHandle, &exposureTime);
             if (result == MV_OK) {
                 return static_cast<size_t>(exposureTime.fCurValue);
             }
-            else {
-                std::cerr << "Failed to get exposure time with:" << result << std::endl;
-                return 0;
-            }
+
+            throw CameraRetrievalError("Failed to get exposure time");
+
         }
 
         size_t Camera_MVS::getGain()
@@ -268,10 +250,10 @@ namespace rw {
             if (result == MV_OK) {
                 return static_cast<size_t>(gain.fCurValue);
             }
-            else {
-                std::cerr << "Failed to get gain with:" << result << std::endl;
-                return 0;
-            }
+
+            throw CameraRetrievalError("Failed to get gain");
+
+
         }
 
         size_t Camera_MVS::getIOTime()
@@ -283,10 +265,9 @@ namespace rw {
             if (result == MV_OK) {
                 return size_t();
             }
-            else {
-                std::cerr << "Failed to get ioTime with:" << result << std::endl;
-                return 0;
-            }
+
+            throw CameraRetrievalError("Failed to get ioTime");
+
 
         }
 
@@ -294,7 +275,7 @@ namespace rw {
             return triggerMode;
         }
 
-        bool Camera_MVS::setTriggerMode(CameraTriggerMode mode)
+        void Camera_MVS::setTriggerMode(CameraTriggerMode mode)
         {
             triggerMode = mode;
             unsigned int modeValue;
@@ -308,35 +289,30 @@ namespace rw {
             }
             else
             {
-                std::cerr << "无效的触发模式" << std::endl;
-                return false;
+                throw CameraSettingError("Invalid trigger mode");
+
             }
-            if (MV_CC_SetTriggerMode(m_cameraHandle,modeValue)==MV_OK)
+            if (MV_CC_SetTriggerMode(m_cameraHandle, modeValue) == MV_OK)
             {
-                std::cout << "相机已经设置为" << (mode == CameraTriggerMode::SoftwareTriggered ? "软件" : "硬件") <<
-                    "触发模式\n";
-                return true;
+                return ;
             }
             else
             {
-                std::cerr << "设置触发模式失败" << std::endl;
-                return false;
+                throw CameraSettingError("Failed to set trigger mode");
+
             }
         }
 
-        bool Camera_MVS::setTriggerLine(size_t lineIndex)
+        void Camera_MVS::setTriggerLine(size_t lineIndex)
         {
             unsigned int lineValue = static_cast <unsigned int> (lineIndex);
-            if (MV_CC_SetTriggerSource(m_cameraHandle,lineValue)==MV_OK)
+            if (MV_CC_SetTriggerSource(m_cameraHandle, lineValue) == MV_OK)
             {
-                std::cout << "触发线设置为索引：" << lineIndex << std::endl;
-                return true;
+                return ;
             }
-            else
-            {
-                std::cerr << "设置触发线失败" << std::endl;
-                return false;
-            }
+
+            throw CameraSettingError("Failed to set trigger line");
+
         }
 
         size_t Camera_MVS::getTriggerLine()
@@ -345,14 +321,11 @@ namespace rw {
             MVCC_ENUMVALUE stTriggerSource;
             if (MV_CC_GetTriggerSource(m_cameraHandle, &stTriggerSource) == MV_OK)
             {
-                std::cout << "获取触发线索引成功: " << stTriggerSource.nCurValue << std::endl;
                 return static_cast<size_t>(stTriggerSource.nCurValue);
             }
-            else
-            {
-                std::cerr << "获取触发线索引失败" << std::endl;
-                return 0; // 或者返回一个适当的错误值
-            }
+
+            throw CameraRetrievalError("Failed to get trigger line");
+
         }
 
         Camera_MVS_Active::Camera_MVS_Active()
@@ -368,30 +341,41 @@ namespace rw {
             MV_FRAME_OUT frameInfo;
             auto getResult = MV_CC_GetImageBuffer(m_cameraHandle, &frameInfo, 1000);
             if (getResult != MV_OK) {
-                std::cerr << "Failed to get image buffer with:" << getResult << std::endl;
                 isGet = false;
-                return cv::Mat();
+                std::cerr << "Failed to get image buffer" << std::endl;
             }
             cv::Mat image = ImageFrameConvert::MVS_ConvertFrameToMat(frameInfo);
             if (image.empty())
             {
-                std::cerr << "Failed to convert frame to mat" << std::endl;
                 isGet = false;
-                return cv::Mat();
+                std::cerr << "Failed to convert frame to mat" << std::endl;
             }
             isGet = true;
             auto freeResult = MV_CC_FreeImageBuffer(m_cameraHandle, &frameInfo);
             if (freeResult != MV_OK) {
-                std::cerr << "Failed to free image buffer with:" << freeResult << std::endl;
-                return cv::Mat();
+                isGet = false;
+                std::cerr << "Failed to free image buffer" << std::endl;
             }
             return image;
         }
 
         cv::Mat Camera_MVS_Active::getImage()
         {
-            bool isGet;
-            return this->getImage(isGet);
+            MV_FRAME_OUT frameInfo;
+            auto getResult = MV_CC_GetImageBuffer(m_cameraHandle, &frameInfo, 1000);
+            if (getResult != MV_OK) {
+                throw CameraRetrievalError("Failed to get image buffer");
+            }
+            cv::Mat image = ImageFrameConvert::MVS_ConvertFrameToMat(frameInfo);
+            if (image.empty())
+            {
+                throw CameraRetrievalError("Failed to convert frame to mat");
+            }
+            auto freeResult = MV_CC_FreeImageBuffer(m_cameraHandle, &frameInfo);
+            if (freeResult != MV_OK) {
+                throw CameraRetrievalError("Failed to free image buffer");
+            }
+            return image;
         }
 
         Camera_MVS_Passive::Camera_MVS_Passive(UserToCallBack userToCallback)
@@ -405,14 +389,13 @@ namespace rw {
 
         }
 
-        bool Camera_MVS_Passive::RegisterCallBackFunc()
+        void Camera_MVS_Passive::RegisterCallBackFunc()
         {
             auto result = MV_CC_RegisterImageCallBackEx(m_cameraHandle, Camera_MVS_Passive::ImageCallBackFunc, this);
             if (result != MV_OK) {
-                std::cerr << "Failed to register image callback with:" << result << std::endl;
-                return false;
+                throw CameraMonitorError("Failed to register image callback");
             }
-            return true;
+            return;
         }
 
         void __stdcall Camera_MVS_Passive::ImageCallBackFunc(unsigned char* pData, MV_FRAME_OUT_INFO_EX* pFrameInfo, void* pUser) {
@@ -424,7 +407,7 @@ namespace rw {
                     pThis->_userToCallBack(image);
                 }
                 else {
-                    std::cerr << "Failed to get user pointer" << std::endl;
+                    throw CameraMonitorError("Failed to get user pointer");
                 }
             }
 

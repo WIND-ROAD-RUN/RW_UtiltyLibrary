@@ -25,19 +25,19 @@ namespace rw {
             static bool _isIniSDK;   
             static std::vector<std::string> getCameraIpList();
             static std::vector<CameraInfo> getCameraInfoList();
-            static bool initSDK();
-            static bool unInitSDK();
+            static void initSDK();
+            static void unInitSDK();
         public:
-            bool connectCamera() override;
+            void connectCamera() override;
         public:
-            bool startMonitor() override;
-            bool stopMonitor() override;
+            void startMonitor() override;
+            void stopMonitor() override;
         public:
-            bool setExposureTime(size_t value) override;
-            bool setGain(size_t value) override;
-            bool setIOTime(size_t value) override;
-            bool setTriggerMode(CameraTriggerMode mode) override;
-            bool setTriggerLine(size_t lineIndex) override;
+            void setExposureTime(size_t value) override;
+            void setGain(size_t value) override;
+            void setIOTime(size_t value) override;
+            void setTriggerMode(CameraTriggerMode mode) override;
+            void setTriggerLine(size_t lineIndex) override;
         public:
             size_t getExposureTime() override;
             size_t getGain() override;
@@ -72,7 +72,7 @@ namespace rw {
                 });
             ~Camera_MVS_Passive() override;
         public:
-            bool RegisterCallBackFunc() override;
+            void RegisterCallBackFunc() override;
         public:
 
             static void __stdcall ImageCallBackFunc(unsigned char* pData, MV_FRAME_OUT_INFO_EX* pFrameInfo, void* pUser);

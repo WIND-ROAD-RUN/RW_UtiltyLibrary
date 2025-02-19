@@ -2,7 +2,8 @@
 
 #include <QMouseEvent>
 #include <QDebug>
-#include"opencv2/opencv.hpp"   
+#include"opencv2/opencv.hpp"
+#include<QThread>
 
 namespace rw
 {
@@ -10,36 +11,36 @@ namespace rw
     {
         CameraDisplayLabel::CameraDisplayLabel(QWidget* parent) : QLabel(parent)
         {
-            auto cameraIPs = hoec::CameraFactory::checkAllCamera();
-            if (cameraIPs.size() == 0)
+            auto cameraList=CheckCameraList();
+            if (cameraList.size() < 0)
             {
-                throw std::runtime_error("No camera found");
+                return;
             }
-            auto cameraIP = cameraIPs[0];
-            _cameraPassive = 
-                hoec::CameraFactory::CreatePassiveCamera
-            (cameraIP, hoec::CameraTriggerMode::SoftwareTriggered, [this](cv::Mat mat)
-                {
-                    static int count = 0;
-                    this->setText(QString::number(count));
-                    count++;
-                });
-            _cameraPassive->RegisterCallBackFunc();
-            _cameraPassive->startMonitor();
 
+            CameraMetaData & cameraMetaData = cameraList[0];
+            _cameraPassive = std::make_unique<CameraPassiveObject>(this);
+            _cameraPassive->initCamera(cameraMetaData, CameraObjectTrigger::Software);
+            connect(_cameraPassive.get(), &CameraPassiveObject::frameCapturedWithMetaData, this, &CameraDisplayLabel::onFrameCapturedWithMetaData);
+            _cameraPassive->startMonitor();
         }
 
         CameraDisplayLabel::~CameraDisplayLabel()
         {
         }
 
-        void CameraDisplayLabel::mousePressEvent(QMouseEvent* event)
+        void CameraDisplayLabel::onFrameCapturedWithMetaData(cv::Mat frame, CameraMetaData cameraMetaData)
         {
-            // 处理鼠标按下事件
-            qDebug() << "Mouse pressed at position:" << event->pos();
-            QLabel::mousePressEvent(event); // 调用基类的实现
+            static int count = 0;
+            QString text = QString("Frame captured: %1").arg(count++);
+            QString framInfo = QString("Frame Info: %1").arg(cameraMetaData.ip);
+            QString framSize = QString("Frame Size: %1x%2").arg(frame.cols).arg(frame.rows);
+            text += QString("\n") + framInfo + QString("\n") + framSize;
+            setText(text);
+
+            cv::Mat rgbFrame;
+            cv::cvtColor(frame, rgbFrame, cv::COLOR_BGR2RGB);
+            QImage img = QImage((const unsigned char*)(rgbFrame.data), rgbFrame.cols, rgbFrame.rows, QImage::Format_RGB888);
+            setPixmap(QPixmap::fromImage(img));
         }
-
-
     } // namespace rsw
 } // namespace rw

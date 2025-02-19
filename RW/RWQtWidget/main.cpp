@@ -3,8 +3,8 @@
 #include <QMessageBox>
 #include<QDialog>
 
-#include"rsw_CameraDisplayLabel.hpp"
-#include"rsw_CameraDisplayLabel.hpp"
+#include"rqw_CameraDisplayLabel.hpp"
+#include"rqw_CameraDisplayLabel.hpp"
 
 int main(int argc, char* argv[]) {
     QApplication app(argc, argv);

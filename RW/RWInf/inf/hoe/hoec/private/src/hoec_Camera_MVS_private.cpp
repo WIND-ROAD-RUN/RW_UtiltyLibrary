@@ -6,6 +6,8 @@
 #include"MvCameraControl.h"
 #include"CameraParams.h"
 
+#include<algorithm>
+
 namespace rw {
     namespace hoec {
         bool Camera_MVS::_isIniSDK = false;
@@ -163,6 +165,17 @@ namespace rw {
                 throw CameraConnectionError("Failed to open device");
             }
 
+            auto cameraInfoList=Camera_MVS::getCameraInfoList();
+            auto findResult = std::find_if(cameraInfoList.begin(), cameraInfoList.end(), [this](const CameraInfo& cameraInfo) {
+                return cameraInfo.ip == _ip;
+                });
+
+            if (findResult == cameraInfoList.end()) {
+                throw CameraConnectionError("Failed to find target device");
+            }
+
+            _cameraInfo = *findResult;
+
             return ;
         }
 
@@ -195,7 +208,6 @@ namespace rw {
 
         void Camera_MVS::setExposureTime(size_t value)
         {
-            //TODO::设置曝光时间
             float exposureTime = static_cast<float>(value);
             auto result = MV_CC_SetExposureTime(m_cameraHandle, exposureTime);
             if (result == MV_OK)
@@ -207,7 +219,6 @@ namespace rw {
 
         void Camera_MVS::setGain(size_t value)
         {
-            //TODO::设置增益
             float gain = static_cast<float>(value);
             auto result = MV_CC_SetGain(m_cameraHandle, gain);
             if (result == MV_OK)
@@ -218,7 +229,6 @@ namespace rw {
 
         void Camera_MVS::setIOTime(size_t value)
         {
-            //TODO::设置IO时间
             auto result = MV_CC_SetIntValue(m_cameraHandle, "LineDebouncerTime ", value);
             if (result == MV_OK)
             {
@@ -229,7 +239,6 @@ namespace rw {
 
         size_t Camera_MVS::getExposureTime()
         {
-            //TODO::获取曝光时间
             MVCC_FLOATVALUE exposureTime;
             memset(&exposureTime, 0, sizeof(MVCC_FLOATVALUE));
             auto result = MV_CC_GetExposureTime(m_cameraHandle, &exposureTime);
@@ -243,7 +252,6 @@ namespace rw {
 
         size_t Camera_MVS::getGain()
         {
-            //TODO::获取增益
             MVCC_FLOATVALUE gain;
             memset(&gain, 0, sizeof(MVCC_FLOATVALUE));
             auto result = MV_CC_GetGain(m_cameraHandle, &gain);
@@ -404,7 +412,7 @@ namespace rw {
             {
                 auto image = ImageFrameConvert::MVS_ConvertFrameToMat(*pFrameInfo, pData);
                 if (pThis) {
-                    pThis->_userToCallBack(image);
+                    pThis->_userToCallBack(std::move(image));
                 }
                 else {
                     throw CameraMonitorError("Failed to get user pointer");

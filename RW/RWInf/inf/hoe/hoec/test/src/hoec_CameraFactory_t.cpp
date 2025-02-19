@@ -30,24 +30,33 @@ namespace  hoec_CameraFactory
             try
             {
                 auto cameraActive = CameraFactory::CreateActiveCamera(cameraIP, CameraTriggerMode::SoftwareTriggered);
+                auto cameraInfo = cameraActive->getCameraInfo();
+                std::cout << cameraInfo.ip << '\n';
+                std::cout << cameraInfo.name << '\n';
+                std::cout << cameraInfo.mac << '\n';
             }
             catch (const CameraCreateError& e)
             {
                 std::cout << e.what() << '\n';
                 FAIL();
             }
+
         }
 
         {
 
             try
             {
-                auto cameraActive = CameraFactory::CreatePassiveCamera(cameraIP, CameraTriggerMode::SoftwareTriggered, [](cv::Mat mat)
+                auto cameraPassive = CameraFactory::CreatePassiveCamera(cameraIP, CameraTriggerMode::SoftwareTriggered, [](cv::Mat mat)
                     {
                         std::cout << mat.size().width << '\n';
                         std::cout << mat.size().height << '\n';
                         std::cout << "We have gotten a image" << '\n';
                     });
+                auto cameraInfo = cameraPassive->getCameraInfo();
+                std::cout << cameraInfo.ip << '\n';
+                std::cout << cameraInfo.name << '\n';
+                std::cout << cameraInfo.mac << '\n';
             }
             catch (const CameraCreateError& e)
             {

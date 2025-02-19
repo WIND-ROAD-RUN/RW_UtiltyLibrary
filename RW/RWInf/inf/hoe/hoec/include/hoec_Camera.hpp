@@ -140,11 +140,18 @@ namespace rw
              *@Parameters:
              *  void
              *@Methods:
-             *  Connect the camera,in this call, it whill exclusive the camera resource,and open
-             * device. It also initialize the camera resource and get the camera handle.
+             *  Connect the camera,in this call, it will exclusive the camera resource,and open
+             * device. It also initializes the camera resource and get the camera handle.
              *@Returns: bool
              *  If connect the camera successfully, return true,otherwise return false.
              *@Throws:
+             *   CameraConnectionError: If failed to connect the camera, throw the CameraConnectionError.
+             *   Below is the reason:
+             *      - Failed to enumerate devices
+             *      - Failed to find target device
+             *      - Failed to access device
+             *      - Failed to create handle
+             *      - Failed to open device
              *
              */
             virtual void connectCamera() = 0;
@@ -159,7 +166,10 @@ namespace rw
              *@Returns: bool
              *  If start the camera monitor successfully, return true,otherwise return false.
              *@Throws:
-             *
+             *  CameraMonitorError: If failed to start the camera monitor, throw the CameraMonitorError.
+             *  Below is the reason:
+             *      - Monitor has already started
+             *      - Failed to start grabbing
              *@Warning:
              * If you want stop the camera monitor,you can call the stopMonitor() function 
              *or destruct the camera object which will stop the camera monitor automatically.
@@ -174,6 +184,10 @@ namespace rw
              *@Returns: bool
              *  If stop the camera monitor successfully, return true,otherwise return false.
              *@Throws:
+             *  CameraMonitorError: If failed to stop the camera monitor, throw the CameraMonitorError.
+             *  Below is the reason:
+             *      - Monitor has already stopped
+             *      - Failed to stop grabbing
              *
              */
             virtual void stopMonitor() = 0;
@@ -181,6 +195,17 @@ namespace rw
         public:
             CameraInfo getCameraInfo();
 
+        protected:
+            /**
+             *@Parameters:
+             *  - cameraInfo: The information of the camera you want to set.
+             *@Methods:
+             *  When connect the camera, you should set the camera information in connectCamera() function.
+             *@Returns: types
+             *  returns
+             *@Throws:
+             *  throws
+             */
             void setCameraInfo(const CameraInfo& cameraInfo);
         public:
 
@@ -192,7 +217,9 @@ namespace rw
              *@Returns: bool
              *  If set the exposure time successfully, return true,otherwise return false.
              *@Throws:
-             *
+             *  CameraSettingError: If failed to set the exposure time, throw the CameraSettingError.
+             *  Below is the reason:
+             *      - Failed to set exposure time
              *@Warning:
              * For some camera, the exposure time has a range, you should set the value in the range.
              *For this function,we guarantee that when you set the exposure,whatever the value is,if 
@@ -208,6 +235,9 @@ namespace rw
              *@Returns: bool
              *  If set the gain successfully, return true,otherwise return false.
              *@Throws:
+             *  CameraSettingError: If failed to set the gain, throw the CameraSettingError.
+             *  Below is the reason:
+             *      - Failed to set gain
              *
              *@Warning:
              * For some camera, the gain has a range, you should set the value in the range.
@@ -224,6 +254,9 @@ namespace rw
              *@Returns: bool
              *  If set the IO time successfully, return true,otherwise return false.
              *@Throws:
+             *  CameraSettingError: If failed to set the IO time, throw the CameraSettingError.
+             *  Below is the reason:
+             *      - Failed to set IO time
              *
              */
             virtual void setIOTime(size_t value) = 0;
@@ -237,6 +270,9 @@ namespace rw
              *@Returns: bool
              *  If set the monitor mode successfully, return true,otherwise return false.
              *@Throws:
+             *  CameraSettingError: If failed to set the monitor mode, throw the CameraSettingError.
+             *  Below is the reason:
+             *      - Failed to set monitor mode
              *
              */
             virtual void setTriggerMode(CameraTriggerMode mode) = 0;
@@ -249,6 +285,9 @@ namespace rw
              *@Returns: bool
              *  If set the trigger line successfully, return true,otherwise return false.
              *@Throws:
+             *  CameraSettingError: If failed to set the trigger line, throw the CameraSettingError.
+             *  Below is the reason:
+             *      - Failed to set trigger line
              *
              */
             virtual void setTriggerLine(size_t lineIndex) = 0;
@@ -263,6 +302,9 @@ namespace rw
              *@Returns: void
              *
              *@Throws:
+             *  CameraRetrievalError: If failed to get the exposure time, throw the CameraRetrievalError.
+             *  Below is the reason:
+             *      - Failed to get exposure time
              *
              */
             [[nodiscard]] virtual size_t getExposureTime()=0;
@@ -275,7 +317,9 @@ namespace rw
              *@Returns: void
              *
              *@Throws:
-             *
+             *  CameraRetrievalError: If failed to get the gain, throw the CameraRetrievalError.
+             *  Below is the reason:
+             *      - Failed to get gain
              */
             [[nodiscard]] virtual size_t getGain()=0;
 
@@ -287,7 +331,9 @@ namespace rw
              *@Returns: void
              *
              *@Throws:
-             *
+             *  CameraRetrievalError: If failed to get the IO time, throw the CameraRetrievalError.
+             *  Below is the reason:
+             *      - Failed to get IO time
              */
             [[nodiscard]] virtual size_t getIOTime()=0;
 
@@ -299,7 +345,9 @@ namespace rw
              *@Returns: void
              *
              *@Throws:
-             *
+             *  CameraRetrievalError: If failed to get the monitor mode, throw the CameraRetrievalError.
+             *  Below is the reason:
+             *      - Failed to get monitor mode
              */
             [[nodiscard]] virtual CameraTriggerMode getMonitorMode()=0;
 
@@ -311,6 +359,8 @@ namespace rw
              *@Returns: void
              *
              *@Throws:
+             *  CameraRetrievalError: If failed to get the trigger line, throw the CameraRetrievalError.
+             *  - Failed to get trigger line
              *
              */
             [[nodiscard]] virtual size_t getTriggerLine() = 0;

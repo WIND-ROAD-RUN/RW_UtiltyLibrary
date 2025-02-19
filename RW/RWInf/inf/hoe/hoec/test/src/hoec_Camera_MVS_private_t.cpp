@@ -585,6 +585,11 @@ namespace  hoec_Camera_MVS
                 FAIL();
             }
 
+            auto cameraInfo = cameraActive.getCameraInfo();
+            std::cout << cameraInfo.ip << '\n';
+            std::cout << cameraInfo.name << '\n';
+            std::cout << cameraInfo.mac << '\n';
+
         }
 
 
@@ -601,6 +606,11 @@ namespace  hoec_Camera_MVS
                 std::cout << e.what() << '\n';
                 FAIL();
             }
+
+            auto cameraInfo = cameraPassive.getCameraInfo();
+            std::cout << cameraInfo.ip << '\n';
+            std::cout << cameraInfo.name << '\n';
+            std::cout << cameraInfo.mac << '\n';
 
         }
 

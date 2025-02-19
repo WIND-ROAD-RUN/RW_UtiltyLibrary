@@ -17,6 +17,7 @@ namespace  hoec_CameraFactory
         {
             std::cout << "Please connect the camera before test" << '\n';
             SUCCEED();
+            return;
         }
 
         CameraIP cameraIP;
@@ -66,6 +67,7 @@ namespace  hoec_CameraFactory
         {
             std::cout << "Please connect the camera before test" << '\n';
             SUCCEED();
+            return;
         }
 
         CameraIP cameraIP;
@@ -140,6 +142,7 @@ namespace  hoec_CameraFactory
         {
             std::cout << "Please connect the camera before test" << '\n';
             SUCCEED();
+            return;
         }
 
         CameraIP cameraIP;
@@ -229,6 +232,7 @@ namespace  hoec_CameraFactory
         {
             std::cout << "Please connect the camera before test" << '\n';
             SUCCEED();
+            return;
         }
         CameraIP cameraIP;
         cameraIP.ip = cameraList[0].ip;
@@ -347,6 +351,7 @@ namespace  hoec_CameraFactory
         {
             std::cout << "Please connect the camera before test" << '\n';
             SUCCEED();
+            return;
         }
         CameraIP cameraIP;
         cameraIP.ip = cameraList[0].ip;
@@ -390,6 +395,7 @@ namespace  hoec_CameraFactory
         {
             std::cout << "Please connect the camera before test" << '\n';
             SUCCEED();
+            return;
         }
         CameraIP cameraIP;
         cameraIP.ip = cameraList[0].ip;

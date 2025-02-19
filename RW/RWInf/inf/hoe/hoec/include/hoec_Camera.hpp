@@ -265,7 +265,7 @@ namespace rw
              *@Throws:
              *
              */
-            virtual size_t getExposureTime()=0;
+            [[nodiscard]] virtual size_t getExposureTime()=0;
 
             /**
              *@Parameters:
@@ -277,7 +277,7 @@ namespace rw
              *@Throws:
              *
              */
-            virtual size_t getGain()=0;
+            [[nodiscard]] virtual size_t getGain()=0;
 
             /**
              *@Parameters:
@@ -289,7 +289,7 @@ namespace rw
              *@Throws:
              *
              */
-            virtual size_t getIOTime()=0;
+            [[nodiscard]] virtual size_t getIOTime()=0;
 
             /**
              *@Parameters:
@@ -301,7 +301,7 @@ namespace rw
              *@Throws:
              *
              */
-            virtual CameraTriggerMode getMonitorMode()=0;
+            [[nodiscard]] virtual CameraTriggerMode getMonitorMode()=0;
 
             /**
              *@Parameters:
@@ -313,7 +313,7 @@ namespace rw
              *@Throws:
              *
              */
-            virtual size_t getTriggerLine() = 0;
+            [[nodiscard]] virtual size_t getTriggerLine() = 0;
 
         };
 
@@ -333,7 +333,7 @@ namespace rw
              *@Throws:
              *
              */
-            virtual cv::Mat getImage(bool& isGet)=0;
+            [[nodiscard]] virtual cv::Mat getImage(bool& isGet)=0;
 
             /**
              *@Parameters:
@@ -345,7 +345,7 @@ namespace rw
              *@Throws:
              *
              */
-            virtual cv::Mat getImage() = 0;
+            [[nodiscard]] virtual cv::Mat getImage() = 0;
         };
 
         class ICameraPassive
@@ -393,14 +393,14 @@ namespace rw
             void setIOTime(size_t value) override;
             void setTriggerMode(CameraTriggerMode mode) override;
             void setTriggerLine(size_t lineIndex) override;
-            size_t getExposureTime() override;
-            size_t getGain() override;
-            size_t getIOTime() override;
-            CameraTriggerMode getMonitorMode() override;
-            size_t getTriggerLine() override;
+            [[nodiscard]] size_t getExposureTime() override;
+            [[nodiscard]] size_t getGain() override;
+            [[nodiscard]] size_t getIOTime() override;
+            [[nodiscard]] CameraTriggerMode getMonitorMode() override;
+            [[nodiscard]] size_t getTriggerLine() override;
         public:
-            cv::Mat getImage(bool& isGet) override;
-            cv::Mat getImage() override;
+            [[nodiscard]] cv::Mat getImage(bool& isGet) override;
+            [[nodiscard]] cv::Mat getImage() override;
         private:
             CameraProvider _provider;
         public:

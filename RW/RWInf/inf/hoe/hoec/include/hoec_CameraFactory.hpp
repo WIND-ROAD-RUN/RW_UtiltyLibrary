@@ -18,6 +18,8 @@ namespace rw
             hoec::CameraProvider provider;
         };
 
+
+
         class CameraFactory {
         public:
             static std::vector<CameraIP> checkAllCamera();

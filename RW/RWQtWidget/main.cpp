@@ -3,12 +3,16 @@
 #include <QMessageBox>
 #include<QDialog>
 
+#include"rsw_CameraDisplayLabel.hpp"
+#include"rsw_CameraDisplayLabel.hpp"
+
 int main(int argc, char* argv[]) {
     QApplication app(argc, argv);
 
-    QDialog dialog;
-    dialog.setWindowTitle("Hello, world!");
-    dialog.exec();
+    rw::rqw::CameraDisplayLabel label;
+    label.setText("Hello World");
+    label.show();
+
 
     return app.exec();
 }

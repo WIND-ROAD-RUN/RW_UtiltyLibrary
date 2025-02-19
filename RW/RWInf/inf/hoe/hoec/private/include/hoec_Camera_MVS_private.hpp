@@ -46,7 +46,7 @@ namespace rw {
             size_t getTriggerLine() override;
         protected:
             void* m_cameraHandle{ nullptr };
-        private:
+        protected:
             bool _isMonitor{ false };
             CameraTriggerMode triggerMode;
         };

@@ -394,7 +394,11 @@ namespace rw {
 
         Camera_MVS_Passive::~Camera_MVS_Passive()
         {
-
+            if (_isMonitor)
+            {
+                this->Camera_MVS::stopMonitor();
+                _isMonitor = false;
+            }
         }
 
         void Camera_MVS_Passive::RegisterCallBackFunc()
@@ -405,6 +409,7 @@ namespace rw {
             }
             return;
         }
+
 
         void __stdcall Camera_MVS_Passive::ImageCallBackFunc(unsigned char* pData, MV_FRAME_OUT_INFO_EX* pFrameInfo, void* pUser) {
             Camera_MVS_Passive* pThis = static_cast<Camera_MVS_Passive*>(pUser);

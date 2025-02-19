@@ -67,7 +67,23 @@ namespace rw
             // The camera is provided by the HIKVISION.
             MVS
         };
+        inline CameraProvider  from_string(const std::string& string)
+        {
+            if (string == "MVS")
+            {
+                return CameraProvider::MVS;
+            }
+            return CameraProvider::MVS;
+        }
 
+        inline const char* to_string(CameraProvider e)
+        {
+            switch (e)
+            {
+            case CameraProvider::MVS: return "MVS";
+            default: return "unknown";
+            }
+        }
 
         /**
          * @brief This class is used to provide the interface of the camera.

@@ -50,7 +50,7 @@ namespace rw {
             if (cameraIP.provider == CameraProvider::MVS)
             {
 
-                auto camera = new Camera_MVS_Passive();
+                auto camera = new Camera_MVS_Passive(userToCallBack);
                 result = std::make_unique<CameraPassive>(camera, camera,userToCallBack);
                 result->setIP(cameraIP.ip);
                 result->connectCamera();

@@ -1,3 +1,2 @@
-add_subdirectory(inf)
-add_subdirectory(utilty)
-add_subdirectory(mic)
+add_subdirectory(RWInf)
+add_subdirectory(RWQtWidget)

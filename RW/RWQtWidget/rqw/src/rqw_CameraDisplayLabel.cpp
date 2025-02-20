@@ -1,3 +1,4 @@
+#include <QDebug>
 #include"rqw_CameraDisplayLabel.hpp"
 
 #include <QMouseEvent>
@@ -21,7 +22,8 @@ namespace rw
             _cameraPassiveThread = new CameraPassiveThread();
             _cameraPassiveThread->initCamera(cameraMetaData, CameraObjectTrigger::Software);
 
-            connect(_cameraPassiveThread, &CameraPassiveThread::frameCapturedWithMetaData, this, &CameraDisplayLabel::onFrameCapturedWithMetaData);
+            //多线程用Qt::QueuedConnection
+            connect(_cameraPassiveThread, &CameraPassiveThread::frameCapturedWithMetaData, this, &CameraDisplayLabel::onFrameCapturedWithMetaData, Qt::QueuedConnection);
             _cameraPassiveThread->startMonitor();
         }
 

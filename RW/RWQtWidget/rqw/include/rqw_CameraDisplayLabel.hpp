@@ -1,7 +1,7 @@
 #pragma once
 
 #include"rqw_CameraObject.hpp"
-#include"rqw_CameraObjectThead.hpp"
+#include"rqw_CameraObjectThread.hpp"
 
 #include <memory>
 #include <QLabel>

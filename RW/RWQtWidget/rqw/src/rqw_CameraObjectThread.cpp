@@ -1,4 +1,7 @@
-#include"rqw_CameraObjectThead.hpp"
+#include"rqw_CameraObjectThread.hpp"
+
+#include"rqw_CameraObject.hpp"
+
 
 namespace rw
 {
@@ -27,9 +30,9 @@ namespace rw
             if (!_cameraObject)
             {
                 _cameraObject = new rw::rqw::CameraPassiveObject();
-                connect(_cameraObject, &rw::rqw::CameraPassiveObject::frameCaptured, this, &CameraPassiveThread::frameCaptured);
-                connect(_cameraObject, &rw::rqw::CameraPassiveObject::frameCapturedWithMetaData, this, &CameraPassiveThread::frameCapturedWithMetaData);
-                connect(_cameraObject, &rw::rqw::CameraPassiveObject::frameCapturedWithoutArgs, this, &CameraPassiveThread::frameCapturedWithoutArgs);
+                connect(_cameraObject, &rw::rqw::CameraPassiveObject::frameCaptured, this, &CameraPassiveThread::onFrameCaptured,Qt::DirectConnection);
+                connect(_cameraObject, &rw::rqw::CameraPassiveObject::frameCapturedWithMetaData, this, &CameraPassiveThread::onFrameCapturedWithMetaData, Qt::DirectConnection);
+                connect(_cameraObject, &rw::rqw::CameraPassiveObject::frameCapturedWithoutArgs, this, &CameraPassiveThread::onFrameCapturedWithoutArgs, Qt::DirectConnection);
                 _cameraObject->initCamera(cameraMetaData, triggerMode);
             }
         }
@@ -59,6 +62,21 @@ namespace rw
         void CameraPassiveThread::run()
         {
             exec();
+        }
+
+        void CameraPassiveThread::onFrameCaptured(cv::Mat frame)
+        {
+            emit frameCaptured(std::move(frame));
+        }
+
+        void CameraPassiveThread::onFrameCapturedWithMetaData(cv::Mat frame, rw::rqw::CameraMetaData cameraMetaData)
+        {
+            emit frameCapturedWithMetaData(std::move(frame), std::move(cameraMetaData));
+        }
+
+        void CameraPassiveThread::onFrameCapturedWithoutArgs()
+        {
+            emit frameCapturedWithoutArgs();
         }
     } // namespace rqw
 } // namespace rw

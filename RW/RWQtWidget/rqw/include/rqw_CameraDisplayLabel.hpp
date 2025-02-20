@@ -1,6 +1,7 @@
 #pragma once
 
 #include"rqw_CameraObject.hpp"
+#include"rqw_CameraObjectThead.hpp"
 
 #include <memory>
 #include <QLabel>
@@ -12,11 +13,10 @@ namespace rw {
         {
             Q_OBJECT
         private:
-            std::unique_ptr<CameraPassiveObject> _cameraPassive;
+            CameraPassiveThread* _cameraPassiveThread;
         public:
             explicit CameraDisplayLabel(QWidget* parent = nullptr);
             ~CameraDisplayLabel() override;
-
         public slots:
             void onFrameCapturedWithMetaData(cv::Mat frame, CameraMetaData cameraMetaData);
         };

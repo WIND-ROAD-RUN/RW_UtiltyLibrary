@@ -18,15 +18,20 @@ namespace rw
             }
 
             CameraMetaData & cameraMetaData = cameraList[0];
-            _cameraPassive = std::make_unique<CameraPassiveObject>(this);
-            _cameraPassive->initCamera(cameraMetaData, CameraObjectTrigger::Software);
-            connect(_cameraPassive.get(), &CameraPassiveObject::frameCapturedWithMetaData, this, &CameraDisplayLabel::onFrameCapturedWithMetaData);
-            _cameraPassive->startMonitor();
+            _cameraPassiveThread = new CameraPassiveThread();
+            _cameraPassiveThread->initCamera(cameraMetaData, CameraObjectTrigger::Software);
+
+            connect(_cameraPassiveThread, &CameraPassiveThread::frameCapturedWithMetaData, this, &CameraDisplayLabel::onFrameCapturedWithMetaData);
+            _cameraPassiveThread->startMonitor();
         }
 
         CameraDisplayLabel::~CameraDisplayLabel()
         {
+            _cameraPassiveThread->stopMonitor();
+
+            delete _cameraPassiveThread;
         }
+
 
         void CameraDisplayLabel::onFrameCapturedWithMetaData(cv::Mat frame, CameraMetaData cameraMetaData)
         {

@@ -55,6 +55,36 @@ namespace rqw_CameraObject
     }
 
 
+    TEST_F(CameraPassiveObjectTest, apiSetGet)
+    {
+        if (!isConstruct)
+        {
+            std::cout << "Test skipped" << '\n';
+            std::cout << "if you want to test ,please connect camera" << '\n';
+            return;
+        }
+        testObj->startMonitor();
+        std::this_thread::sleep_for(std::chrono::seconds(5));
+        QCoreApplication::processEvents();
+
+
+        testObj->setExposureTime(1000);
+        testObj->setGain(10);
+        /*testObj->setIOTime(1000);*/
+        testObj->setTriggerMode(rqw::CameraObjectTrigger::Hardware);
+        /*testObj->setTriggerLine(1);*/
+
+        EXPECT_EQ(testObj->getExposureTime(), 1000);
+        EXPECT_EQ(testObj->getGain(), 10);
+        /*EXPECT_EQ(testObj->getIOTime(), 1000);*/
+        EXPECT_EQ(testObj->getMonitorMode(), rqw::CameraObjectTrigger::Hardware);
+        /*EXPECT_EQ(testObj->getTriggerLine(), 1);*/
+
+
+        testObj->stopMonitor();
+    }
+
+
     
 
 }

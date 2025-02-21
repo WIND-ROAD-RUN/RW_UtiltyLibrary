@@ -25,6 +25,8 @@ namespace rw
             //多线程用Qt::QueuedConnection
             connect(_cameraPassiveThread, &CameraPassiveThread::frameCapturedWithMetaData, this, &CameraDisplayLabel::onFrameCapturedWithMetaData, Qt::QueuedConnection);
             _cameraPassiveThread->startMonitor();
+            _cameraPassiveThread->setExposureTime(18000);
+            _cameraPassiveThread->setGain(10);
         }
 
         CameraDisplayLabel::~CameraDisplayLabel()

@@ -21,9 +21,6 @@ namespace rw {
             void onFrameCapturedWithMetaData(cv::Mat frame, CameraMetaData cameraMetaData);
         };
 
-
-
-
     } // namespace rsw
 
 } // namespace rw

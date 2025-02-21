@@ -53,7 +53,8 @@ namespace rw {
         enum class CameraObjectTrigger
         {
             Hardware,
-            Software
+            Software,
+            Undefined
         };
 
 

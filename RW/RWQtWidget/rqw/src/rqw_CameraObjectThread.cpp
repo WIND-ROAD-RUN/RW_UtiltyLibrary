@@ -59,6 +59,91 @@ namespace rw
             }
         }
 
+        void CameraPassiveThread::setExposureTime(size_t value) const
+        {
+            if (_cameraObject)
+            {
+                _cameraObject->setExposureTime(value);
+            }
+        }
+
+        void CameraPassiveThread::setGain(size_t value) const
+        {
+            if (_cameraObject)
+            {
+                _cameraObject->setGain(value);
+            }
+        }
+
+        void CameraPassiveThread::setIOTime(size_t value) const
+        {
+            if (_cameraObject)
+            {
+                _cameraObject->setIOTime(value);
+            }
+        }
+
+        void CameraPassiveThread::setTriggerMode(CameraObjectTrigger mode) const
+        {
+            if (_cameraObject)
+            {
+                _cameraObject->setTriggerMode(mode);
+            }
+        }
+
+        void CameraPassiveThread::setTriggerLine(size_t lineIndex) const
+        {
+            if (_cameraObject)
+            {
+                _cameraObject->setTriggerLine(lineIndex);
+            }
+        }
+
+        size_t CameraPassiveThread::getExposureTime() const
+        {
+            if (_cameraObject)
+            {
+                return _cameraObject->getExposureTime();
+            }
+            return 0;
+        }
+
+        size_t CameraPassiveThread::getGain() const
+        {
+            if (_cameraObject)
+            {
+                return _cameraObject->getGain();
+            }
+            return 0;
+        }
+
+        size_t CameraPassiveThread::getIOTime() const
+        {
+            if (_cameraObject)
+            {
+                return _cameraObject->getIOTime();
+            }
+            return 0;
+        }
+
+        CameraObjectTrigger CameraPassiveThread::getMonitorMode() const
+        {
+            if (_cameraObject)
+            {
+                return _cameraObject->getMonitorMode();
+            }
+            return CameraObjectTrigger::Undefined;
+        }
+
+        size_t CameraPassiveThread::getTriggerLine() const
+        {
+            if (_cameraObject)
+            {
+                return _cameraObject->getTriggerLine();
+            }
+            return 0;
+        }
+
         void CameraPassiveThread::run()
         {
             exec();

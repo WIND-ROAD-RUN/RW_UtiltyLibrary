@@ -1,0 +1,27 @@
+version: '3.8'
+
+services:
+  mysql:
+    build: ./database
+    container_name: mysqlDataBase
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: my-secret-pw
+      MYSQL_DATABASE: mydatabase
+      MYSQL_USER: myuser
+      MYSQL_PASSWORD: mypassword
+    volumes:
+      - mysql-data:/var/lib/mysql
+
+  redis:
+    build: ./redis  
+    container_name: redisCache
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis-data:/data
+
+volumes:
+  mysql-data:
+  redis-data:

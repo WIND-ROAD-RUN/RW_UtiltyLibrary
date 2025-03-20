@@ -8,6 +8,7 @@
 #include<vector>
 #include<string>
 #include<functional>
+#include<atomic>
 
 struct _MV_FRAME_OUT_INFO_EX_;
 typedef struct _MV_FRAME_OUT_INFO_EX_ MV_FRAME_OUT_INFO_EX;
@@ -17,7 +18,7 @@ namespace rw {
         class Camera_MVS:
             public ICamera {
         private:
-            static size_t _cameraNum;
+            static std::atomic<size_t> _cameraNum;
         public:
             Camera_MVS();
             ~Camera_MVS() override;

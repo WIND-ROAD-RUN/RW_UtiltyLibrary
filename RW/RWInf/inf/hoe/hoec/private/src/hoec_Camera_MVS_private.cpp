@@ -11,7 +11,7 @@
 namespace rw {
     namespace hoec {
         bool Camera_MVS::_isIniSDK = false;
-        size_t Camera_MVS::_cameraNum = 0;
+        std::atomic<size_t> Camera_MVS::_cameraNum = 0;
 
         Camera_MVS::Camera_MVS()
             :triggerMode(CameraTriggerMode::SoftwareTriggered)

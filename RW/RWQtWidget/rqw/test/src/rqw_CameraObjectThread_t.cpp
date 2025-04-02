@@ -1,21 +1,9 @@
-#include"rqw_CameraObject_t.hpp"
+#include"rqw_CameraObjectThread_t.hpp"
 
-namespace rqw_CameraObject
+namespace rqw_CameraObjectThread
 {
-    TEST(Global, CheckCameraListFunc)
+    TEST(CameraPassiveThread_class, construct)
     {
-        auto cameraList=rqw::CheckCameraList();
-        std::cout << "Camera List: " << '\n';
-        for (auto camera : cameraList)
-        {
-            std::cout << camera.ip.toStdString() << '\n';
-            std::cout << camera.provider.toStdString() << '\n';
-        }
-    }
-
-    TEST(CameraPassiveObject_class,construct)
-    {
-        rqw::CameraPassiveObject cameraPassiveObject;
         auto cameraList = rqw::CheckCameraList();
         if (cameraList.size() == 0)
         {
@@ -24,17 +12,19 @@ namespace rqw_CameraObject
             return;
         }
         auto cameraMetaData = cameraList[0];
-        std::cout << "Test target camera: "  << '\n';
+        std::cout << "Test target camera: " << '\n';
         std::cout << "Camera IP: " << cameraMetaData.ip.toStdString() << '\n';
         std::cout << "Camera Provider: " << cameraMetaData.provider.toStdString() << '\n';
 
-        cameraPassiveObject.initCamera(cameraMetaData, rqw::CameraObjectTrigger::Software);
-        cameraPassiveObject.startMonitor();
+        rqw::CameraPassiveThread cameraPassiveThread;
+
+        cameraPassiveThread.initCamera(cameraMetaData, rqw::CameraObjectTrigger::Software);
+        cameraPassiveThread.startMonitor();
         std::this_thread::sleep_for(std::chrono::seconds(5));
-        cameraPassiveObject.stopMonitor();
+        cameraPassiveThread.stopMonitor();
     }
 
-    TEST_F(CameraPassiveObjectTest, signalFrameCaptured)
+    TEST_F(CameraPassiveObjectThreadTest, signalFrameCaptured)
     {
         if (!isConstruct)
         {
@@ -54,8 +44,7 @@ namespace rqw_CameraObject
         EXPECT_EQ(testComponent.cameraMetaData.provider, cameraMetaData.provider);
     }
 
-
-    TEST_F(CameraPassiveObjectTest, apiSetGet)
+    TEST_F(CameraPassiveObjectThreadTest, SetAndGet)
     {
         if (!isConstruct)
         {
@@ -66,7 +55,6 @@ namespace rqw_CameraObject
         testObj->startMonitor();
         std::this_thread::sleep_for(std::chrono::seconds(5));
         QCoreApplication::processEvents();
-
 
         testObj->setExposureTime(1000);
         testObj->setGain(10);
@@ -79,12 +67,10 @@ namespace rqw_CameraObject
         /*EXPECT_EQ(testObj->getIOTime(), 1000);*/
         EXPECT_EQ(testObj->getMonitorMode(), rqw::CameraObjectTrigger::Hardware);
         /*EXPECT_EQ(testObj->getTriggerLine(), 1);*/
-
-
         testObj->stopMonitor();
+
     }
-
-
-    
-
 }
+
+
+

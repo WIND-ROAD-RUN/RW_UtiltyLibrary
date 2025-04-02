@@ -1,13 +1,12 @@
 #pragma once
 
-#include "pch.h"
-#include "rqw_CameraObject.hpp"
-#include <gtest/gtest.h>
+#include"rqw_CameraObjectThread.hpp"
+
 #include <QCoreApplication>
 
 using namespace rw;
 
-class testComponetCameraObject : public QObject
+class testComponetCameraObjectThread : public QObject
 {
     Q_OBJECT
 public:
@@ -33,7 +32,7 @@ public slots:
     }
 };
 
-class CameraPassiveObjectTest
+class CameraPassiveObjectThreadTest
     : public ::testing::Test
 {
 protected:
@@ -43,8 +42,7 @@ protected:
         char** argv = nullptr;
         app = new QCoreApplication(argc, argv);
 
-        testObj = new rqw::CameraPassiveObject();
-        rqw::CameraPassiveObject cameraPassiveObject;
+        testObj = new rqw::CameraPassiveThread();
         auto cameraList = rqw::CheckCameraList();
         if (cameraList.size() == 0)
         {
@@ -59,9 +57,9 @@ protected:
         std::cout << "Camera Provider: " << cameraMetaData.provider.toStdString() << '\n';
         testObj->initCamera(cameraMetaData, rqw::CameraObjectTrigger::Software);
 
-        QObject::connect(testObj, &rqw::CameraPassiveObject::frameCaptured, &testComponent, &testComponetCameraObject::slotFrameCaptured);
-        QObject::connect(testObj, &rqw::CameraPassiveObject::frameCapturedWithoutArgs, &testComponent, &testComponetCameraObject::slotFrameCapturedWithoutArgs);
-        QObject::connect(testObj, &rqw::CameraPassiveObject::frameCapturedWithMetaData, &testComponent, &testComponetCameraObject::slotFrameCapturedWithMetaData);
+        QObject::connect(testObj, &rqw::CameraPassiveThread::frameCaptured, &testComponent, &testComponetCameraObjectThread::slotFrameCaptured, Qt::QueuedConnection);
+        QObject::connect(testObj, &rqw::CameraPassiveThread::frameCapturedWithoutArgs, &testComponent, &testComponetCameraObjectThread::slotFrameCapturedWithoutArgs, Qt::QueuedConnection);
+        QObject::connect(testObj, &rqw::CameraPassiveThread::frameCapturedWithMetaData, &testComponent, &testComponetCameraObjectThread::slotFrameCapturedWithMetaData, Qt::QueuedConnection);
         isConstruct = true;
     }
 
@@ -71,10 +69,10 @@ protected:
         delete app;
     }
 public:
-    rqw::CameraPassiveObject* testObj;
+    rqw::CameraPassiveThread* testObj;
 public:
     rqw::CameraMetaData cameraMetaData;
-    testComponetCameraObject testComponent;
+    testComponetCameraObjectThread testComponent;
     QCoreApplication* app;
 public:
     bool isConstruct;

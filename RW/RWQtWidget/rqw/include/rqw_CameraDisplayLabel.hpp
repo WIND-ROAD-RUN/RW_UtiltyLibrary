@@ -1,10 +1,9 @@
 #pragma once
 
-#include"hoec_Camera.hpp"
-#include"hoec_CameraFactory.hpp"
+#include"rqw_CameraObject.hpp"
+#include"rqw_CameraObjectThread.hpp"
 
 #include <memory>
-
 #include <QLabel>
 
 namespace rw {
@@ -14,16 +13,13 @@ namespace rw {
         {
             Q_OBJECT
         private:
-            std::unique_ptr<hoec::CameraPassive> _cameraPassive;
+            CameraPassiveThread* _cameraPassiveThread;
         public:
             explicit CameraDisplayLabel(QWidget* parent = nullptr);
-            ~CameraDisplayLabel();
-        
-        protected:
-            void mousePressEvent(QMouseEvent* event) override;
+            ~CameraDisplayLabel() override;
+        public slots:
+            void onFrameCapturedWithMetaData(cv::Mat frame, CameraMetaData cameraMetaData);
         };
-
-
 
     } // namespace rsw
 

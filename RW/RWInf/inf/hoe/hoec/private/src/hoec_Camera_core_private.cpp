@@ -17,6 +17,11 @@ namespace rw {
             // 根据图像像素格式创建cv::Mat
             cv::Mat image;
             switch (frameInfo.stFrameInfo.enPixelType) {
+            case PixelType_Gvsp_BayerRG8:
+                // Bayer RG8格式图像
+                image = cv::Mat(height, width, CV_8UC1, data);
+                cv::cvtColor(image, image, cv::COLOR_BayerRG2BGR);
+                break;
             case PixelType_Gvsp_Mono8:
                 // 单通道灰度图像
                 image = cv::Mat(height, width, CV_8UC1, data);
@@ -102,6 +107,9 @@ namespace rw {
             case PixelType_Gvsp_BayerGR12_Packed:
                 channels = 1;
                 break;
+            case PixelType_Gvsp_BayerRG8:
+                channels = 1;
+                break;
             default:
                 std::cerr << "Unsupported pixel format which is " << frameInfo.enPixelType << std::endl;
                 return cv::Mat();
@@ -132,6 +140,9 @@ namespace rw {
             case PixelType_Gvsp_BayerGR10_Packed:
             case PixelType_Gvsp_BayerGR12_Packed:
                 cv::cvtColor(image, image, cv::COLOR_BayerGR2BGR);
+                break;
+            case PixelType_Gvsp_BayerRG8:
+                cv::cvtColor(image, image, cv::COLOR_BayerRG2BGR);
                 break;
             default:
                 break;

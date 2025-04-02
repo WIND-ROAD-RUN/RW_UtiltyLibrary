@@ -11,4 +11,5 @@
 
 using namespace rw::hoec;
 
+
 #endif // !HOEC_CAMERA_MVS_PRIVATE_T_H_

@@ -1,7 +1,6 @@
 #pragma once
 
 #include"oso_core.h"
-#include"oso_IStorageStrategy.hpp"
 
 #include<string>
 #include<filesystem>
@@ -10,6 +9,8 @@ namespace rw
 {
     namespace oso
     {
+        class IStorageStrategy;
+
         enum class StorageType
         {
             Sqlite,

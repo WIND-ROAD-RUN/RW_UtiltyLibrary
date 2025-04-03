@@ -4,6 +4,7 @@
 #include"oso_StorageStrategy_Json.hpp"
 #include "oso_StorageStrategy_Sqlite.hpp"
 #include"oso_StorageStrategy_Text.hpp"
+#include"oso_IStorageStrategy.hpp"
 
 namespace rw
 {

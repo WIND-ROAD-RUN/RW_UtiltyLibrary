@@ -8,12 +8,16 @@ if(DEFINED ENV{QT_ROOT})
     file(GLOB QT_PATHS "$ENV{QT_ROOT}/[56]*/msvc2019_64/bin/")
     if(QT_PATHS)
         list(GET QT_PATHS 0 QT_PATH) # 获取第一个匹配的路径
-        set(CMAKE_PREFIX_PATH "${CMAKE_PREFIX_PATH};${QT_PATH}") # 添加到CMAKE_PREFIX_PATH
+        set(CMAKE_PREFIX_PATH "${CMAKE_PREFIX_PATH};${QT_PATH}/..") # 添加到CMAKE_PREFIX_PATH
         message("Found QT path: ${QT_PATH}")
 
         # 设置Qt平台插件路径
         set(ENV{QT_PLUGIN_PATH} "${QT_PATH}/plugins")
         message("Set QT_PLUGIN_PATH to ${QT_PATH}/plugins")
+
+        # 将QT_PATH设置为环境变量
+        set(ENV{QT_PATH} "${QT_PATH}")
+        message("Set QT_PATH to ${QT_PATH}")
     else()
         message(FATAL_ERROR "No QT path found that meets the criteria (Qt major version should be 5 or 6)")
     endif()

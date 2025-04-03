@@ -21,12 +21,18 @@ FIND_SOURCES_AND_HEADERS(SRC_LIST
 )
 # google test library
 add_executable(${PROJECT_NAME} ${SRC_LIST})
+
 target_link_libraries(${PROJECT_NAME}  PRIVATE GTest::gtest GTest::gtest_main)
 target_link_libraries(${PROJECT_NAME} PRIVATE Qt6::Core Qt6::Widgets)
 
 target_link_libraries(${PROJECT_NAME} PRIVATE rqw hoec)
 target_include_directories(${PROJECT_NAME} 
 	PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/include
+)
+
+add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+    COMMAND ${QT_PATH}/windeployqt.exe --no-compiler-runtime --no-opengl-sw $<TARGET_FILE:${PROJECT_NAME}>
+    COMMENT "Running windeployqt to package Qt dependencies"
 )
 
 add_test(NAME ${PROJECT_NAME} COMMAND ${PROJECT_NAME})
